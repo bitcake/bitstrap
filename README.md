@@ -1,17 +1,16 @@
-# BitStrap #
+# BitStrap
 
-This is BitCake's set of useful tools that will let you quickly
-bootstrap a new Unity project.
+This is BitCake's set of useful tools that will let you quickly bootstrap a new Unity project.
 We use it in our projects and hope it will be of help for yours! :)
 
-### What is this repository for? ###
+### What is this repository for?
 
 This is our humble way to give back to the game dev community.
 We hope this will ease other studios lives when working with Unity!
 
 You are free to use this code in whatever project you feel like to :D
 
-### How do I get set up? ###
+### How do I get set up?
 
 This is the easy part!
 Since this is a Unity project, just download it and then continue from there.
@@ -19,25 +18,17 @@ Alternatively, you can just add all these scripts to an already existing project
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
-### License ###
-
-BitStrap is licensed under the MIT License. You can read more about it at [opensource.org](http://opensource.org/licenses/MIT)
-
-### Contribution guidelines ###
-
-At the time of writing, we expect users to simply download and reuse this code.
-Feel free, however, to contribute to this repository by creating pull requests or
-just talking to us.
-
-### Documentation ###
+### Documentation
 
 Although all the classes are already documented, we also have a simple web page
 containing a feature list followed by a quick explanation of each. You can think
 of it as a "table of contents".
 
+Also, right now we're moving all the documentation to this repository Wiki!
+
 [Documentation Link](https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub)
 
-### Who do I talk to? ###
+### Who do I talk to?
 
 * Jefferson Bandeira
     * Twitter : [@thevallcrist](https://twitter.com/thevallcrist)
@@ -53,7 +44,7 @@ of it as a "table of contents".
     * Email   : company@bitcakestudio.com
 
 
-## Contributors ##
+## Contributors
 
 * Timothy McGill ([DragonSmack.com](http://dragonsmack.com) | dragonsmackgames@gmail.com)
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))

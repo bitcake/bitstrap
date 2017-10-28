@@ -1,13 +1,13 @@
-# Changelog #
+# Changelog
 
-### 1.11.1 ###
+### 1.11.1
 
 + Unity 5.6.2 support
 + Unity 2017.2 support
 + More UMakeBuildTarget examples
 
 
-### 1.11.0 ###
+### 1.11.0
 
 + BlobSerializer: simple text serializer that handles circular references
 + WebApi URL params: if you pass more parameters than the ones defined in a WebAction, they're passed directly in the url
@@ -16,7 +16,7 @@
 * CircularBuffer.Enumerator: enumerator is now GC free
 
 
-### 1.10.0 ###
+### 1.10.0
 
 New extensible build system: UMake!
 + UMake: make builds by setting up presets and pre/post build actions
@@ -25,7 +25,7 @@ New extensible build system: UMake!
 * Improvements to WebApi
 
 
-### 1.9.3 ###
+### 1.9.3
 
 Windows Store App (WSA) support!
 + TypeExtensions: methods for WSA compatibility
@@ -35,13 +35,13 @@ Windows Store App (WSA) support!
 * MemberInfo.GetCustomAttribute: renamed to GetAttribute
 
 
-###	1.9.2 ###
+###	1.9.2
 
 + BitStream: serialize bools, ints and floats with bit precision. Good for critical network data compressing.
 * Some editor scripts were outside the Editor folder causing build compilation issues.
 
 
-###	1.9.1 ###
+###	1.9.1
 
 + Option: option (maybe) monad that represents the possibility of no value (better than passing null around)
 + Sort Components: right from the component context menu, you can sort your components again!
@@ -51,7 +51,7 @@ Windows Store App (WSA) support!
 * Some general code cleanup
 
 
-### 1.9 ###
+### 1.9
 
 + RequireInterfaceAttribute: use it on a UnityEngine.Object reference to restricting its assignment
 + ShowImplementedInterfacesAttribute: show in inspector all the interfaces a component implements
@@ -62,7 +62,7 @@ Windows Store App (WSA) support!
 * TweenPath: adding methods to play through the end and also backward
 
 
-### 1.8 ###
+### 1.8
 
 + HashSetExtensions: similar to DictionaryExtensions but for HashSet
 + TransformEditor: similar to the stock editor but with individual reset buttons next to each property
@@ -74,7 +74,7 @@ Windows Store App (WSA) support!
 - "Sort Components", "Move to Top", "Move to Bottom": this feature was a "hack". Since 5.5, it's broken because of some Unity internal refactorings.
 
 
-### 1.7 ###
+### 1.7
 
 + TweenPath: Interpolates a transform through a Bezier or linear path of control points
 + Fix small bug on Modifiable
@@ -82,19 +82,19 @@ Windows Store App (WSA) support!
 > Shoutout to Johannes
 
 
-### 1.6 ###
+### 1.6
 
 + Fix WebPlayer not compiling error.
 
 
-### 1.5 ###
+### 1.5
 
 + BitStrap.Examples namespace: all examples are now inside of this namespace.
 + CircularBuffer: An insert optimized queue.
 * Lots of small improvements
 
 
-### 1.4 ###
+### 1.4
 
 + PropertyDrawerHelper: Methods that help to code a PropertyDrawer editor.
 + ParticleSystemExtensions: Extensions to the UnityEngine.ParticleSystem class.
@@ -103,7 +103,7 @@ Windows Store App (WSA) support!
 * RectExtensions: Left() and Right() behaviours were swapped when "width" was negative. This is more intuitive.
 
 
-### 1.3 ###
+### 1.3
 
 + StaticReflectionHelper: Bunch of static reflection helper methods.
 + ScriptDefinesHelper: Helper to work with scripting define symbols.
@@ -114,7 +114,7 @@ Windows Store App (WSA) support!
 + ScriptCreator: Create C# Script and C# Editor Script through the "Assets > Create" menu.
 
 
-### 1.2 ###
+### 1.2
 
 + ScriptableObjectCreator: create ScriptableObject instances by right-clicking its scripts;
 + RectExtensions: helper extensions for non-layout editor codes;
@@ -131,7 +131,6 @@ Windows Store App (WSA) support!
 * Modifiable<T>: Changed to Math folder; and created a nice Inspector editor;
 
 
-### 1.1 ###
+### 1.1
 
 First public version.
-You can follow this documentation link (https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub) for its contents.
