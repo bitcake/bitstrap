@@ -49,8 +49,8 @@ of it as a "table of contents".
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))
 * Johannes Deml ([johannesdeml.com](http://johannesdeml.com) | [@DemlJohannes](https://twitter.com/DemlJohannes))
 
-## [License](LICENSE)
+### [License](LICENSE)
 
-## [Contributing](CONTRIBUTING.md)
+### [Contributing](CONTRIBUTING.md)
 
-## [Changelog](Assets/BitStrap/Docs/Changelog.md)
+### [Changelog](Assets/BitStrap/Docs/Changelog.md)
