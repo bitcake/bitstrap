@@ -1,0 +1,19 @@
+// ---------------------------------------------------------------------------
+// <copyright file="#SCRIPTNAME#.cs" company="CompanyName">
+//   Copyright (c) #YEAR# CompanyName. All rights reserved.
+// </copyright>
+// <author>
+//   Author Name
+//   AuthorName@Company.com
+// </author>
+// ---------------------------------------------------------------------------
+using UnityEngine;
+using System.Collections;
+namespace Bitstrap
+{
+	public class #SCRIPTNAME# : MonoBehaviour 
+	{
+		
+	}
+}
+

@@ -1,0 +1,11 @@
+syntax: glob
+Library/
+Temp/
+Builds/
+obj/
+.vs/
+.vscode/
+*.sln
+*.csproj
+omnisharp.json
+BitStrap.unitypackage

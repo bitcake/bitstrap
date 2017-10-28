@@ -1,0 +1,53 @@
+using UnityEditor;
+using UnityEngine;
+
+namespace BitStrap
+{
+	[CustomEditor( typeof( UMake ) )]
+	public sealed class UMakeEditor : Editor
+	{
+		[MenuItem( "Window/BitStrap/Select UMake %&b" )]
+		public static void Select()
+		{
+			UMake umake;
+			if( !UMake.Get().TryGet( out umake ) )
+			{
+				umake = ScriptableObject.CreateInstance<UMake>();
+				AssetDatabase.CreateAsset( umake, UMake.Path );
+			}
+
+			if( umake != null )
+			{
+				Selection.activeObject = umake;
+				EditorGUIUtility.PingObject( umake );
+			}
+		}
+
+		public override void OnInspectorGUI()
+		{
+			EditorGUILayout.BeginHorizontal();
+
+			EditorGUI.BeginChangeCheck();
+			string buildPath = EditorGUILayout.TextField( "Build Path", UMake.BuildPathPref );
+			if( EditorGUI.EndChangeCheck() )
+				UMake.BuildPathPref = buildPath;
+
+			if( string.IsNullOrEmpty( buildPath ) )
+			{
+				Rect position = GUILayoutUtility.GetLastRect().Right( -EditorGUIUtility.labelWidth );
+				EditorGUI.LabelField( position, "Pick folder on build.", EditorStyles.centeredGreyMiniLabel );
+			}
+
+			if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )
+			{
+				string path = EditorUtility.OpenFolderPanel( "Build Path", UMake.BuildPathPref, "Builds" );
+				if( !string.IsNullOrEmpty( path ) )
+					UMake.BuildPathPref = path;
+			}
+
+			EditorGUILayout.EndHorizontal();
+
+			base.OnInspectorGUI();
+		}
+	}
+}
