@@ -3,14 +3,14 @@
 This is BitCake's set of useful tools that will let you quickly bootstrap a new Unity project.
 We use it in our projects and hope it will be of help for yours! :)
 
-### What is this repository for?
+## What is this project for?
 
-This is our humble way to give back to the game dev community.
-We hope this will ease other studios lives when working with Unity!
+This is our humble way to give back to the gamedev community.
+We hope this will ease other people lives when working with Unity.
 
-You are free to use this code in whatever project you feel like to :D
+You are free to use these tools in whatever project you're doing. Make us proud! :D
 
-### How do I get set up?
+## Getting started?
 
 This is the easy part!
 Since this is a Unity project, just download it and then continue from there.
@@ -18,17 +18,17 @@ Alternatively, you can just add all these scripts to an already existing project
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
-### Documentation
+## Documentation
+
+NOTE: Right now we're moving all the documentation to this repository Wiki!
 
 Although all the classes are already documented, we also have a simple web page
 containing a feature list followed by a quick explanation of each. You can think
 of it as a "table of contents".
 
-Also, right now we're moving all the documentation to this repository Wiki!
-
 [Documentation Link](https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub)
 
-### Who do I talk to?
+## I need ~healing~ help?
 
 * Jefferson Bandeira
     * Twitter : [@thevallcrist](https://twitter.com/thevallcrist)
@@ -43,11 +43,14 @@ Also, right now we're moving all the documentation to this repository Wiki!
     * Twitter : [@bitcakestudio](https://twitter.com/bitcakestudio)
     * Email   : company@bitcakestudio.com
 
-
-## Contributors
+## Awesome contributors
 
 * Timothy McGill ([DragonSmack.com](http://dragonsmack.com) | dragonsmackgames@gmail.com)
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))
 * Johannes Deml ([johannesdeml.com](http://johannesdeml.com) | [@DemlJohannes](https://twitter.com/DemlJohannes))
+
+## [License](LICENSE)
+
+## [Contributing](CONTRIBUTING.md)
 
 ## [Changelog](Assets/BitStrap/Docs/Changelog.md)
