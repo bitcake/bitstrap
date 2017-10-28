@@ -18,12 +18,6 @@ Alternatively, you can just add all these scripts to an already existing project
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
-## adasd
-
-[asda](./LICENSE)
-[asdas](https://github.com/bitcake/bitstrap/blob/master/Assets/BitStrap/Docs/Changelog.md)
-[asdsa](blob/master/Assets/BitStrap/Docs/Changelog.md)
-
 ### Documentation
 
 Although all the classes are already documented, we also have a simple web page
@@ -56,4 +50,4 @@ Also, right now we're moving all the documentation to this repository Wiki!
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))
 * Johannes Deml ([johannesdeml.com](http://johannesdeml.com) | [@DemlJohannes](https://twitter.com/DemlJohannes))
 
-## [Changelog](https://bitbucket.org/bitcake-studio/bitstrap/raw/default/Assets/BitStrap/Docs/Changelog.txt)
+## [Changelog](Assets/BitStrap/Docs/Changelog.md)
