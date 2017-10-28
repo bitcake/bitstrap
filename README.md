@@ -18,6 +18,12 @@ Alternatively, you can just add all these scripts to an already existing project
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
+## adasd
+
+[asda](./LICENSE)
+[asdas](https://github.com/bitcake/bitstrap/blob/master/Assets/BitStrap/Docs/Changelog.md)
+[asdsa](blob/master/Assets/BitStrap/Docs/Changelog.md)
+
 ### Documentation
 
 Although all the classes are already documented, we also have a simple web page
