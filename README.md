@@ -10,7 +10,7 @@ We hope this will ease other people lives when working with Unity.
 
 You are free to use these tools in whatever project you're doing. Make us proud! :D
 
-## Getting started?
+## Getting started
 
 This is the easy part!
 Since this is a Unity project, just download it and then continue from there.
