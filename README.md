@@ -28,7 +28,7 @@ of it as a "table of contents".
 
 [Documentation Link](https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub)
 
-## I need ~healing~ help?
+## I need ~healing~ help
 
 * Jefferson Bandeira
     * Twitter : [@thevallcrist](https://twitter.com/thevallcrist)
