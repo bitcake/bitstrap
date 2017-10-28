@@ -14,11 +14,13 @@ namespace BitStrap.Examples
 
 			var self = target as VectorHelperExample;
 
+			EditorGUI.BeginDisabledGroup( true );
 			EditorGUILayout.ToggleLeft( string.Format( "Vector is zero?" ), self.IsVectorZero() );
 			bool betweenVectors = self.IsVectorCBetweenVectorsAAndB();
 			EditorGUILayout.ToggleLeft( string.Format( "Vector C between vectors A and B?" ), betweenVectors );
 			bool onVectorSide = self.IsVectorCOnTheSameSideAsVectorBInRelationToA();
 			EditorGUILayout.ToggleLeft( string.Format( "Vector C on the same side as vectors B in relation to A?" ), onVectorSide );
+			EditorGUI.EndDisabledGroup();
 
 			var rect = EditorGUILayout.GetControlRect( false, 200.0f );
 
