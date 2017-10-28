@@ -5,10 +5,12 @@ namespace BitStrap
 {
 	[CustomPropertyDrawer( typeof( ModifiableInt ) )]
 	[CustomPropertyDrawer( typeof( ModifiableFloat ) )]
-	public class ModifiableDrawer : PropertyDrawer
+	public sealed class ModifiableDrawer : PropertyDrawer
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			// Bugged Unity... hacks :(
 			if( !property.type.StartsWith( "Modifiable" ) )
 				return;

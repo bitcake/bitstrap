@@ -2,7 +2,7 @@
 
 namespace BitStrap.Examples
 {
-	public class AttributesExample : MonoBehaviour
+	public sealed class AttributesExample : MonoBehaviour
 	{
 		[Header( "This is an example of the custom attributes in BitStrap." )]
 		[LayerSelector]
@@ -20,8 +20,8 @@ namespace BitStrap.Examples
 		[HelpBox( "This is a HelpBox.", HelpBoxAttribute.MessageType.Warning )]
 		public int fieldWithHelpBox = 2;
 
-		[Unit( "m/s²" )]
-		public float unit = 5f;
+		[Unit( "m/s" )]
+		public float velocityWithUnit = 5.0f;
 
 		[FolderPath]
 		public string relativeFolderPath = string.Empty;

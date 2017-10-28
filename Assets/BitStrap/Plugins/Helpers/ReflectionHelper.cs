@@ -7,8 +7,6 @@ namespace BitStrap
 	/// </summary>
 	public static class ReflectionHelper
 	{
-		public static readonly object[] EmptyArgs = new object[0];
-
 		/// <summary>
 		/// Returns the value of all fields of type.
 		/// </summary>

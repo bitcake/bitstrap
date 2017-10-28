@@ -136,9 +136,9 @@ namespace BitStrap
 
 			object value = null;
 			if( graph.Connected( e.fromSlot, e.toSlot ) )
-				value = outputProperty.GetValue( outputNode, ReflectionHelper.EmptyArgs );
+				value = outputProperty.GetValue( outputNode, new object[0] );
 
-			inputProperty.SetValue( this, value, ReflectionHelper.EmptyArgs );
+			inputProperty.SetValue( this, value, new object[0] );
 		}
 
 		private void SetupNodeSlots()

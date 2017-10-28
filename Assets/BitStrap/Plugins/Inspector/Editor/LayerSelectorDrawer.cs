@@ -8,6 +8,8 @@ namespace BitStrap
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			if( property.propertyType == SerializedPropertyType.Integer && !EditorApplication.isPlaying )
 			{
 				EditorGUI.BeginProperty( position, label, property );

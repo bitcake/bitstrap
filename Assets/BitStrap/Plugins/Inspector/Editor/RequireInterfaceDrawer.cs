@@ -8,6 +8,8 @@ namespace BitStrap
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var requireInterfaceAttribute = attribute as RequireInterfaceAttribute;
 
 			if( requireInterfaceAttribute == null )

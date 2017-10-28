@@ -21,7 +21,7 @@ namespace BitStrap
 
 				foreach( var property in outputNode.outputs )
 				{
-					object value = property.GetValue( outputNode, ReflectionHelper.EmptyArgs );
+					object value = property.GetValue( outputNode, new object[0] );
 					Slot inputSlot = FindInputSlot( graph, value );
 					Slot outputSlot = outputNode[property.Name];
 
@@ -41,7 +41,7 @@ namespace BitStrap
 
 				foreach( var property in inputNode.inputs )
 				{
-					object value = property.GetValue( inputNode, ReflectionHelper.EmptyArgs );
+					object value = property.GetValue( inputNode, new object[0] );
 					if( value == outputValue )
 						return inputNode[property.Name];
 				}

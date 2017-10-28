@@ -8,6 +8,8 @@ namespace BitStrap
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var readOnlyAttribute = attribute as ReadOnlyAttribute;
 
 			EditorGUI.BeginDisabledGroup( !readOnlyAttribute.onlyInPlaymode || EditorApplication.isPlayingOrWillChangePlaymode );

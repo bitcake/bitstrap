@@ -17,6 +17,8 @@ namespace BitStrap
 
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var referencesBase = SerializedPropertyHelper.GetValue( fieldInfo, property ) as ReferencesBase;
 
 			Rect labelRect;

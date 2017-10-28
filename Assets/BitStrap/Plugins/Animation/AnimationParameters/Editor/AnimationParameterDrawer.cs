@@ -11,6 +11,8 @@ namespace BitStrap
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var behaviour = property.serializedObject.targetObject as MonoBehaviour;
 
 			Animator animator = null;

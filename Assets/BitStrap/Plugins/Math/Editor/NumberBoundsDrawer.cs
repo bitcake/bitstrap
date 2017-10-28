@@ -5,68 +5,70 @@ using UnityEngine;
 
 namespace BitStrap
 {
-    [CustomPropertyDrawer( typeof( IntBounds ) )]
-    [CustomPropertyDrawer( typeof( FloatBounds ) )]
-    public class NumberBoundsDrawer : PropertyDrawer
-    {
-        public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
-        {
-            // Bugged Unity... hacks :(
-            if( !property.type.EndsWith( "Bounds" ) )
-                return;
+	[CustomPropertyDrawer( typeof( IntBounds ) )]
+	[CustomPropertyDrawer( typeof( FloatBounds ) )]
+	public sealed class NumberBoundsDrawer : PropertyDrawer
+	{
+		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
+		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
 
-            Rect labelPosition = new Rect( position );
-            Rect minPosition = new Rect( position );
-            Rect maxPosition = new Rect( position );
+			// Bugged Unity... hacks :(
+			if( !property.type.EndsWith( "Bounds" ) )
+				return;
 
-            labelPosition.width = EditorGUIUtility.labelWidth;
-            minPosition.x = labelPosition.xMax;
-            minPosition.width = ( minPosition.width - labelPosition.width ) * 0.5f;
-            maxPosition.x = labelPosition.xMax + minPosition.width;
-            maxPosition.width = minPosition.width;
+			Rect labelPosition = new Rect( position );
+			Rect minPosition = new Rect( position );
+			Rect maxPosition = new Rect( position );
 
-            EditorGUI.LabelField( labelPosition, label );
+			labelPosition.width = EditorGUIUtility.labelWidth;
+			minPosition.x = labelPosition.xMax;
+			minPosition.width = ( minPosition.width - labelPosition.width ) * 0.5f;
+			maxPosition.x = labelPosition.xMax + minPosition.width;
+			maxPosition.width = minPosition.width;
 
-            SerializedProperty max = property.GetMemberProperty<IntBounds>( b => b.Max );
-            SerializedProperty min = property.GetMemberProperty<IntBounds>( b => b.Min );
+			EditorGUI.LabelField( labelPosition, label );
 
-            EditorHelper.BeginChangeLabelWidth( 32.0f );
-            EditorHelper.BeginChangeIndentLevel( 0 );
+			SerializedProperty max = property.GetMemberProperty<IntBounds>( b => b.Max );
+			SerializedProperty min = property.GetMemberProperty<IntBounds>( b => b.Min );
 
-            EditorGUI.BeginChangeCheck();
-            DelayedPropertyField( minPosition, min );
-            DelayedPropertyField( maxPosition, max );
-            if( EditorGUI.EndChangeCheck() )
-            {
-                min.serializedObject.ApplyModifiedProperties();
-                max.serializedObject.ApplyModifiedProperties();
+			EditorHelper.BeginChangeLabelWidth( 32.0f );
+			EditorHelper.BeginChangeIndentLevel( 0 );
 
-                var validatable = SerializedPropertyHelper.GetValue( fieldInfo, property ) as IValidatable;
-                validatable.Validate();
+			EditorGUI.BeginChangeCheck();
+			DelayedPropertyField( minPosition, min );
+			DelayedPropertyField( maxPosition, max );
+			if( EditorGUI.EndChangeCheck() )
+			{
+				min.serializedObject.ApplyModifiedProperties();
+				max.serializedObject.ApplyModifiedProperties();
 
-                min.serializedObject.Update();
-                max.serializedObject.Update();
-            }
+				var validatable = SerializedPropertyHelper.GetValue( fieldInfo, property ) as IValidatable;
+				validatable.Validate();
 
-            EditorHelper.EndChangeIndentLevel();
-            EditorHelper.EndChangeLabelWidth();
-        }
+				min.serializedObject.Update();
+				max.serializedObject.Update();
+			}
 
-        private void DelayedPropertyField( Rect position, SerializedProperty property )
-        {
-            switch( property.propertyType )
-            {
-            case SerializedPropertyType.Integer:
-                property.intValue = EditorGUI.DelayedIntField( position, property.displayName, property.intValue );
-                break;
+			EditorHelper.EndChangeIndentLevel();
+			EditorHelper.EndChangeLabelWidth();
+		}
 
-            case SerializedPropertyType.Float:
-                property.floatValue = EditorGUI.DelayedFloatField( position, property.displayName, property.floatValue );
-                break;
+		private void DelayedPropertyField( Rect position, SerializedProperty property )
+		{
+			switch( property.propertyType )
+			{
+			case SerializedPropertyType.Integer:
+				property.intValue = EditorGUI.DelayedIntField( position, property.displayName, property.intValue );
+				break;
 
-            default:
-                break;
-            }
-        }
-    }
+			case SerializedPropertyType.Float:
+				property.floatValue = EditorGUI.DelayedFloatField( position, property.displayName, property.floatValue );
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
 }

@@ -28,9 +28,14 @@ namespace BitStrap
 
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var nullableAttribute = fieldInfo.GetAttribute<NullableAttribute>( false );
 
-			if( !nullableAttribute.hasValue && IsNull( property ) )
+			Object target = property.serializedObject.targetObject;
+			bool isFromMonoBehaviour = target != null && target is MonoBehaviour;
+
+			if( !nullableAttribute.hasValue && isFromMonoBehaviour && IsNull( property ) )
 			{
 				GUI.color = Color.red;
 				EditorGUI.PropertyField( position, property, label, true );

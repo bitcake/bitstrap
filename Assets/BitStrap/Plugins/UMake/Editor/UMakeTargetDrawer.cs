@@ -13,6 +13,8 @@ namespace BitStrap
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			position = position.Right( -16.0f );
 
 			float buttonWidth = 40.0f;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BitStrap
 {
 	[CustomPropertyDrawer( typeof( TweenShaderProperty ) )]
-	public class TweenShaderPropertyDrawer : PropertyDrawer
+	public sealed class TweenShaderPropertyDrawer : PropertyDrawer
 	{
 		private const float TypeWidth = 64.0f;
 		private const float CurveWidth = 32.0f;
@@ -25,6 +25,8 @@ namespace BitStrap
 
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
+			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+
 			var nameProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.name );
 			var typeProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.type );
 			var curveProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.curve );
