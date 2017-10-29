@@ -7,7 +7,7 @@ namespace BitStrap
 	/// Tool that lets you mirror several Transforms in the hierarchy given a reflect normal.
 	/// Useful when level designing.
 	/// </summary>
-	public class MirrorTool : MonoBehaviour
+	public sealed class MirrorTool : MonoBehaviour
 	{
 		/// <summary>
 		/// The normal vector that will be used to reflect the selected Transforms.

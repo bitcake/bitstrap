@@ -10,6 +10,57 @@
 		{
 			return new Option<T>( value );
 		}
+
+		public static void IfSome<A, B>( Option<A> a, Option<B> b, System.Action<A, B> predicate )
+		{
+			A valueA;
+			if( !a.TryGet( out valueA ) )
+				return;
+
+			B valueB;
+			if( !b.TryGet( out valueB ) )
+				return;
+
+			predicate( valueA, valueB );
+		}
+
+		public static void IfSome<A, B, C>( Option<A> a, Option<B> b, Option<C> c, System.Action<A, B, C> predicate )
+		{
+			A valueA;
+			if( !a.TryGet( out valueA ) )
+				return;
+
+			B valueB;
+			if( !b.TryGet( out valueB ) )
+				return;
+
+			C valueC;
+			if( !c.TryGet( out valueC ) )
+				return;
+
+			predicate( valueA, valueB, valueC );
+		}
+
+		public static void IfSome<A, B, C, D>( Option<A> a, Option<B> b, Option<C> c, Option<D> d, System.Action<A, B, C, D> predicate )
+		{
+			A valueA;
+			if( !a.TryGet( out valueA ) )
+				return;
+
+			B valueB;
+			if( !b.TryGet( out valueB ) )
+				return;
+
+			C valueC;
+			if( !c.TryGet( out valueC ) )
+				return;
+
+			D valueD;
+			if( !d.TryGet( out valueD ) )
+				return;
+
+			predicate( valueA, valueB, valueC, valueD );
+		}
 	}
 
 	public struct Option<A>
@@ -22,8 +73,12 @@
 		}
 
 		private readonly A value;
+		private readonly bool hasValue;
 
-		public readonly bool hasValue;
+		public bool HasValue
+		{
+			get { return hasValue && ( IsValueType || value != null ); }
+		}
 
 		public Option( A value )
 		{
@@ -41,44 +96,50 @@
 			return default( Option<A> );
 		}
 
-		public bool TryGet( out A retValue )
+		public bool TryGet( out A value )
 		{
-			if( hasValue )
+			if( HasValue )
 			{
-				retValue = value;
+				value = this.value;
 				return true;
 			}
 
-			retValue = default( A );
+			value = default( A );
 			return false;
 		}
 
-		public B Match<B>( System.Func<A, B> onSome, System.Func<B> onNone )
+		public B Match<B>( System.Func<A, B> some, System.Func<B> none )
 		{
-			if( hasValue )
-				return onSome( value );
-			return onNone();
+			if( HasValue )
+				return some( value );
+			return none();
 		}
 
-		public A Or( A orValue )
+		public A Or( A noneValue )
 		{
-			if( hasValue )
+			if( HasValue )
 				return value;
 
-			return orValue;
+			return noneValue;
 		}
 
-		public A Or( System.Func<A> onNone )
+		public A Or( System.Func<A> none )
 		{
-			if( hasValue )
+			if( HasValue )
 				return value;
 
-			return onNone();
+			return none();
+		}
+
+		public void IfSome( System.Action<A> some )
+		{
+			if( HasValue )
+				some( value );
 		}
 
 		public Option<B> Select<B>( System.Func<A, B> select )
 		{
-			if( !hasValue )
+			if( !HasValue )
 				return new None();
 
 			return select( value );
@@ -86,7 +147,7 @@
 
 		public Option<A> Where( System.Predicate<A> predicate )
 		{
-			if( !hasValue || !predicate( value ) )
+			if( !HasValue || !predicate( value ) )
 				return new None();
 
 			return this;
@@ -94,11 +155,11 @@
 
 		public Option<C> SelectMany<B, C>( System.Func<A, Option<B>> func, System.Func<A, B, C> select )
 		{
-			if( !hasValue )
+			if( !HasValue )
 				return new None();
 
 			var b = func( value );
-			if( !b.hasValue )
+			if( !b.HasValue )
 				return new None();
 
 			return select( value, b.value );

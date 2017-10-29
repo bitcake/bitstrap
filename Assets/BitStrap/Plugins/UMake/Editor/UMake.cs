@@ -23,7 +23,7 @@ namespace BitStrap
 
 		public static Option<UMake> Get()
 		{
-			if( !instance.hasValue )
+			if( !instance.HasValue )
 			{
 				var umake = AssetDatabase.LoadAssetAtPath<UMake>( Path );
 				instance = new Option<UMake>( umake );

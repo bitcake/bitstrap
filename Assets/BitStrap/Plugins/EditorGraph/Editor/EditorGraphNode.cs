@@ -104,8 +104,9 @@ namespace BitStrap
 		/// <param name="expression"></param>
 		protected void DrawSlot( GraphGUI host, Expression<System.Func<object>> expression )
 		{
-			string slotName = StaticReflectionHelper.GetMemberName( expression );
-			DrawSlot( host, slotName );
+			string slotName;
+			if( StaticReflectionHelper.GetMemberName( expression ).TryGet( out slotName ) )
+				DrawSlot( host, slotName );
 		}
 
 		/// <summary>

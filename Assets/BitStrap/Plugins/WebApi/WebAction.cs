@@ -88,8 +88,8 @@ namespace BitStrap
 				throw new WrongNumberOfParamsException( this, Controller );
 
 			int headerCount = data.headers.Match(
-				 h => h.Length,
-				 () => 0
+				 some: h => h.Length,
+				 none: () => 0
 			);
 
 			if( HeaderNames.Length != headerCount )

@@ -18,8 +18,8 @@ namespace BitStrap.Examples
 		void ISerializationCallbackReceiver.OnAfterDeserialize()
 		{
 			nodes = EditorGraphSerializer.Deserialize<MyGraphNode[]>( serialized ).Match(
-				a => a.ToList(),
-				() => new List<MyGraphNode>()
+				some: a => a.ToList(),
+				none: () => new List<MyGraphNode>()
 			);
 		}
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BitStrap
 {
-	public class TweenShaderPropertiesCache
+	public sealed class TweenShaderPropertiesCache
 	{
 		public struct ShaderProperty
 		{

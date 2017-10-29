@@ -47,7 +47,7 @@ namespace BitStrap
 		{
 			if( !IsEmail( email ) )
 			{
-				correctEmail = null;
+				correctEmail = "";
 				return true;
 			}
 
@@ -67,7 +67,7 @@ namespace BitStrap
 
 			string emailProvider = email.Substring( emailProviderIndex, emailProviderLength );
 
-			string mostCorrectProvider = null;
+			Option<string> mostCorrectProvider = new None();
 			int mostCorrectDistance = 6;
 
 			foreach( string provider in emailProviders )
@@ -85,9 +85,10 @@ namespace BitStrap
 				}
 			}
 
-			if( !string.IsNullOrEmpty( mostCorrectProvider ) )
+			string correctProvider;
+			if( mostCorrectProvider.TryGet( out correctProvider ) )
 			{
-				correctEmail = email.Remove( emailProviderIndex, emailProviderLength ).Insert( emailProviderIndex, mostCorrectProvider );
+				correctEmail = email.Remove( emailProviderIndex, emailProviderLength ).Insert( emailProviderIndex, correctProvider );
 				return true;
 			}
 

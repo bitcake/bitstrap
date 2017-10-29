@@ -2,7 +2,7 @@
 
 namespace BitStrap.Examples
 {
-	public class DummySingleton : MonoBehaviour
+	public sealed class DummySingleton : Singleton<DummySingleton>
 	{
 		public int dummyIntField = 8;
 	}

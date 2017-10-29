@@ -15,14 +15,13 @@ namespace BitStrap
 		/// <param name="prefab"></param>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public static GameObject Prefab( GameObject prefab, Transform parent = null )
+		public static GameObject Prefab( GameObject prefab, Option<Transform> parent = new Option<Transform>() )
 		{
 			GameObject go = Object.Instantiate( prefab );
 
-			if( parent != null )
-			{
-				go.transform.SetParent( parent, false );
-			}
+			Transform p;
+			if( parent.TryGet( out p ) )
+				go.transform.SetParent( p, false );
 
 			go.transform.localPosition = prefab.transform.localPosition;
 			go.transform.localRotation = prefab.transform.localRotation;
@@ -38,14 +37,13 @@ namespace BitStrap
 		/// <typeparam name="T"></typeparam>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public static T Behaviour<T>( Transform parent = null ) where T : MonoBehaviour
+		public static T Behaviour<T>( Option<Transform> parent = new Option<Transform>() ) where T : MonoBehaviour
 		{
 			GameObject go = new GameObject( typeof( T ).Name );
 
-			if( parent != null )
-			{
-				go.transform.SetParent( parent, false );
-			}
+			Transform p;
+			if( parent.TryGet( out p ) )
+				go.transform.SetParent( p, false );
 
 			go.transform.localPosition = Vector3.zero;
 			go.transform.localRotation = Quaternion.identity;
@@ -61,14 +59,13 @@ namespace BitStrap
 		/// <param name="behaviourPrefab"></param>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public static T Behaviour<T>( T behaviourPrefab, Transform parent = null ) where T : MonoBehaviour
+		public static T Behaviour<T>( T behaviourPrefab, Option<Transform> parent = new Option<Transform>() ) where T : MonoBehaviour
 		{
 			GameObject go = Object.Instantiate( behaviourPrefab.gameObject );
 
-			if( parent != null )
-			{
-				go.transform.SetParent( parent, false );
-			}
+			Transform p;
+			if( parent.TryGet( out p ) )
+				go.transform.SetParent( p, false );
 
 			go.transform.localPosition = behaviourPrefab.transform.localPosition;
 			go.transform.localRotation = behaviourPrefab.transform.localRotation;

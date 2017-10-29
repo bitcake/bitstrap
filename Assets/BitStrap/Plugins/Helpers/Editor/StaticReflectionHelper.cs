@@ -15,7 +15,7 @@ namespace BitStrap
 		/// </summary>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static string GetMemberName( Expression<System.Func<object>> expression )
+		public static Option<string> GetMemberName( Expression<System.Func<object>> expression )
 		{
 			return GetMemberName( expression.Body );
 		}
@@ -27,7 +27,7 @@ namespace BitStrap
 		/// <typeparam name="T"></typeparam>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static string GetMemberName<T>( Expression<System.Func<T, object>> expression )
+		public static Option<string> GetMemberName<T>( Expression<System.Func<T, object>> expression )
 		{
 			return GetMemberName( expression.Body );
 		}
@@ -38,7 +38,7 @@ namespace BitStrap
 		/// </summary>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static string GetMemberName( Expression<System.Action> expression )
+		public static Option<string> GetMemberName( Expression<System.Action> expression )
 		{
 			return GetMemberName( expression.Body );
 		}
@@ -50,7 +50,7 @@ namespace BitStrap
 		/// <typeparam name="T"></typeparam>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static string GetMemberName<T>( Expression<System.Action<T>> expression )
+		public static Option<string> GetMemberName<T>( Expression<System.Action<T>> expression )
 		{
 			return GetMemberName( expression.Body );
 		}
@@ -61,7 +61,7 @@ namespace BitStrap
 		/// </summary>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static MethodInfo GetMethod( Expression<System.Func<object>> expression )
+		public static Option<MethodInfo> GetMethod( Expression<System.Func<object>> expression )
 		{
 			return GetMethod( expression.Body );
 		}
@@ -73,7 +73,7 @@ namespace BitStrap
 		/// <typeparam name="T"></typeparam>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static MethodInfo GetMethod<T>( Expression<System.Func<T, object>> expression )
+		public static Option<MethodInfo> GetMethod<T>( Expression<System.Func<T, object>> expression )
 		{
 			return GetMethod( expression.Body );
 		}
@@ -84,7 +84,7 @@ namespace BitStrap
 		/// </summary>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static MethodInfo GetMethod( Expression<System.Action> expression )
+		public static Option<MethodInfo> GetMethod( Expression<System.Action> expression )
 		{
 			return GetMethod( expression.Body );
 		}
@@ -96,12 +96,12 @@ namespace BitStrap
 		/// <typeparam name="T"></typeparam>
 		/// <param name="expression"></param>
 		/// <returns></returns>
-		public static MethodInfo GetMethod<T>( Expression<System.Action<T>> expression )
+		public static Option<MethodInfo> GetMethod<T>( Expression<System.Action<T>> expression )
 		{
 			return GetMethod( expression.Body );
 		}
 
-		private static string GetMemberName( Expression expression )
+		private static Option<string> GetMemberName( Expression expression )
 		{
 			var memberExpression = expression as MemberExpression;
 			if( memberExpression != null )
@@ -115,10 +115,10 @@ namespace BitStrap
 			if( unaryExpression != null )
 				return GetMemberName( unaryExpression.Operand );
 
-			return null;
+			return new None();
 		}
 
-		private static MethodInfo GetMethod( Expression expression )
+		private static Option<MethodInfo> GetMethod( Expression expression )
 		{
 			var methodCallExpression = expression as MethodCallExpression;
 			if( methodCallExpression != null )
@@ -128,7 +128,7 @@ namespace BitStrap
 			if( unaryExpression != null )
 				return GetMethod( unaryExpression.Operand );
 
-			return null;
+			return new None();
 		}
 	}
 }

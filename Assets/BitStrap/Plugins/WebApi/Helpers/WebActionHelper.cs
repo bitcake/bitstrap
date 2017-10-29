@@ -30,8 +30,8 @@ namespace BitStrap
 		public static void InitWebActionField( FieldInfo field, IWebController controller )
 		{
 			string actionName = field.GetAttribute<WebUrlAttribute>( false ).Match(
-				a => a.url,
-				() => field.Name
+				some: a => a.url,
+				none: () => field.Name
 			);
 
 			WebMethod actionMethod;
@@ -45,8 +45,8 @@ namespace BitStrap
 			paramNames = attribute.paramNames;
 
 			string[] headerNames = field.GetAttribute<WebHeadersAttribute>( false ).Match(
-				a => a.headerNames,
-				() => new string[0]
+				some: a => a.headerNames,
+				none: () => new string[0]
 			);
 
 			var action = System.Activator.CreateInstance( field.FieldType, actionName, actionMethod, headerNames, paramNames, controller ) as IWebAction;

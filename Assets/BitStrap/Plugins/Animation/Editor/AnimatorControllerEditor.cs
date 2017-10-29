@@ -85,9 +85,7 @@ namespace BitStrap
 		{
 			AnimationClip selectedAnimation = null;
 			if( list.index >= 0 && list.index < list.list.Count )
-			{
 				selectedAnimation = list.list[list.index] as AnimationClip;
-			}
 
 			if( selectedAnimation != null )
 			{

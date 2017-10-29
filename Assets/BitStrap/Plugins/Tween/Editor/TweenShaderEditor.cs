@@ -13,7 +13,7 @@ namespace BitStrap
 		private readonly object[] emptyArgs = new object[0];
 
 		private ReorderableList shaderProperiesList;
-		private EditorCoroutine playCoroutine;
+		private Option<EditorCoroutine> playCoroutine;
 
 		private MethodInfo initMethod;
 		private MethodInfo updateMethod;
@@ -107,8 +107,7 @@ namespace BitStrap
 
 		private void UpdateTween( TweenShader tweenShader )
 		{
-			if( playCoroutine != null )
-				playCoroutine.Stop();
+			playCoroutine.IfSome( c => c.Stop() );
 
 			if( tweenShader != null && !EditorApplication.isPlayingOrWillChangePlaymode )
 				playCoroutine = EditorCoroutine.Start( UpdateTweenCoroutine( tweenShader ) );
@@ -127,8 +126,8 @@ namespace BitStrap
 				yield return null;
 			}
 
-			playCoroutine.Stop();
-			playCoroutine = null;
+			playCoroutine.IfSome( c => c.Stop() );
+			playCoroutine = new None();
 
 			tweenShader.enabled = wasTweenEnabled;
 		}

@@ -16,10 +16,10 @@ namespace BitStrap
 		public static void LoadAttributeTooltip( PropertyDrawer self, GUIContent label )
 		{
 			var tooltipAttribute = from a in self.fieldInfo.GetCustomAttributes( typeof( TooltipAttribute ), true ).First() select a as TooltipAttribute;
-			
+
 			label.tooltip = tooltipAttribute.Match(
-				a => a.tooltip,
-				() => "" );
+				some: a => a.tooltip,
+				none: () => "" );
 		}
 	}
 }

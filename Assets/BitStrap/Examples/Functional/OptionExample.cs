@@ -35,7 +35,7 @@ namespace BitStrap.Examples
 		[Button]
 		public void TestWithOptionAndNone()
 		{
-			Option<int> a = Option.Some( 1 );
+			Option<int> a = 1;
 			Option<int> b = new None();
 
 			var r = from x in a
@@ -53,7 +53,7 @@ namespace BitStrap.Examples
 		public void TestWithNull()
 		{
 			var a = Option.Some( ( object ) null );
-			Debug.Log( "Has value? " + a.hasValue );
+			Debug.Log( "Has value? " + a.HasValue );
 		}
 	}
 }

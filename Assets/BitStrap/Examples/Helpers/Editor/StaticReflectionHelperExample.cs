@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,9 +7,9 @@ namespace BitStrap.Examples
 	/// <summary>
 	/// Open this window by navigating in Unity Editor to "Window/BitStrap Examples/Extensions/StaticReflectionHelper".
 	/// </summary>
-	public class StaticReflectionHelperExample : EditorWindow
+	public sealed class StaticReflectionHelperExample : EditorWindow
 	{
-		public class TestClass
+		public sealed class TestClass
 		{
 			public static int staticTestField;
 			public int testField;
@@ -46,57 +47,75 @@ namespace BitStrap.Examples
 
 			if( GUILayout.Button( "Get TestClass field name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName<TestClass>( c => c.testField );
-				Debug.Log( memberName );
+				string memberName;
+				if( StaticReflectionHelper.GetMemberName<TestClass>( c => c.testField ).TryGet( out memberName ) )
+					Debug.Log( memberName );
 			}
 
 			if( GUILayout.Button( "Get TestClass property name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName<TestClass>( c => c.testProperty );
-				Debug.Log( memberName );
+				string memberName;
+				if( StaticReflectionHelper.GetMemberName<TestClass>( c => c.testProperty ).TryGet( out memberName ) )
+					Debug.Log( memberName );
 			}
 
 			if( GUILayout.Button( "Get TestClass static field name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName( () => TestClass.staticTestField );
-				Debug.Log( memberName );
+				string memberName;
+				if( StaticReflectionHelper.GetMemberName( () => TestClass.staticTestField ).TryGet( out memberName ) )
+					Debug.Log( memberName );
 			}
 
 			if( GUILayout.Button( "Get TestClass static property name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName( () => TestClass.staticTestProperty );
-				Debug.Log( memberName );
+				string memberName;
+				if( StaticReflectionHelper.GetMemberName( () => TestClass.staticTestProperty ).TryGet( out memberName ) )
+					Debug.Log( memberName );
 			}
 
 			GUILayout.Label( "Methods" );
 
 			if( GUILayout.Button( "Get TestClass method name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethod() );
-				var methodInfo = StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethod() );
-				Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name );
+				Option.IfSome(
+					StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethod() ),
+					StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethod() ),
+					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
+				);
 			}
 
 			if( GUILayout.Button( "Get TestClass no return method name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethodNoReturn() );
-				var methodInfo = StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethodNoReturn() );
-				Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name );
+				Option.IfSome(
+					StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethodNoReturn() ),
+					StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethodNoReturn() ),
+					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
+				);
 			}
 
 			if( GUILayout.Button( "Get TestClass static methods name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethod() );
-				var methodInfo = StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethod() );
-				Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name );
+				Option.IfSome(
+					StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethod() ),
+					StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethod() ),
+					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
+				);
 			}
 
 			if( GUILayout.Button( "Get TestClass no return static methods name" ) )
 			{
-				string memberName = StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethodNoReturn() );
-				var methodInfo = StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethodNoReturn() );
-				Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name );
+				Option.IfSome(
+					StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethodNoReturn() ),
+					StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethodNoReturn() ),
+					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
+				);
 			}
+		}
+
+		private static None DebugLog( string message )
+		{
+			Debug.Log( message );
+			return new None();
 		}
 	}
 }

@@ -2,14 +2,17 @@
 
 namespace BitStrap.Examples
 {
-	public class SingletonExample : MonoBehaviour
+	public sealed class SingletonExample : MonoBehaviour
 	{
 		[Button]
 		public void AccessDummySingletonFieldDirectly()
 		{
 			if( Application.isPlaying )
 			{
-				var fieldValue = Singleton<DummySingleton>.Instance.dummyIntField;
+				var fieldValue = Singleton<DummySingleton>.Instance.Match(
+					some: s => s.dummyIntField,
+					none: () => 0 );
+
 				Debug.LogFormat( "Accessing DummySingleton's dummyIntField directly: {0}", fieldValue );
 			}
 			else
