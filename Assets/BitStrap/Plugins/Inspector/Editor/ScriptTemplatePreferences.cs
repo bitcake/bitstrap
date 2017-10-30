@@ -9,6 +9,7 @@ namespace BitStrap
 	/// its static properties.
 	/// To use script templates go to Edit -> Preferences -> BitStrap.
 	/// </summary>
+	[InitializeOnLoadAttribute]
 	public static class ScriptTemplatePreferences
 	{
 		public static EditorPrefProperty<string> ScriptTemplateDefaultPath = new EditorPrefString( "ScriptTemplate_DefaultFilePath", "" );
@@ -47,6 +48,11 @@ public sealed class #SCRIPTNAME# : Editor
 		public static string CSharpEditorScriptDefaultCode
 		{
 			get { return cSharpEditorScriptTemplate.TemplateCode; }
+		}
+
+		static ScriptTemplatePreferences()
+		{
+			BitStrapPreferences.RegisterPreference( OnPreferencesGUI );
 		}
 
 		public static void OnPreferencesGUI()
