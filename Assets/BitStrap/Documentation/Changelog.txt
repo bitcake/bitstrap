@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.11.2
+
++ Documentation links "Windows/BitStrap/ Open Web Documentation" and "Preferences/BitStrap"
++ "Assets/BitStrap/Documentation/Documentation.html" that points to the web docs
+* Changelog is a .txt again
+
+
 ### 1.11.1
 
 + Unity 5.6.2 support
