@@ -42,13 +42,13 @@ Windows Store App (WSA) support!
 * MemberInfo.GetCustomAttribute: renamed to GetAttribute
 
 
-###	1.9.2
+### 1.9.2
 
 + BitStream: serialize bools, ints and floats with bit precision. Good for critical network data compressing.
 * Some editor scripts were outside the Editor folder causing build compilation issues.
 
 
-###	1.9.1
+### 1.9.1
 
 + Option: option (maybe) monad that represents the possibility of no value (better than passing null around)
 + Sort Components: right from the component context menu, you can sort your components again!
@@ -86,7 +86,7 @@ Windows Store App (WSA) support!
 + TweenPath: Interpolates a transform through a Bezier or linear path of control points
 + Fix small bug on Modifiable
 + Some other fixes and code improvements
-> Shoutout to Johannes
+> Shout out to Johannes
 
 
 ### 1.6
