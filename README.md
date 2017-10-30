@@ -53,4 +53,4 @@ of it as a "table of contents".
 
 ### [How to contribute](CONTRIBUTING.md)
 
-### [Changelog](Assets/BitStrap/Docs/Changelog.md)
+### [Changelog](Assets/BitStrap/Docs/Changelog.txt)
