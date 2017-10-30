@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildTarget: 5
   buildOptions: 0
-  fileNameOverride: Game_{TARGET}_{VERSION}
+  fileNameOverride: Game_{TARGET}_{VERSION}.exe
   preBuildActions:
   - {fileID: 11400000, guid: f6e33dfb6ed775e4fbc3044f69d21401, type: 2}
   postBuildActions:
