@@ -1,5 +1,13 @@
 # Changelog
 
+### 1.12.0
+
++ Timer.Start( timeOffset ): start the timer with a time offset (in the future)
++ Timer.onTimerPrecise: same as 'onTimer' but takes the callback latency as a parameter
+* NumberRange: renamed from NumberBounds
+* Fix TweenShader Editor: it was not saving changes to the animation curve
+
+
 ### 1.11.2
 
 + Documentation links "Windows/BitStrap/ Open Web Documentation" and "Preferences/BitStrap"

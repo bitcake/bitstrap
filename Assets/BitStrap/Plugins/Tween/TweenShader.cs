@@ -9,7 +9,7 @@ namespace BitStrap
 	/// It is better to use it than directly setting a material property because it does not
 	/// create a new Material instance and, thus, does not generates a new drawcall.
 	/// </summary>
-	public class TweenShader : MonoBehaviour
+	public sealed class TweenShader : MonoBehaviour
 	{
 		/// <summary>
 		/// The tween duration.

@@ -26,6 +26,7 @@ namespace BitStrap
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
 			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
+			property.serializedObject.Update();
 
 			var nameProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.name );
 			var typeProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.type );
@@ -70,7 +71,7 @@ namespace BitStrap
 				EditorGUI.EndDisabledGroup();
 			}
 
-			curveProperty.animationCurveValue = EditorGUI.CurveField( curveRect, curveProperty.animationCurveValue );
+			EditorGUI.PropertyField( curveRect, curveProperty, GUIContent.none );
 
 			EditorHelper.BeginChangeLabelWidth( FromToLabelWidth );
 

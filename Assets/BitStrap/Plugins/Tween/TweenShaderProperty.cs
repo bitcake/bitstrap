@@ -6,7 +6,7 @@ namespace BitStrap
 	/// A shader property that can be interpolated.
 	/// </summary>
 	[System.Serializable]
-	public class TweenShaderProperty
+	public sealed class TweenShaderProperty
 	{
 		/// <summary>
 		/// The shader property type.

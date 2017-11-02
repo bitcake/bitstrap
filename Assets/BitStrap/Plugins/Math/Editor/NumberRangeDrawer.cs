@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace BitStrap
 {
-	[CustomPropertyDrawer( typeof( IntBounds ) )]
-	[CustomPropertyDrawer( typeof( FloatBounds ) )]
-	public sealed class NumberBoundsDrawer : PropertyDrawer
+	[CustomPropertyDrawer( typeof( IntRange ) )]
+	[CustomPropertyDrawer( typeof( FloatRange ) )]
+	[CustomPropertyDrawer( typeof( DoubleRange ) )]
+	public sealed class NumberRangeDrawer : PropertyDrawer
 	{
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
@@ -29,8 +30,8 @@ namespace BitStrap
 
 			EditorGUI.LabelField( labelPosition, label );
 
-			SerializedProperty max = property.GetMemberProperty<IntBounds>( b => b.Max );
-			SerializedProperty min = property.GetMemberProperty<IntBounds>( b => b.Min );
+			SerializedProperty max = property.GetMemberProperty<IntRange>( b => b.Max );
+			SerializedProperty min = property.GetMemberProperty<IntRange>( b => b.Min );
 
 			EditorHelper.BeginChangeLabelWidth( 32.0f );
 			EditorHelper.BeginChangeIndentLevel( 0 );

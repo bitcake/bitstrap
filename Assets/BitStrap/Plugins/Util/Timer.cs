@@ -19,6 +19,12 @@ namespace BitStrap
 		/// </summary>
 		public SafeAction onTimer = new SafeAction();
 
+		/// <summary>
+		/// Similar to 'onTimer' but it takes as a parameter the callback latency
+		/// E.g. how much time has passed since it was meant to be called.
+		/// </summary>
+		public SafeAction<float> onTimerPrecise = new SafeAction<float>();
+
 		private float elapsedTime = -1.0f;
 
 		/// <summary>
@@ -72,10 +78,12 @@ namespace BitStrap
 			if( elapsedTime >= 0.0f )
 				elapsedTime += deltaTime;
 
-			if( elapsedTime >= length )
+			float latency = elapsedTime - length;
+			if( latency >= 0 )
 			{
 				elapsedTime = -1.0f;
 				onTimer.Call();
+				onTimerPrecise.Call( latency );
 			}
 		}
 
@@ -93,6 +101,14 @@ namespace BitStrap
 		public void Start()
 		{
 			elapsedTime = 0.0f;
+		}
+
+		/// <summary>
+		/// Start the timer at 'timeOffset' and play its counter.
+		/// </summary>
+		public void Start( float timeOffset )
+		{
+			elapsedTime = timeOffset;
 		}
 	}
 }

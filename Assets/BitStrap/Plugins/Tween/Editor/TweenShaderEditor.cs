@@ -10,7 +10,7 @@ namespace BitStrap
 	[CustomEditor( typeof( TweenShader ) )]
 	public class TweenShaderEditor : Editor
 	{
-		private readonly object[] emptyArgs = new object[0];
+		private static readonly object[] EmptyArgs = new object[0];
 
 		private ReorderableList shaderProperiesList;
 		private Option<EditorCoroutine> playCoroutine;
@@ -99,7 +99,7 @@ namespace BitStrap
 		private void InitTween( TweenShader tweenShader )
 		{
 			TryInitReflection();
-			initMethod.Invoke( tweenShader, emptyArgs );
+			initMethod.Invoke( tweenShader, EmptyArgs );
 
 			if( !tweenShader.duration.IsRunning )
 				wasTweenEnabled = tweenShader.enabled;
@@ -117,7 +117,7 @@ namespace BitStrap
 		{
 			while( true )
 			{
-				updateMethod.Invoke( tweenShader, emptyArgs );
+				updateMethod.Invoke( tweenShader, EmptyArgs );
 				SceneView.RepaintAll();
 
 				if( !tweenShader.duration.IsRunning )

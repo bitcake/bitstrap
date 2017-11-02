@@ -8,15 +8,15 @@ namespace BitStrap
 	}
 
 	/// <summary>
-	/// Specialized version of NumberBounds for int.
+	/// Specialized version of NumberRange for int.
 	/// </summary>
 	[System.Serializable]
-	public class IntBounds : NumberBounds<int>
+	public sealed class IntRange : NumberRange<int>
 	{
-		public IntBounds() : base()
+		public IntRange() : base()
 		{ }
 
-		public IntBounds( int min, int max ) : base( min, max )
+		public IntRange( int min, int max ) : base( min, max )
 		{ }
 
 		/// <summary>
@@ -30,15 +30,15 @@ namespace BitStrap
 	}
 
 	/// <summary>
-	/// Specialized version of NumberBounds for float.
+	/// Specialized version of NumberRange for float.
 	/// </summary>
 	[System.Serializable]
-	public class FloatBounds : NumberBounds<float>
+	public sealed class FloatRange : NumberRange<float>
 	{
-		public FloatBounds() : base()
+		public FloatRange() : base()
 		{ }
 
-		public FloatBounds( float min, float max ) : base( min, max )
+		public FloatRange( float min, float max ) : base( min, max )
 		{ }
 
 		/// <summary>
@@ -62,12 +62,25 @@ namespace BitStrap
 	}
 
 	/// <summary>
-	/// Represents a number bounds. Contains a minimum and maximun value.
+	/// Specialized version of NumberRange for double.
+	/// </summary>
+	[System.Serializable]
+	public sealed class DoubleRange : NumberRange<double>
+	{
+		public DoubleRange() : base()
+		{ }
+
+		public DoubleRange( double min, double max ) : base( min, max )
+		{ }
+	}
+
+	/// <summary>
+	/// Represents a number range. Contains a minimum and maximun value.
 	/// Also it has a nice inspector with auto validation.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[System.Serializable]
-	public class NumberBounds<T> : IValidatable where T : System.IComparable<T>
+	public class NumberRange<T> : IValidatable where T : System.IComparable<T>
 	{
 		[SerializeField]
 		protected T min = default( T );
@@ -93,11 +106,11 @@ namespace BitStrap
 			set { max = value; ValidateBounds(); }
 		}
 
-		public NumberBounds()
+		public NumberRange()
 		{
 		}
 
-		public NumberBounds( T min, T max )
+		public NumberRange( T min, T max )
 		{
 			Set( min, max );
 		}
