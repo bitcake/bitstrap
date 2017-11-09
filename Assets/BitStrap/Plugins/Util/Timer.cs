@@ -17,13 +17,13 @@ namespace BitStrap
 		/// <summary>
 		/// Callback that gets called when "length" seconds has elapsed.
 		/// </summary>
-		public SafeAction onTimer = new SafeAction();
+		public readonly SafeAction onTimer = new SafeAction();
 
 		/// <summary>
 		/// Similar to 'onTimer' but it takes as a parameter the callback latency
 		/// E.g. how much time has passed since it was meant to be called.
 		/// </summary>
-		public SafeAction<float> onTimerPrecise = new SafeAction<float>();
+		public readonly SafeAction<float> onTimerPrecise = new SafeAction<float>();
 
 		private float elapsedTime = -1.0f;
 
