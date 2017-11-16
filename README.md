@@ -19,7 +19,7 @@ It is also possible to import it directly from the [AssetStore](https://www.asse
 
 ## Documentation
 
-NOTE: Right now we're moving all the documentation to this repository [Wiki](/wiki)!
+NOTE: Right now we're moving all the documentation to this repository [Wiki](https://github.com/bitcake/bitstrap/wiki)!
 
 Although all the classes are already documented, we also have a simple web page
 containing a feature list followed by a quick explanation of each. You can think
