@@ -12,15 +12,14 @@ You are free to use these tools in whatever project you're doing. Make us proud!
 
 ## Getting started
 
-This is the easy part!
-Since this is a Unity project, just download it and then continue from there.
-Alternatively, you can just add all these scripts to an already existing project.
+Easy! Since this is a Unity project, just download it and then continue from there.
+Alternatively, you can add all assets inside `Assets/BitStrap` to an already existing Unity project.
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
 ## Documentation
 
-NOTE: Right now we're moving all the documentation to this repository Wiki!
+NOTE: Right now we're moving all the documentation to this repository [Wiki](/wiki)!
 
 Although all the classes are already documented, we also have a simple web page
 containing a feature list followed by a quick explanation of each. You can think
