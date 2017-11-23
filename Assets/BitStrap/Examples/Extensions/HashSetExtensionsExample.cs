@@ -50,7 +50,7 @@ namespace BitStrap.Examples
 		public void GetFirstElementOrDefaultValue()
 		{
 			BuildHashSet();
-			Debug.LogFormat( "First element or 'None' is {0}.", actualHashSet.First().Or( "None" ) );
+			Debug.LogFormat( "First element or 'None' is {0}.", actualHashSet.First().UnwrapOr( "None" ) );
 		}
 
 		[Button]

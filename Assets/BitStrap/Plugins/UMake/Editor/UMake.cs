@@ -23,13 +23,14 @@ namespace BitStrap
 
 		public static Option<UMake> Get()
 		{
-			if( !instance.HasValue )
+			UMake umake;
+			if( !instance.TryGet( out umake ) )
 			{
-				var umake = AssetDatabase.LoadAssetAtPath<UMake>( Path );
-				instance = new Option<UMake>( umake );
+				umake = AssetDatabase.LoadAssetAtPath<UMake>( Path );
+				instance = umake;
 			}
 
-			return instance;
+			return umake;
 		}
 
 		public static Option<UMakeTarget> GetTarget( string targetName )

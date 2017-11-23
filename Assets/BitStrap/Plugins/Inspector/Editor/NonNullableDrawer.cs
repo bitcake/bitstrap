@@ -35,7 +35,7 @@ namespace BitStrap
 			Object target = property.serializedObject.targetObject;
 			bool isFromMonoBehaviour = target != null && target is MonoBehaviour;
 
-			if( !nullableAttribute.HasValue && isFromMonoBehaviour && IsNull( property ) )
+			if( !nullableAttribute.IsSome && isFromMonoBehaviour && IsNull( property ) )
 			{
 				GUI.color = Color.red;
 				EditorGUI.PropertyField( position, property, label, true );

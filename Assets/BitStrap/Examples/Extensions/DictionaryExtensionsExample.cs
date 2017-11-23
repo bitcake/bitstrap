@@ -58,7 +58,7 @@ namespace BitStrap.Examples
 		{
 			BuildDictionary();
 			var value = from e in actualDictionary.First() select e.Value;
-			Debug.LogFormat( "First element value or -999 value is {0}.", value.Or( -999 ) );
+			Debug.LogFormat( "First element value or -999 value is {0}.", value.UnwrapOr( -999 ) );
 		}
 
 		[Button]

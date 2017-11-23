@@ -19,7 +19,7 @@ namespace BitStrap
 		/// <returns></returns>
 		public static SerializedProperty GetMemberProperty<T>( this SerializedObject obj, Expression<System.Func<T, object>> expression )
 		{
-			string memberName = StaticReflectionHelper.GetMemberName( expression ).Or( "" );
+			string memberName = StaticReflectionHelper.GetMemberName( expression ).UnwrapOr( "" );
 			SerializedProperty memberProperty = obj.FindProperty( memberName );
 
 			if( memberProperty == null )
@@ -40,7 +40,7 @@ namespace BitStrap
 		/// <returns></returns>
 		public static SerializedProperty GetMemberProperty<T>( this SerializedProperty property, Expression<System.Func<T, object>> expression )
 		{
-			string memberName = StaticReflectionHelper.GetMemberName( expression ).Or( "" );
+			string memberName = StaticReflectionHelper.GetMemberName( expression ).UnwrapOr( "" );
 			SerializedProperty memberProperty = property.FindPropertyRelative( memberName );
 
 			if( memberProperty == null )

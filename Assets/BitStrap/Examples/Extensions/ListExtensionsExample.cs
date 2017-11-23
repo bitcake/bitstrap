@@ -38,7 +38,7 @@ namespace BitStrap.Examples
 		[Button]
 		public void GetFirstElementOrDefaultValue()
 		{
-			Debug.LogFormat( "First element or -999 value is {0}.", list.First().Or( -999 ) );
+			Debug.LogFormat( "First element or -999 value is {0}.", list.First().UnwrapOr( -999 ) );
 		}
 
 		[Button]

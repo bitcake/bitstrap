@@ -9,7 +9,7 @@ namespace BitStrap
 		public static void DrawUnit( Rect fieldPosition, string unitText, Option<GUIStyle> unitStyle )
 		{
 			var content = new GUIContent( unitText );
-			GUIStyle labelStyle = unitStyle.Or( EditorStyles.centeredGreyMiniLabel );
+			GUIStyle labelStyle = unitStyle.UnwrapOr( EditorStyles.centeredGreyMiniLabel );
 			float labelWidth = labelStyle.CalcSize( content ).x;
 
 			GUI.Label( fieldPosition.Right( labelWidth + 2.0f ), content, labelStyle );

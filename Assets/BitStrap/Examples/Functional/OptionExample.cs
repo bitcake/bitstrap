@@ -53,7 +53,7 @@ namespace BitStrap.Examples
 		public void TestWithNull()
 		{
 			var a = Option.Some( ( object ) null );
-			Debug.Log( "Has value? " + a.HasValue );
+			Debug.Log( "Has value? " + a.IsSome );
 		}
 	}
 }

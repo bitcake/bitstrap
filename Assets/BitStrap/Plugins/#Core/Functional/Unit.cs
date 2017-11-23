@@ -6,13 +6,14 @@ namespace BitStrap
 	{
 		public static Unit Do<T>( T a )
 		{
-			return default( Unit );
+			return new Unit();
 		}
 
 		public static Unit Do( System.Action action )
 		{
-			action();
-			return default( Unit );
+			if( action != null )
+				action();
+			return new Unit();
 		}
 	}
 }

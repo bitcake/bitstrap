@@ -18,16 +18,21 @@ namespace BitStrap
 		{
 			get
 			{
-				if( !instance.HasValue )
-					instance = Object.FindObjectOfType<T>();
+				T singleton;
+				if( !instance.TryGet( out singleton) )
+				{
+					singleton = Object.FindObjectOfType<T>();
+					instance = singleton;
+				}
 
-				return instance;
+				return singleton;
 			}
 
 			set
 			{
-				if( value.HasValue )
-					instance = value;
+				T singleton;
+				if( value.TryGet( out singleton ))
+					instance = singleton;
 			}
 		}
 	}
