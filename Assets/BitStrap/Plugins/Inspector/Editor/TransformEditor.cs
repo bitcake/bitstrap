@@ -11,7 +11,6 @@ namespace BitStrap
 	public class TransformEditor : Editor
 	{
 		private const float FIELD_WIDTH = 212.0f;
-		private const bool WIDE_MODE = true;
 
 		private const float POSITION_MAX = 100000.0f;
 
@@ -61,10 +60,12 @@ namespace BitStrap
 
 		public override void OnInspectorGUI()
 		{
-			EditorGUIUtility.wideMode = WIDE_MODE;
-			EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - FIELD_WIDTH; // align field to right of inspector
-
-			serializedObject.Update();
+		    if (!EditorGUIUtility.wideMode)
+		    {
+		        EditorGUIUtility.wideMode = true;
+                EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - FIELD_WIDTH; // align field to right of inspector
+		    }
+		    serializedObject.Update();
 
 			BeginPropertyWithReset();
 			EditorGUILayout.PropertyField( positionProperty, positionGUIContent );
