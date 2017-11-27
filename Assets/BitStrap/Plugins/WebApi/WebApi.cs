@@ -5,12 +5,23 @@ using UnityEngine.Networking;
 
 namespace BitStrap
 {
+	public struct WebError
+	{
+		public string message;
+		public long httpCode;
+
+		public override string ToString()
+		{
+			return message;
+		}
+	}
+
 	public sealed class WebApi : MonoBehaviour
 	{
 		public static WebApi Instance { get; private set; }
 
-		public string Url;
-		public bool VerboseMode;
+		public string url;
+		public bool verboseMode;
 
 		[System.NonSerialized]
 		public IWebSerializer serializer;
@@ -39,12 +50,17 @@ namespace BitStrap
 		{
 			string url = WebApiHelper.BuildUrl( action, actionData );
 
-			if( VerboseMode )
+			if( verboseMode )
 				Debug.LogFormat( "*[WebApi.Request]* [{0}] \"{1}\"\n{2}", action.Method, url, actionData.values.ToStringFull() );
 
 			UnityWebRequest httpRequest;
-			if( !WebApiHelper.CreateRequest( url, action, actionData, serializer ).TryGet( out httpRequest ) )
+
+			var result = WebApiHelper.CreateRequest( url, action, actionData, serializer );
+			if( !result.Ok.TryGet( out httpRequest ) )
+			{
+				request.RespondToResult( this, result.Select( r => "" ) );
 				yield break;
+			}
 
 #if UNITY_5
 			yield return httpRequest.Send();
@@ -57,16 +73,22 @@ namespace BitStrap
 #endif
 
 			string text;
-
 			if( success )
 				text = httpRequest.downloadHandler.text;
 			else
 				text = httpRequest.error;
 
-			if( VerboseMode )
+			if( verboseMode )
 				Debug.LogFormat( "*[WebApi.Response]* [{0}] \"{1}\"\n{2}", action.Method, url, text );
 
-			request.RespondToResult( success, text );
+			if( success )
+				request.RespondToResult( this, new Result<string, WebError>( text ) );
+			else
+				request.RespondToResult(this, new Result<string, WebError>( new WebError
+				{
+					message = text,
+					httpCode = httpRequest.responseCode
+				} ) );
 		}
 
 		private void Awake()

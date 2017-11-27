@@ -5,14 +5,13 @@ namespace BitStrap
 {
 	public interface IWebRequest
 	{
-		void RespondToResult( bool success, string text );
+		void RespondToResult( WebApi api, Result<string, WebError> result );
 	}
 
 	public sealed class WebRequest<T> : IWebRequest
 	{
 		private readonly IWebAction action;
-		private readonly SafeAction<string> onResponse = new SafeAction<string>();
-		private readonly SafeAction<string> onError = new SafeAction<string>();
+		private readonly SafeAction<Result<string, WebError>> onResponse = new SafeAction<Result<string, WebError>>();
 
 		public WebRequest( IWebAction action, ref WebActionData data )
 		{
@@ -20,32 +19,25 @@ namespace BitStrap
 			action.Controller.Api.MakeRequest( action, data, this );
 		}
 
-		public WebRequest<T> OnResponse( System.Action<T> callback )
+		public WebRequest<T> OnResponse( System.Action<Result<T, WebError>> callback )
 		{
 			onResponse.Register( action.ConvertRequestCallback( callback ) );
 			return this;
 		}
 
-		public WebRequest<T> OnRawResponse( System.Action<string> callback )
+		public WebRequest<T> OnRawResponse( System.Action<Result<string, WebError>> callback )
 		{
 			onResponse.Register( callback );
 			return this;
 		}
 
-		public WebRequest<T> OnError( System.Action<string> callback )
+		void IWebRequest.RespondToResult( WebApi api, Result<string, WebError> result )
 		{
-			onError.Register( callback );
-			return this;
-		}
+			onResponse.Call( result );
 
-		void IWebRequest.RespondToResult( bool success, string text )
-		{
-			if( success )
-				onResponse.Call( text );
-			else if( onError.Count > 0 )
-				onError.Call( text );
-			else
-				Debug.LogErrorFormat( "Response error: \"{0}\"", text );
+			WebError error;
+			if( api.verboseMode && result.Error.TryGet( out error ) )
+				Debug.LogErrorFormat( "Response error: \"{0}\"", error );
 		}
 	}
 }

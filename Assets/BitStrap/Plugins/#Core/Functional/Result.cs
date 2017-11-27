@@ -14,6 +14,16 @@ namespace BitStrap
 
 		public readonly bool isOk;
 
+		public Option<A> Ok
+		{
+			get { return isOk ? Option.Some( value ) : new None(); }
+		}
+
+		public Option<E> Error
+		{
+			get { return !isOk ? Option.Some( error ) : new None(); }
+		}
+
 		public Result( A value )
 		{
 			this.value = value;
@@ -54,22 +64,6 @@ namespace BitStrap
 				error( this.error );
 
 			return new Unit();
-		}
-
-		public Option<A> Ok()
-		{
-			if( isOk )
-				return Option.Some( value );
-
-			return new None();
-		}
-
-		public Option<E> Error()
-		{
-			if( !isOk )
-				return Option.Some( error );
-
-			return new None();
 		}
 
 		public A Unwrap()

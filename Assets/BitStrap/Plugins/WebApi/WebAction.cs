@@ -44,16 +44,16 @@ namespace BitStrap
 		string[] ParamNames { get; }
 		IWebController Controller { get; }
 
-		System.Action<string> ConvertRequestCallback<A>( System.Action<A> callback );
+		System.Action<Result<string, WebError>> ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback );
 	}
 
 	public sealed class WebAction : WebAction<None>, IWebAction
 	{
 		public WebAction( string name, WebMethod httpMethod, string[] headerNames, string[] argNames, IWebController controller ) : base( name, httpMethod, headerNames, argNames, controller ) { }
 
-		System.Action<string> IWebAction.ConvertRequestCallback<A>( System.Action<A> callback )
+		System.Action<Result<string, WebError>> IWebAction.ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback )
 		{
-			return text => Callback.Trigger( callback, default( A ) );
+			return result => callback( result.Select( text => default( A ) ) );
 		}
 	}
 
@@ -103,14 +103,9 @@ namespace BitStrap
 			return request;
 		}
 
-		System.Action<string> IWebAction.ConvertRequestCallback<A>( System.Action<A> callback )
+		System.Action<Result<string, WebError>> IWebAction.ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback )
 		{
-			return text =>
-			{
-				A responseValue;
-				if( Controller.Api.serializer.Deserialize<A>( text ).TryGet( out responseValue ) )
-					Callback.Trigger( callback, responseValue );
-			};
+			return result => callback( result.AndThen( text => Controller.Api.serializer.Deserialize<A>( text ) ) );
 		}
 	}
 }

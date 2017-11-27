@@ -16,12 +16,12 @@ namespace BitStrap.Examples
 				return;
 			}
 
-			duckDuckGoWebApi.Controller<DuckDuckGoSearchController>().web.Request( search, "json" ).OnRawResponse( text =>
+			duckDuckGoWebApi.Controller<DuckDuckGoSearchController>().web.Request( search, "json" ).OnRawResponse( result =>
 			{
-				Debug.LogFormat( "RESULT: {0}", text );
-			} ).OnError( error =>
-			{
-				Debug.LogFormat( "ERROR: {0}", error );
+				result.Match(
+					ok: text => Debug.LogFormat( "RESULT: {0}", text ),
+					error: error => Debug.LogFormat( "ERROR: {0}", error )
+				);
 			} );
 		}
 

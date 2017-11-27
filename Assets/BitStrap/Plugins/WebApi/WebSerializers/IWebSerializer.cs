@@ -5,9 +5,9 @@ namespace BitStrap
 {
 	public interface IWebSerializer
 	{
-		Option<string> Serialize( object value );
+		Result<string, WebError> Serialize( object value );
 
-		Option<T> Deserialize<T>( string value );
+		Result<T, WebError> Deserialize<T>( string value );
 
 		void OnBeforeRequest( UnityWebRequest request );
 	}

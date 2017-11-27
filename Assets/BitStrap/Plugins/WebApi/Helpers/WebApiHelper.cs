@@ -13,9 +13,9 @@ namespace BitStrap
 			var api = controller.Api;
 
 			var uriBuilder = new StringBuilder();
-			uriBuilder.Append( api.Url );
+			uriBuilder.Append( api.url );
 
-			if( !api.Url.EndsWith( "/" ) )
+			if( !api.url.EndsWith( "/" ) )
 				uriBuilder.Append( '/' );
 
 			uriBuilder.Append( controller.Name );
@@ -70,32 +70,29 @@ namespace BitStrap
 			return uriBuilder.ToString();
 		}
 
-		public static Option<UnityWebRequest> CreateRequest( string url, IWebAction action, WebActionData actionData, IWebSerializer serializer )
+		public static Result<UnityWebRequest, WebError> CreateRequest( string url, IWebAction action, WebActionData actionData, IWebSerializer serializer )
 		{
-			UnityWebRequest request;
-
 			if( action.Method == WebMethod.POST )
 			{
-				string postData = "";
 				object[] values = actionData.values;
 
 				var form = new Dictionary<string, object>();
 				for( int i = 0; i < values.Length; i++ )
 					form.Add( action.ParamNames[i], values[i] );
 
-				if( !serializer.Serialize( form ).TryGet( out postData ) )
-					return new None();
-
-				request = UnityWebRequest.Post( url, postData );
+				return serializer.Serialize( form ).Select( postData =>
+					{
+						var request = UnityWebRequest.Post( url, postData );
+						serializer.OnBeforeRequest( request );
+						return request;
+					} );
 			}
 			else
 			{
-				request = UnityWebRequest.Get( url );
+				var request = UnityWebRequest.Get( url );
+				serializer.OnBeforeRequest( request );
+				return request;
 			}
-
-			serializer.OnBeforeRequest( request );
-
-			return request;
 		}
 	}
 }
