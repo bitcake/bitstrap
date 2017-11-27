@@ -5,6 +5,7 @@
 + Result: a monad that contains either a value or an error. Behaves like the Result monad in Rust
 * Option: now it behaves like the Option monad in Rust
 * WebApi: now it uses the Result monad in its methods and callbacks
+* UMakeCli.BuildAndPostBuild(): will build and immediately execute post build actions
 - Callback: was removed because we do not encourage the use of null references
 
 

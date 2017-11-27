@@ -97,6 +97,12 @@ namespace BitStrap
 			} );
 		}
 
+		public static void BuildAndPostBuild()
+		{
+			Build();
+			PostBuild();
+		}
+
 		private static void GetArgs()
 		{
 			string[] allArgs = System.Environment.GetCommandLineArgs();
