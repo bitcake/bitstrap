@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.13.0
+
++ Result: a monad that contains either a value or an error. Behaves like the Result monad in Rust
+* Option: now it behaves like the Option monad in Rust
+* WebApi: now it uses the Result monad in its methods and callbacks
+
+
 ### 1.12.0
 
 + Timer.Start( timeOffset ): start the timer with a time offset (in the future)
