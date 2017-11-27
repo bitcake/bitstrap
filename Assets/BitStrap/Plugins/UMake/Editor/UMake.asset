@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2a83d148faa244e98b9c1b5845223e, type: 3}
   m_Name: UMake
   m_EditorClassIdentifier: 
-  version: 0.2
+  version: 0.0
   targets:
   - {fileID: 11400000, guid: 7f81796b9ae50f44ab7ee6b46afc306f, type: 2}
   - {fileID: 11400000, guid: 433406062d68cd84f9ef6510ad667da3, type: 2}
