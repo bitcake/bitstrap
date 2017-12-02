@@ -13,7 +13,7 @@ namespace BitStrap
 		[UMakeTargetActions]
 		public UMakeTarget[] targets;
 
-		private static Option<UMake> instance = new None();
+		private static Option<UMake> instance = Functional.None;
 
 		public static string BuildPathPref
 		{

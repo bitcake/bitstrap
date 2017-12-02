@@ -77,45 +77,35 @@ namespace BitStrap.Examples
 
 			if( GUILayout.Button( "Get TestClass method name" ) )
 			{
-				Option.IfSome(
-					StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethod() ),
-					StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethod() ),
-					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
-				);
+				Functional.Ignore =
+					from memberName in StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethod() )
+					from methodInfo in StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethod() )
+					select Functional.Do( () => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name ) );
 			}
 
 			if( GUILayout.Button( "Get TestClass no return method name" ) )
 			{
-				Option.IfSome(
-					StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethodNoReturn() ),
-					StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethodNoReturn() ),
-					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
-				);
+				Functional.Ignore =
+					from memberName in StaticReflectionHelper.GetMemberName<TestClass>( c => c.TestMethodNoReturn() )
+					from methodInfo in StaticReflectionHelper.GetMethod<TestClass>( c => c.TestMethodNoReturn() )
+					select Functional.Do( () => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name ) );
 			}
 
 			if( GUILayout.Button( "Get TestClass static methods name" ) )
 			{
-				Option.IfSome(
-					StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethod() ),
-					StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethod() ),
-					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
-				);
+				Functional.Ignore =
+					from memberName in StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethod() )
+					from methodInfo in StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethod() )
+					select Functional.Do( () => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name ) );
 			}
 
 			if( GUILayout.Button( "Get TestClass no return static methods name" ) )
 			{
-				Option.IfSome(
-					StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethodNoReturn() ),
-					StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethodNoReturn() ),
-					( memberName, methodInfo ) => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name )
-				);
+				Functional.Ignore =
+					from memberName in StaticReflectionHelper.GetMemberName( () => TestClass.StaticTestMethodNoReturn() )
+					from methodInfo in StaticReflectionHelper.GetMethod( () => TestClass.StaticTestMethodNoReturn() )
+					select Functional.Do( () => Debug.Log( memberName + ", MethodInfo.Name: " + methodInfo.Name ) );
 			}
-		}
-
-		private static None DebugLog( string message )
-		{
-			Debug.Log( message );
-			return new None();
 		}
 	}
 }

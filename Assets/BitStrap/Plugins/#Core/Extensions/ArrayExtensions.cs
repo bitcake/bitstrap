@@ -94,7 +94,7 @@ namespace BitStrap
 			if( collection.Length > 0 )
 				return new Option<T>( collection[0] );
 
-			return new None();
+			return Functional.None;
 		}
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace BitStrap
 					return new Option<T>( collection[i] );
 			}
 
-			return new None();
+			return Functional.None;
 		}
 
 		/// <summary>

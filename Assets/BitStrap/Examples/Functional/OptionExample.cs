@@ -18,8 +18,8 @@ namespace BitStrap.Examples
 		[Button]
 		public void TestWithOption()
 		{
-			var a = Option.Some( 1 );
-			var b = Option.Some( 2 );
+			Option<int> a = 1;
+			Option<int> b = 2;
 
 			var r = from x in a
 					from y in b
@@ -36,7 +36,7 @@ namespace BitStrap.Examples
 		public void TestWithOptionAndNone()
 		{
 			Option<int> a = 1;
-			Option<int> b = new None();
+			Option<int> b = Functional.None;
 
 			var r = from x in a
 					from y in b
@@ -52,7 +52,7 @@ namespace BitStrap.Examples
 		[Button]
 		public void TestWithNull()
 		{
-			var a = Option.Some( ( object ) null );
+			Option<object> a = null;
 			Debug.Log( "Has value? " + a.IsSome );
 		}
 	}

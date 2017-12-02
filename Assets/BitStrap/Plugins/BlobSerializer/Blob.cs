@@ -14,7 +14,7 @@ namespace BitStrap
 					return i;
 			}
 
-			return new None();
+			return Functional.None;
 		}
 	}
 

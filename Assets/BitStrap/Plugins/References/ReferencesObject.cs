@@ -29,7 +29,7 @@ namespace BitStrap
 					return reference;
 			}
 
-			return new None();
+			return Functional.None;
 		}
 
 #if UNITY_EDITOR

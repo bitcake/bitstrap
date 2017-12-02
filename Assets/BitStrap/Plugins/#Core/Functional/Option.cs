@@ -4,72 +4,17 @@
 	{
 	}
 
-
 	public static class Option
 	{
 		public sealed class UnwrapNoneException : System.Exception
 		{
 		}
-
-		public static Option<T> Some<T>( T value )
-		{
-			return new Option<T>( value );
-		}
-
-		public static void IfSome<A, B>( Option<A> a, Option<B> b, System.Action<A, B> predicate )
-		{
-			A valueA;
-			if( !a.TryGet( out valueA ) )
-				return;
-
-			B valueB;
-			if( !b.TryGet( out valueB ) )
-				return;
-
-			predicate( valueA, valueB );
-		}
-
-		public static void IfSome<A, B, C>( Option<A> a, Option<B> b, Option<C> c, System.Action<A, B, C> predicate )
-		{
-			A valueA;
-			if( !a.TryGet( out valueA ) )
-				return;
-
-			B valueB;
-			if( !b.TryGet( out valueB ) )
-				return;
-
-			C valueC;
-			if( !c.TryGet( out valueC ) )
-				return;
-
-			predicate( valueA, valueB, valueC );
-		}
-
-		public static void IfSome<A, B, C, D>( Option<A> a, Option<B> b, Option<C> c, Option<D> d, System.Action<A, B, C, D> predicate )
-		{
-			A valueA;
-			if( !a.TryGet( out valueA ) )
-				return;
-
-			B valueB;
-			if( !b.TryGet( out valueB ) )
-				return;
-
-			C valueC;
-			if( !c.TryGet( out valueC ) )
-				return;
-
-			D valueD;
-			if( !d.TryGet( out valueD ) )
-				return;
-
-			predicate( valueA, valueB, valueC, valueD );
-		}
 	}
 
 	public struct Option<A>
 	{
+		private static readonly Option<A> None = default( Option<A> );
+
 		private readonly A value;
 		private readonly bool isSome;
 
@@ -91,7 +36,7 @@
 
 		public static implicit operator Option<A>( None value )
 		{
-			return default( Option<A> );
+			return None;
 		}
 
 		public bool TryGet( out A value )
@@ -121,7 +66,7 @@
 			else
 				none();
 
-			return new Unit();
+			return Functional.Unit;
 		}
 
 		public Result<A, E> OkOr<E>( E error )
@@ -169,7 +114,7 @@
 			if( IsSome )
 				onSome( value );
 
-			return new Unit();
+			return Functional.Unit;
 		}
 
 		public Option<B> And<B>( Option<B> other )
@@ -177,7 +122,7 @@
 			if( IsSome )
 				return other;
 
-			return new None();
+			return Option<B>.None;
 		}
 
 		public Option<B> AndThen<B>( System.Func<A, Option<B>> onOther )
@@ -185,7 +130,7 @@
 			if( IsSome )
 				return onOther( value );
 
-			return new None();
+			return Option<B>.None;
 		}
 
 		public Option<A> Or( Option<A> other )
@@ -209,7 +154,7 @@
 			if( IsSome )
 				return select( value );
 
-			return new None();
+			return Option<B>.None;
 		}
 
 		public Option<A> Where( System.Predicate<A> predicate )
@@ -217,17 +162,17 @@
 			if( IsSome && predicate( value ) )
 				return this;
 
-			return new None();
+			return None;
 		}
 
 		public Option<C> SelectMany<B, C>( System.Func<A, Option<B>> func, System.Func<A, B, C> select )
 		{
 			if( !IsSome )
-				return new None();
+				return Option<C>.None;
 
 			var b = func( value );
 			if( !b.IsSome )
-				return new None();
+				return Option<C>.None;
 
 			return select( value, b.value );
 		}

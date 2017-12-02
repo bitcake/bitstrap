@@ -67,7 +67,7 @@ namespace BitStrap
 
 			string emailProvider = email.Substring( emailProviderIndex, emailProviderLength );
 
-			Option<string> mostCorrectProvider = new None();
+			Option<string> mostCorrectProvider = Functional.None;
 			int mostCorrectDistance = 6;
 
 			foreach( string provider in emailProviders )

@@ -51,7 +51,7 @@ namespace BitStrap
 			catch( System.Exception e )
 			{
 				Debug.LogException( e );
-				return new None();
+				return Functional.None;
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace BitStrap
 		{
 			if( value == null )
 			{
-				return new BlobField( name, new None() );
+				return new BlobField( name, Functional.None );
 			}
 			else if( IsValueType( value.GetType() ) )
 			{

@@ -16,12 +16,12 @@ namespace BitStrap
 
 		public Option<A> Ok
 		{
-			get { return isOk ? Option.Some( value ) : new None(); }
+			get { return isOk ? new Option<A>( value ) : new Option<A>(); }
 		}
 
 		public Option<E> Error
 		{
-			get { return !isOk ? Option.Some( error ) : new None(); }
+			get { return !isOk ? new Option<E>( error ) : new Option<E>(); }
 		}
 
 		public Result( A value )
@@ -63,7 +63,7 @@ namespace BitStrap
 			else
 				error( this.error );
 
-			return new Unit();
+			return Functional.Unit;
 		}
 
 		public A Unwrap()
@@ -95,7 +95,7 @@ namespace BitStrap
 			if( isOk )
 				onOk( value );
 
-			return new Unit();
+			return Functional.Unit;
 		}
 
 		public Result<B, E> And<B>( Result<B, E> other )

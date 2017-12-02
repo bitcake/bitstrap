@@ -127,7 +127,7 @@ namespace BitStrap
 			}
 
 			playCoroutine.IfSome( c => c.Stop() );
-			playCoroutine = new None();
+			playCoroutine = Functional.None;
 
 			tweenShader.enabled = wasTweenEnabled;
 		}

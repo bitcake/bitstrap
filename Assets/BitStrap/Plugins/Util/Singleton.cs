@@ -9,7 +9,7 @@ namespace BitStrap
 	/// <typeparam name="T"></typeparam>
 	public class Singleton<T> : MonoBehaviour where T : Object
 	{
-		private static Option<T> instance = new None();
+		private static Option<T> instance = Functional.None;
 
 		/// <summary>
 		/// The class's single global instance.

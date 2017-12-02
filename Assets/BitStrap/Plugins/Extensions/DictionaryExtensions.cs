@@ -66,7 +66,7 @@ namespace BitStrap
 			if( collection.TryGetValue( key, out value ) )
 				return new Option<V>( value );
 
-			return new None();
+			return Functional.None;
 		}
 
 		/// <summary>
@@ -161,7 +161,7 @@ namespace BitStrap
 			if( enumerator.MoveNext() )
 				return new Option<KeyValuePair<K, V>>( enumerator.Current );
 
-			return new None();
+			return Functional.None;
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace BitStrap
 					return new Option<KeyValuePair<K, V>>( enumerator.Current );
 			}
 
-			return new None();
+			return Functional.None;
 		}
 
 		/// <summary>

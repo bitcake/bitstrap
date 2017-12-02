@@ -115,7 +115,7 @@ namespace BitStrap
 			if( unaryExpression != null )
 				return GetMemberName( unaryExpression.Operand );
 
-			return new None();
+			return Functional.None;
 		}
 
 		private static Option<MethodInfo> GetMethod( Expression expression )
@@ -128,7 +128,7 @@ namespace BitStrap
 			if( unaryExpression != null )
 				return GetMethod( unaryExpression.Operand );
 
-			return new None();
+			return Functional.None;
 		}
 	}
 }
