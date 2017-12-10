@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.14.0
+
++ Promise: a Future/Promise monad implementation
+
+
 ### 1.13.0
 
 + Result: a monad that contains either a value or an error. Behaves like the Result monad in Rust
