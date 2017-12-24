@@ -53,3 +53,11 @@ of it as a "table of contents".
 ### [How to contribute](CONTRIBUTING.md)
 
 ### [Changelog](Assets/BitStrap/Documentation/Changelog.txt)
+
+## Screenshots
+
+![Animation Parameters](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimationParameters.png)
+
+![Animation Parameters](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimatorEditor.png)
+
+
