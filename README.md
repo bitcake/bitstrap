@@ -56,34 +56,32 @@ of it as a "table of contents".
 
 ## Screenshots
 
-![](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimationParameters.png)
+<style type="text/css">
+   img + em { display: block; text-align: center;}
+</style>
 
-*Access Animation parameters without hardcoded strings*
+<figure>
+  <img src="{{site.url}}/Assets/AssetStoreTools/ScreenShots/Screenshot_AnimationParameters.png" />
+  <figcaption>Access Animation parameters without hardcoded strings.</figcaption>
+</figure>
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimatorEditor.png)
-
 *Organize your AnimatorControllers with nested AnimationClips*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_Attributes.png)
-
 *Use these helpful attributes to spice your inspectors up without writing a custom editor*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_BackgroundBlur.png)
-
 *Gorgeous and UI ready blur*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_GraphEditor.png)
-
 *Extendable graph editor. Make your own nodes!*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_RuntimeConsole.png)
-
 *Read those pesky debug logs in runtime even after the build*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_TweenShader.png)
-
 *Animate your shader params without allocating a new Material*
 
 ![](Assets/AssetStoreTools/ScreenShots/Screenshot_VectorHelperExample.png)
-
 *Some Vector utilities with an eye candy editor*
