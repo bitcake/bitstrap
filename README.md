@@ -56,8 +56,18 @@ of it as a "table of contents".
 
 ## Screenshots
 
-![Animation Parameters](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimationParameters.png)
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimationParameters.png)
 
-![Animation Parameters](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimatorEditor.png)
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_AnimatorEditor.png)
 
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_Attributes.png)
 
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_BackgroundBlur.png)
+
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_GraphEditor.png)
+
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_RuntimeConsole.png)
+
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_TweenShader.png)
+
+![](Assets/AssetStoreTools/ScreenShots/Screenshot_VectorHelperExample.png)
