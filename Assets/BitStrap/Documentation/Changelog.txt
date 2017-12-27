@@ -2,7 +2,7 @@
 
 ### 1.14.1
 
-* Fix a compatibility issue with Unity 2017.1
+* Fix compatibility issues with both Unity 2017.1 and Unity 2017.3
 
 
 ### 1.14.0

@@ -31,7 +31,11 @@ namespace BitStrap
 
 		private static string LocalString( string text )
 		{
+#if UNITY_5 || UNITY_2017_1 || UNITY_2017_2
 			return LocalizationDatabase.GetLocalizedString( text );
+#else
+			return text;
+#endif
 		}
 
 		private static void BeginPropertyWithReset()

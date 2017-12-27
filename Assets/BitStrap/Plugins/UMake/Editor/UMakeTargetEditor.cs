@@ -85,7 +85,13 @@ namespace BitStrap
 		private void ShowBuildSettings( UMakeTarget t )
 		{
 			t.buildTarget = ( BuildTarget ) EditorGUILayout.EnumPopup( "Build Target", t.buildTarget );
+
+#if UNITY_5 || UNITY_2017_1 || UNITY_2017_2
 			t.buildOptions = ( BuildOptions ) EditorGUILayout.EnumMaskField( "Build Options", t.buildOptions );
+#else
+			t.buildOptions = ( BuildOptions ) EditorGUILayout.EnumFlagsField( "Build Options", t.buildOptions );
+#endif
+
 			t.fileNameOverride = EditorGUILayout.TextField( "File Name Override", t.fileNameOverride );
 		}
 
