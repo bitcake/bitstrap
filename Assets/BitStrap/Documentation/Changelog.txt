@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.14.1
+
+* Fix a compatibility issue with Unity 2017.1
+
+
 ### 1.14.0
 
 + Promise: a Future/Promise monad implementation
