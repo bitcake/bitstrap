@@ -136,8 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f987ca3419b415488b3d40a1f61373f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Url: http://api.duckduckgo.com/
-  VerboseMode: 1
+  url: http://api.duckduckgo.com/
+  verboseMode: 1
 --- !u!4 &25976205
 Transform:
   m_ObjectHideFlags: 0

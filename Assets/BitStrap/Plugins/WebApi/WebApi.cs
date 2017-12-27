@@ -67,7 +67,11 @@ namespace BitStrap
 
 			bool success = !httpRequest.isError;
 #else
+	#if UNITY_2017_1
+			yield return httpRequest.Send();
+	#else
 			yield return httpRequest.SendWebRequest();
+	#endif
 
 			bool success = !httpRequest.isNetworkError && !httpRequest.isHttpError;
 #endif
