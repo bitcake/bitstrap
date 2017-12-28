@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.15.0
+
++ ResultExamples: Added some Result examples
+
+
 ### 1.14.1
 
 * Fix compatibility issues with both Unity 2017.1 and Unity 2017.3
