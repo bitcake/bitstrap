@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BitStrap.Examples
 {
-	public sealed class DuckDuckGoSearchExample : MonoBehaviour
+	public sealed class WebApiExample : MonoBehaviour
 	{
 		public WebApi duckDuckGoWebApi;
 		public string search = "BitStrap";
