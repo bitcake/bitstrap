@@ -2,9 +2,9 @@
 
 namespace BitStrap.Examples
 {
-	public class SafeActionExample : MonoBehaviour
+	public sealed class SafeActionExample : MonoBehaviour
 	{
-		private SafeAction action = new SafeAction();
+		private readonly SafeAction action = new SafeAction();
 
 		[Button]
 		public void CallAction()

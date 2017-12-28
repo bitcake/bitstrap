@@ -5,10 +5,24 @@ using UnityEngine.Networking;
 
 namespace BitStrap
 {
-	public struct WebError
+	public sealed class WebError
 	{
-		public string message;
-		public long httpCode;
+		public enum Type
+		{
+			Request,
+			Serialization
+		}
+
+		public readonly Type type;
+		public readonly string message;
+		public readonly Option<long> httpCode;
+
+		public WebError( Type type, string message, Option<long> httpCode )
+		{
+			this.type = type;
+			this.message = message;
+			this.httpCode = httpCode;
+		}
 
 		public override string ToString()
 		{
@@ -41,58 +55,51 @@ namespace BitStrap
 			return controller as T;
 		}
 
-		internal void MakeRequest( IWebAction action, WebActionData actionData, IWebRequest request )
+		internal void MakeRequest<T>( WebAction<T> action, WebActionData actionData, Promise<Result<T, WebError>> responsePromise )
 		{
-			StartCoroutine( MakeRequestCoroutine( action, actionData, request ) );
+			StartCoroutine( MakeRequestCoroutine<T>( action, actionData, responsePromise ) );
 		}
 
-		private IEnumerator MakeRequestCoroutine( IWebAction action, WebActionData actionData, IWebRequest request )
+		private IEnumerator MakeRequestCoroutine<T>( WebAction<T> action, WebActionData actionData, Promise<Result<T, WebError>> responsePromise )
 		{
 			string url = WebApiHelper.BuildUrl( action, actionData );
 
 			if( verboseMode )
 				Debug.LogFormat( "*[WebApi.Request]* [{0}] \"{1}\"\n{2}", action.Method, url, actionData.values.ToStringFull() );
 
-			UnityWebRequest httpRequest;
+			UnityWebRequest webRequest;
 
-			var result = WebApiHelper.CreateRequest( url, action, actionData, serializer );
-			if( !result.Ok.TryGet( out httpRequest ) )
+			var httpRequestResult = WebApiHelper.CreateRequest( url, action, actionData, serializer );
+			if( !httpRequestResult.Ok.TryGet( out webRequest ) )
 			{
-				request.RespondToResult( this, result.Select( r => "" ) );
+				WebApiHelper.RespondToResult( this, action, httpRequestResult.Select( r => "" ), responsePromise );
 				yield break;
 			}
 
-#if UNITY_5
-			yield return httpRequest.Send();
-
-			bool success = !httpRequest.isError;
-#else
-	#if UNITY_2017_1
-			yield return httpRequest.Send();
-	#else
-			yield return httpRequest.SendWebRequest();
-	#endif
-
-			bool success = !httpRequest.isNetworkError && !httpRequest.isHttpError;
-#endif
+			yield return UnityWebRequestHelper.SendWebRequest( webRequest );
+			bool success = UnityWebRequestHelper.IsSuccess( webRequest );
 
 			string text;
 			if( success )
-				text = httpRequest.downloadHandler.text;
+				text = webRequest.downloadHandler.text;
 			else
-				text = httpRequest.error;
+				text = webRequest.error;
 
 			if( verboseMode )
 				Debug.LogFormat( "*[WebApi.Response]* [{0}] \"{1}\"\n{2}", action.Method, url, text );
 
 			if( success )
-				request.RespondToResult( this, new Result<string, WebError>( text ) );
+				WebApiHelper.RespondToResult(
+					this,
+					action,
+					new Result<string, WebError>( text ),
+					responsePromise );
 			else
-				request.RespondToResult(this, new Result<string, WebError>( new WebError
-				{
-					message = text,
-					httpCode = httpRequest.responseCode
-				} ) );
+				WebApiHelper.RespondToResult(
+					this,
+					action,
+					new Result<string, WebError>( new WebError( WebError.Type.Request, text, webRequest.responseCode ) ),
+					responsePromise );
 		}
 
 		private void Awake()

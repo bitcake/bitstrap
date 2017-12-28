@@ -4,6 +4,7 @@ namespace BitStrap.Examples
 {
 	public sealed class WebApiExample : MonoBehaviour
 	{
+		[Header( "This will search the web using DuckDuckGo api." )]
 		public WebApi duckDuckGoWebApi;
 		public string search = "BitStrap";
 
@@ -16,7 +17,7 @@ namespace BitStrap.Examples
 				return;
 			}
 
-			duckDuckGoWebApi.Controller<DuckDuckGoSearchController>().web.Request( search, "json" ).OnRawResponse( result =>
+			duckDuckGoWebApi.Controller<DuckDuckGoSearchController>().web.Request( search, "json" ).Then( result =>
 			{
 				result.Match(
 					ok: text => Debug.LogFormat( "RESULT: {0}", text ),

@@ -14,10 +14,7 @@ namespace BitStrap
 			}
 			catch( System.Exception e )
 			{
-				return new WebError
-				{
-					message = string.Format( "Could not serialize \"{0}\". Exception: {1}", value.GetType().Name, e )
-				};
+				return new WebError( WebError.Type.Serialization, string.Format( "Could not serialize \"{0}\". Exception: {1}", value.GetType().Name, e ), Functional.None );
 			}
 		}
 
@@ -29,10 +26,7 @@ namespace BitStrap
 			}
 			catch( System.Exception e )
 			{
-				return new WebError
-				{
-					message = string.Format( "Could not deserialize \"{0}\" into a {1}. Exception:\n{2}", value, typeof( T ).Name, e )
-				};
+				return new WebError( WebError.Type.Serialization, string.Format( "Could not deserialize \"{0}\" into a {1}. Exception:\n{2}", value, typeof( T ).Name, e ), Functional.None );
 			}
 		}
 

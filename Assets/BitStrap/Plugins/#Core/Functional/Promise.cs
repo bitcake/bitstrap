@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace BitStrap
 {
-	public struct Promise<A>
+	public sealed class Promise<A>
 	{
 		private Option<A> result;
-		private SafeAction<A> onComplete;
+		private readonly SafeAction<A> onComplete = new SafeAction<A>();
 
 		public Option<A> Result
 		{
@@ -16,23 +16,16 @@ namespace BitStrap
 		{
 			A value;
 			if( result.TryGet( out value ) )
-			{
 				callback( value );
-			}
 			else
-			{
-				if( onComplete == null )
-					onComplete = new SafeAction<A>();
 				onComplete.Register( callback );
-			}
 		}
 
 		public void Complete( A value )
 		{
 			result = value;
-			if( onComplete != null )
-				onComplete.Call( value );
-			onComplete = null;
+			onComplete.Call( value );
+			onComplete.UnregisterAll();
 		}
 
 		public Promise<B> Select<B>( System.Func<A, B> select )

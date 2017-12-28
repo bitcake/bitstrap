@@ -94,5 +94,14 @@ namespace BitStrap
 				return request;
 			}
 		}
+
+		public static void RespondToResult<T>( WebApi api, WebAction<T> action, Result<string, WebError> result, Promise<Result<T, WebError>> responsePromise )
+		{
+			responsePromise.Complete( action.ConvertResult( result ) );
+
+			WebError error;
+			if( api.verboseMode && result.Error.TryGet( out error ) )
+				Debug.LogErrorFormat( "Response error: \"{0}\"", error );
+		}
 	}
 }

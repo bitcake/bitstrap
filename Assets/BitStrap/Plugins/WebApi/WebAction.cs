@@ -43,21 +43,9 @@ namespace BitStrap
 		string[] HeaderNames { get; }
 		string[] ParamNames { get; }
 		IWebController Controller { get; }
-
-		System.Action<Result<string, WebError>> ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback );
 	}
 
-	public sealed class WebAction : WebAction<None>, IWebAction
-	{
-		public WebAction( string name, WebMethod httpMethod, string[] headerNames, string[] argNames, IWebController controller ) : base( name, httpMethod, headerNames, argNames, controller ) { }
-
-		System.Action<Result<string, WebError>> IWebAction.ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback )
-		{
-			return result => callback( result.Select( text => default( A ) ) );
-		}
-	}
-
-	public class WebAction<T> : IWebAction
+	public sealed class WebAction<T> : IWebAction
 	{
 		public string Name { get; private set; }
 		public WebMethod Method { get; private set; }
@@ -82,7 +70,7 @@ namespace BitStrap
 			return this;
 		}
 
-		public WebRequest<T> Request( params object[] values )
+		public Promise<Result<T, WebError>> Request( params object[] values )
 		{
 			if( values == null || ParamNames.Length != values.Length )
 				throw new WrongNumberOfParamsException( this, Controller );
@@ -97,15 +85,20 @@ namespace BitStrap
 
 			data.values = values;
 
-			var request = new WebRequest<T>( this, ref data );
+			var responsePromise = new Promise<Result<T, WebError>>();
+			Controller.Api.MakeRequest( this, data, responsePromise );
+
 			data = new WebActionData();
 
-			return request;
+			return responsePromise;
 		}
 
-		System.Action<Result<string, WebError>> IWebAction.ConvertRequestCallback<A>( System.Action<Result<A, WebError>> callback )
+		public Result<T, WebError> ConvertResult( Result<string, WebError> result )
 		{
-			return result => callback( result.AndThen( text => Controller.Api.serializer.Deserialize<A>( text ) ) );
+			if( typeof( T ) == typeof( string ) )
+				return result.Select( text => ( T ) ( object ) text );
+
+			return result.AndThen( text => Controller.Api.serializer.Deserialize<T>( text ) );
 		}
 	}
 }

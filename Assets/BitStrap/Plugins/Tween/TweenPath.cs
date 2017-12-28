@@ -6,7 +6,7 @@ namespace BitStrap
 	/// <summary>
 	/// Interpolates a transform through a Bezier or linear path of control points.
 	/// </summary>
-	public class TweenPath : MonoBehaviour
+	public sealed class TweenPath : MonoBehaviour
 	{
 		/// <summary>
 		/// Use a smooth bezier or linear interpolation.
@@ -26,7 +26,7 @@ namespace BitStrap
 		/// <summary>
 		/// Callback called when tween finishes a step.
 		/// </summary>
-		public SafeAction onFinish = new SafeAction();
+		public readonly SafeAction onFinish = new SafeAction();
 
 		private List<TweenStep> steps = new List<TweenStep>();
 

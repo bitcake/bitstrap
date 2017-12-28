@@ -45,19 +45,22 @@ namespace BitStrap
 
 		private void Init()
 		{
-			WebUrlAttribute webUrlAttribute;
-			if( GetType().GetAttribute<WebUrlAttribute>( true ).TryGet( out webUrlAttribute ) )
-			{
-				Name = webUrlAttribute.url;
-			}
-			else
-			{
-				const string stripFromName = "Controller";
+			Name = GetType().GetAttribute<WebUrlAttribute>( true ).Match(
+				some: attribute =>
+				{
+					return attribute.url;
+				},
+				none: () =>
+				{
+					const string stripFromName = "Controller";
 
-				Name = GetType().Name;
-				if( Name.EndsWith( stripFromName ) )
-					Name = Name.Substring( 0, Name.LastIndexOf( stripFromName ) );
-			}
+					string name = GetType().Name;
+					if( name.EndsWith( stripFromName ) )
+						name = name.Substring( 0, name.LastIndexOf( stripFromName ) );
+
+					return name;
+				}
+			);
 
 			FieldInfo[] fields = GetType().GetFields( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance );
 

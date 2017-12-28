@@ -72,7 +72,7 @@ namespace BitStrap
 	/// execution flow interuption just because of one bad callback.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class SafeAction<T>
+	public sealed class SafeAction<T>
 	{
 		private List<Action<T>> actions = new List<Action<T>>();
 
@@ -104,6 +104,14 @@ namespace BitStrap
 		}
 
 		/// <summary>
+		/// Unregisters all callbacks.
+		/// </summary>
+		public void UnregisterAll()
+		{
+			actions.Clear();
+		}
+
+		/// <summary>
 		/// Trigger all callbacks.
 		/// </summary>
 		/// <param name="p1"></param>
@@ -130,7 +138,7 @@ namespace BitStrap
 	/// </summary>
 	/// <typeparam name="T1"></typeparam>
 	/// <typeparam name="T2"></typeparam>
-	public class SafeAction<T1, T2>
+	public sealed class SafeAction<T1, T2>
 	{
 		private List<Action<T1, T2>> actions = new List<Action<T1, T2>>();
 
@@ -159,6 +167,14 @@ namespace BitStrap
 		public void Unregister( Action<T1, T2> a )
 		{
 			actions.Remove( a );
+		}
+
+		/// <summary>
+		/// Unregisters all callbacks.
+		/// </summary>
+		public void UnregisterAll()
+		{
+			actions.Clear();
 		}
 
 		/// <summary>
