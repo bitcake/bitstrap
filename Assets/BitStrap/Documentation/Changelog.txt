@@ -3,6 +3,9 @@
 ### 1.15.0
 
 + ResultExamples: Added some Result examples
++ UnityWebRequestHelper: helper class for compatibility between Unity versions
+* WebAction.Request(): now returns a Promise instead of WebRequest
+- WebRequest: a Promise is used in its place now
 
 
 ### 1.14.1
