@@ -57,19 +57,20 @@ public sealed class #SCRIPTNAME# : Editor
 
 		public static void OnPreferencesGUI()
 		{
-			scroll = EditorHelper.BeginBox( scroll, "Script Templates" );
-			bool windowsLineEnding = EditorGUILayout.Toggle( "Use windows line ending format", ScriptTemplateUseWindowsLineEnding.Value );
-
-			if( windowsLineEnding != ScriptTemplateUseWindowsLineEnding.Value )
+			using( new BoxGroup( ref scroll, "Script Templates" ) )
 			{
-				ScriptTemplateUseWindowsLineEnding.Value = windowsLineEnding;
-				cSharpScriptTemplate.UpdateLineEnding();
-				cSharpEditorScriptTemplate.UpdateLineEnding();
+				bool windowsLineEnding = EditorGUILayout.Toggle( "Use windows line ending format", ScriptTemplateUseWindowsLineEnding.Value );
+
+				if( windowsLineEnding != ScriptTemplateUseWindowsLineEnding.Value )
+				{
+					ScriptTemplateUseWindowsLineEnding.Value = windowsLineEnding;
+					cSharpScriptTemplate.UpdateLineEnding();
+					cSharpEditorScriptTemplate.UpdateLineEnding();
+				}
+				cSharpScriptTemplate.OnPreferencesGUI();
+				EditorGUILayout.Space();
+				cSharpEditorScriptTemplate.OnPreferencesGUI();
 			}
-			cSharpScriptTemplate.OnPreferencesGUI();
-			EditorGUILayout.Space();
-			cSharpEditorScriptTemplate.OnPreferencesGUI();
-			EditorHelper.EndBox();
 		}
 
 		public static void SaveDefaultPathFromFilePath( string filePath )

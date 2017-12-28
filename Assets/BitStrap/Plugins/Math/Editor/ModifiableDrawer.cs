@@ -25,19 +25,20 @@ namespace BitStrap
 			SerializedProperty originalValue = property.GetMemberProperty<ModifiableInt>( m => m.OriginalValue );
 			SerializedProperty modifiedValue = property.GetMemberProperty<ModifiableInt>( m => m.ModifiedValue );
 
-			EditorHelper.BeginChangeLabelWidth( 56.0f );
-			EditorHelper.BeginChangeIndentLevel( 0 );
+			bool modified;
 
-			EditorGUI.BeginChangeCheck();
-			EditorGUI.PropertyField( originalPosition, originalValue, new GUIContent( "Original" ) );
-			bool modified = EditorGUI.EndChangeCheck();
+			using( new ChangeLabelWidth( 56.0f ) )
+			using( new ChangeIndentLevel( 0 ) )
+			{
+				EditorGUI.BeginChangeCheck();
+				EditorGUI.PropertyField( originalPosition, originalValue, new GUIContent( "Original" ) );
+				modified = EditorGUI.EndChangeCheck();
 
-			EditorGUI.BeginDisabledGroup( true );
-			EditorGUI.PropertyField( modifiedPosition, modifiedValue, new GUIContent( "Modified" ) );
-			EditorGUI.EndDisabledGroup();
-
-			EditorHelper.EndChangeIndentLevel();
-			EditorHelper.EndChangeLabelWidth();
+				using( new DisabledGroup( true ) )
+				{
+					EditorGUI.PropertyField( modifiedPosition, modifiedValue, new GUIContent( "Modified" ) );
+				}
+			}
 
 			if( modified )
 			{

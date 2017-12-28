@@ -18,10 +18,11 @@ namespace BitStrap.Examples
 
 		private void OnGUI()
 		{
-			EditorGUILayout.BeginHorizontal( EditorStyles.toolbar );
-			showStyles = GUILayout.Toggle( showStyles,"Styles" , EditorStyles.toolbarButton );
-			showStyles = !GUILayout.Toggle( !showStyles, "Icons", EditorStyles.toolbarButton );
-			EditorGUILayout.EndHorizontal();
+			using( new Horizontal( EditorStyles.toolbar ) )
+			{
+				showStyles = GUILayout.Toggle( showStyles, "Styles", EditorStyles.toolbarButton );
+				showStyles = !GUILayout.Toggle( !showStyles, "Icons", EditorStyles.toolbarButton );
+			}
 
 			if( showStyles )
 				EditorHelper.DrawAllStyles();

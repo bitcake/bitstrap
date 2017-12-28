@@ -25,27 +25,26 @@ namespace BitStrap
 
 		public override void OnInspectorGUI()
 		{
-			EditorGUILayout.BeginHorizontal();
-
-			EditorGUI.BeginChangeCheck();
-			string buildPath = EditorGUILayout.TextField( "Build Path", UMake.BuildPathPref );
-			if( EditorGUI.EndChangeCheck() )
-				UMake.BuildPathPref = buildPath;
-
-			if( string.IsNullOrEmpty( buildPath ) )
+			using( new Horizontal() )
 			{
-				Rect position = GUILayoutUtility.GetLastRect().Right( -EditorGUIUtility.labelWidth );
-				EditorGUI.LabelField( position, "Pick folder on build.", EditorStyles.centeredGreyMiniLabel );
-			}
+				EditorGUI.BeginChangeCheck();
+				string buildPath = EditorGUILayout.TextField( "Build Path", UMake.BuildPathPref );
+				if( EditorGUI.EndChangeCheck() )
+					UMake.BuildPathPref = buildPath;
 
-			if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )
-			{
-				string path = EditorUtility.OpenFolderPanel( "Build Path", UMake.BuildPathPref, "Builds" );
-				if( !string.IsNullOrEmpty( path ) )
-					UMake.BuildPathPref = path;
-			}
+				if( string.IsNullOrEmpty( buildPath ) )
+				{
+					Rect position = GUILayoutUtility.GetLastRect().Right( -EditorGUIUtility.labelWidth );
+					EditorGUI.LabelField( position, "Pick folder on build.", EditorStyles.centeredGreyMiniLabel );
+				}
 
-			EditorGUILayout.EndHorizontal();
+				if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )
+				{
+					string path = EditorUtility.OpenFolderPanel( "Build Path", UMake.BuildPathPref, "Builds" );
+					if( !string.IsNullOrEmpty( path ) )
+						UMake.BuildPathPref = path;
+				}
+			}
 
 			base.OnInspectorGUI();
 		}

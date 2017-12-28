@@ -81,9 +81,6 @@ namespace BitStrap
 			}
 		}
 
-		private static Queue<float> savedLabelWidths = new Queue<float>();
-		private static Queue<int> savedIndentLevels = new Queue<int>();
-
 		private static string searchField = "";
 		private static Vector2 scroll = Vector2.zero;
 		private static Texture[] unityIcons = null;
@@ -114,47 +111,6 @@ namespace BitStrap
 
 				return boxStyle;
 			}
-		}
-
-		/// <summary>
-		/// Begins a block in which you change the EditorGUIUtility.labelWidth
-		/// and then reverts it to its original value.
-		/// </summary>
-		/// <param name="labelWidth"></param>
-		public static void BeginChangeLabelWidth( float labelWidth )
-		{
-			savedLabelWidths.Enqueue( EditorGUIUtility.labelWidth );
-
-			EditorGUIUtility.labelWidth = labelWidth;
-		}
-
-		/// <summary>
-		/// Ends a block in which you change the EditorGUIUtility.labelWidth
-		/// and then reverts it to its original value.
-		/// </summary>
-		public static void EndChangeLabelWidth()
-		{
-			EditorGUIUtility.labelWidth = savedLabelWidths.Dequeue();
-		}
-
-		/// <summary>
-		/// Begins a block in which you change the EditorGUI.indentLevel
-		/// and then reverts it to its original value.
-		/// </summary>
-		/// <param name="indentLevel"></param>
-		public static void BeginChangeIndentLevel( int indentLevel )
-		{
-			savedIndentLevels.Enqueue( EditorGUI.indentLevel );
-			EditorGUI.indentLevel = indentLevel;
-		}
-
-		/// <summary>
-		/// Ends a block in which you change the EditorGUI.indentLevel
-		/// and then reverts it to its original value.
-		/// </summary>
-		public static void EndChangeIndentLevel()
-		{
-			EditorGUI.indentLevel = savedIndentLevels.Dequeue();
 		}
 
 		/// <summary>
@@ -278,18 +234,17 @@ namespace BitStrap
 		/// <returns></returns>
 		public static string SearchField( string search )
 		{
-			EditorGUILayout.BeginHorizontal();
+			using( new Horizontal() )
+			{
+				search = EditorGUILayout.TextField( search, Styles.SearchTextField );
 
-			search = EditorGUILayout.TextField( search, Styles.SearchTextField );
+				GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
+				if( !string.IsNullOrEmpty( search ) )
+					buttonStyle = Styles.SearchCancelButton;
 
-			GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
-			if( !string.IsNullOrEmpty( search ) )
-				buttonStyle = Styles.SearchCancelButton;
-
-			if( GUILayout.Button( GUIContent.none, buttonStyle ) )
-				search = "";
-
-			EditorGUILayout.EndHorizontal();
+				if( GUILayout.Button( GUIContent.none, buttonStyle ) )
+					search = "";
+			}
 
 			return search;
 		}
@@ -301,18 +256,17 @@ namespace BitStrap
 		/// <returns></returns>
 		public static string DelayedSearchField( string search )
 		{
-			EditorGUILayout.BeginHorizontal();
+			using( new Horizontal() )
+			{
+				search = EditorGUILayout.DelayedTextField( search, Styles.SearchTextField );
 
-			search = EditorGUILayout.DelayedTextField( search, Styles.SearchTextField );
+				GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
+				if( !string.IsNullOrEmpty( search ) )
+					buttonStyle = Styles.SearchCancelButton;
 
-			GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
-			if( !string.IsNullOrEmpty( search ) )
-				buttonStyle = Styles.SearchCancelButton;
-
-			if( GUILayout.Button( GUIContent.none, buttonStyle ) )
-				search = "";
-
-			EditorGUILayout.EndHorizontal();
+				if( GUILayout.Button( GUIContent.none, buttonStyle ) )
+					search = "";
+			}
 
 			return search;
 		}
@@ -328,21 +282,21 @@ namespace BitStrap
 			string searchLower = searchField.ToLower( CultureInfo.InvariantCulture );
 			EditorGUILayout.Space();
 
-			scroll = EditorGUILayout.BeginScrollView( scroll );
-			foreach( GUIStyle style in GUI.skin.customStyles )
+			using( new ScrollView( ref scroll ) )
 			{
-				if( string.IsNullOrEmpty( searchField ) ||
-					style.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
+				foreach( GUIStyle style in GUI.skin.customStyles )
 				{
-					EditorGUILayout.BeginHorizontal();
-
-					EditorGUILayout.TextField( style.name, EditorStyles.label );
-					GUILayout.Label( style.name, style );
-
-					EditorGUILayout.EndHorizontal();
+					if( string.IsNullOrEmpty( searchField ) ||
+						style.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
+					{
+						using( new Horizontal() )
+						{
+							EditorGUILayout.TextField( style.name, EditorStyles.label );
+							GUILayout.Label( style.name, style );
+						}
+					}
 				}
 			}
-			EditorGUILayout.EndScrollView();
 		}
 
 		/// <summary>
@@ -362,27 +316,27 @@ namespace BitStrap
 			string searchLower = searchField.ToLower( CultureInfo.InvariantCulture );
 			EditorGUILayout.Space();
 
-			scroll = EditorGUILayout.BeginScrollView( scroll );
-			foreach( Texture texture in unityIcons )
+			using( new ScrollView( ref scroll ) )
 			{
-				if( texture == null || texture.name == "" )
-					continue;
-
-				if( !AssetDatabase.GetAssetPath( texture ).StartsWith( "Library/" ) )
-					continue;
-
-				if( string.IsNullOrEmpty( searchField ) ||
-					texture.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
+				foreach( Texture texture in unityIcons )
 				{
-					EditorGUILayout.BeginHorizontal();
+					if( texture == null || texture.name == "" )
+						continue;
 
-					EditorGUILayout.TextField( texture.name, EditorStyles.label );
-					GUILayout.Label( new GUIContent( texture ) );
+					if( !AssetDatabase.GetAssetPath( texture ).StartsWith( "Library/" ) )
+						continue;
 
-					EditorGUILayout.EndHorizontal();
+					if( string.IsNullOrEmpty( searchField ) ||
+						texture.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
+					{
+						using( new Horizontal() )
+						{
+							EditorGUILayout.TextField( texture.name, EditorStyles.label );
+							GUILayout.Label( new GUIContent( texture ) );
+						}
+					}
 				}
 			}
-			EditorGUILayout.EndScrollView();
 		}
 	}
 }

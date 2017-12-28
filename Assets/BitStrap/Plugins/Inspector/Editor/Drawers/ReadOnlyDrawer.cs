@@ -12,9 +12,10 @@ namespace BitStrap
 
 			var readOnlyAttribute = attribute as ReadOnlyAttribute;
 
-			EditorGUI.BeginDisabledGroup( !readOnlyAttribute.onlyInPlaymode || EditorApplication.isPlayingOrWillChangePlaymode );
-			EditorGUI.PropertyField( position, property, label, true );
-			EditorGUI.EndDisabledGroup();
+			using( new DisabledGroup( !readOnlyAttribute.onlyInPlaymode || EditorApplication.isPlayingOrWillChangePlaymode ) )
+			{
+				EditorGUI.PropertyField( position, property, label, true );
+			}
 		}
 	}
 }

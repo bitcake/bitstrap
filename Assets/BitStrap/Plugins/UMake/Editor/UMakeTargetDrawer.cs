@@ -25,27 +25,29 @@ namespace BitStrap
 				.Right( buttonWidth, out buildButtonRect )
 				.Right( buttonWidth, out preButtonRect );
 
-			BitStrap.EditorHelper.BeginChangeIndentLevel( 0 );
+			UMakeTarget target;
+			UMakeTargetEditor.BuildAction action;
 
-			EditorGUI.PropertyField( propertyRect, property, GUIContent.none );
+			using( new ChangeIndentLevel( 0 ) )
+			{
+				EditorGUI.PropertyField( propertyRect, property, GUIContent.none );
 
-			var target = property.objectReferenceValue as UMakeTarget;
-			var action = UMakeTargetEditor.BuildAction.None;
+				target = property.objectReferenceValue as UMakeTarget;
+				action = UMakeTargetEditor.BuildAction.None;
 
-			GUI.enabled = target != null && UMakeTargetEditor.CanBuild;
+				GUI.enabled = target != null && UMakeTargetEditor.CanBuild;
 
-			if( GUI.Button( preButtonRect, "Pre", EditorStyles.miniButtonLeft ) )
-				action = UMakeTargetEditor.BuildAction.PreActions;
+				if( GUI.Button( preButtonRect, "Pre", EditorStyles.miniButtonLeft ) )
+					action = UMakeTargetEditor.BuildAction.PreActions;
 
-			if( GUI.Button( buildButtonRect, "Build", EditorStyles.miniButtonMid ) )
-				action = UMakeTargetEditor.BuildAction.Build;
+				if( GUI.Button( buildButtonRect, "Build", EditorStyles.miniButtonMid ) )
+					action = UMakeTargetEditor.BuildAction.Build;
 
-			if( GUI.Button( postButtonRect, "Post", EditorStyles.miniButtonRight ) )
-				action = UMakeTargetEditor.BuildAction.PostActions;
+				if( GUI.Button( postButtonRect, "Post", EditorStyles.miniButtonRight ) )
+					action = UMakeTargetEditor.BuildAction.PostActions;
 
-			GUI.enabled = true;
-
-			BitStrap.EditorHelper.EndChangeIndentLevel();
+				GUI.enabled = true;
+			}
 
 			property.serializedObject.ApplyModifiedProperties();
 

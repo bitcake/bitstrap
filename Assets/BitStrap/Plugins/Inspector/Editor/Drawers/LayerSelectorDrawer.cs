@@ -12,9 +12,10 @@ namespace BitStrap
 
 			if( property.propertyType == SerializedPropertyType.Integer && !EditorApplication.isPlaying )
 			{
-				EditorGUI.BeginProperty( position, label, property );
-				property.intValue = EditorGUI.LayerField( position, label, property.intValue );
-				EditorGUI.EndProperty();
+				using( new PropertyGUI( position, label, property ) )
+				{
+					property.intValue = EditorGUI.LayerField( position, label, property.intValue );
+				}
 			}
 			else
 			{

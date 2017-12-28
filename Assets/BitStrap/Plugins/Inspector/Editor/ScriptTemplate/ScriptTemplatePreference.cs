@@ -37,7 +37,7 @@ namespace BitStrap
 			}
 			templateCode.Value = EditorGUILayout.TextArea( templateCode.Value );
 
-			EditorGUILayout.BeginHorizontal();
+			using( new Horizontal() )
 			{
 				if( GUILayout.Button( "Load from file" ) )
 				{
@@ -68,8 +68,6 @@ namespace BitStrap
 					templateCode.DeleteKey();
 				}
 			}
-
-			EditorGUILayout.EndHorizontal();
 		}
 
 		/// <summary>

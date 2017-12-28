@@ -37,30 +37,30 @@ namespace BitStrap
 			var tweenShader = target as TweenShader;
 
 			EditorGUILayout.Space();
-			EditorGUILayout.BeginHorizontal();
-
-			if( GUILayout.Button( "Play Forward", EditorStyles.miniButtonLeft ) )
+			
+			using( new Horizontal() )
 			{
-				InitTween( tweenShader );
-				tweenShader.PlayForward();
-				UpdateTween( tweenShader );
-			}
+				if( GUILayout.Button( "Play Forward", EditorStyles.miniButtonLeft ) )
+				{
+					InitTween( tweenShader );
+					tweenShader.PlayForward();
+					UpdateTween( tweenShader );
+				}
 
-			if( GUILayout.Button( "Play Backward", EditorStyles.miniButtonMid ) )
-			{
-				InitTween( tweenShader );
-				tweenShader.PlayBackward();
-				UpdateTween( tweenShader );
-			}
+				if( GUILayout.Button( "Play Backward", EditorStyles.miniButtonMid ) )
+				{
+					InitTween( tweenShader );
+					tweenShader.PlayBackward();
+					UpdateTween( tweenShader );
+				}
 
-			if( GUILayout.Button( "Clear", EditorStyles.miniButtonRight ) )
-			{
-				InitTween( tweenShader );
-				tweenShader.Clear();
-				SceneView.RepaintAll();
+				if( GUILayout.Button( "Clear", EditorStyles.miniButtonRight ) )
+				{
+					InitTween( tweenShader );
+					tweenShader.Clear();
+					SceneView.RepaintAll();
+				}
 			}
-
-			EditorGUILayout.EndHorizontal();
 		}
 
 		private void TryInitList()

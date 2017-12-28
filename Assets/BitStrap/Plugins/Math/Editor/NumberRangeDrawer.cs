@@ -33,26 +33,24 @@ namespace BitStrap
 			SerializedProperty max = property.GetMemberProperty<IntRange>( b => b.Max );
 			SerializedProperty min = property.GetMemberProperty<IntRange>( b => b.Min );
 
-			EditorHelper.BeginChangeLabelWidth( 32.0f );
-			EditorHelper.BeginChangeIndentLevel( 0 );
-
-			EditorGUI.BeginChangeCheck();
-			DelayedPropertyField( minPosition, min );
-			DelayedPropertyField( maxPosition, max );
-			if( EditorGUI.EndChangeCheck() )
+			using( new ChangeLabelWidth( 32.0f ) )
+			using( new ChangeIndentLevel( 0 ) )
 			{
-				min.serializedObject.ApplyModifiedProperties();
-				max.serializedObject.ApplyModifiedProperties();
+				EditorGUI.BeginChangeCheck();
+				DelayedPropertyField( minPosition, min );
+				DelayedPropertyField( maxPosition, max );
+				if( EditorGUI.EndChangeCheck() )
+				{
+					min.serializedObject.ApplyModifiedProperties();
+					max.serializedObject.ApplyModifiedProperties();
 
-				var validatable = SerializedPropertyHelper.GetValue( fieldInfo, property ) as IValidatable;
-				validatable.Validate();
+					var validatable = SerializedPropertyHelper.GetValue( fieldInfo, property ) as IValidatable;
+					validatable.Validate();
 
-				min.serializedObject.Update();
-				max.serializedObject.Update();
+					min.serializedObject.Update();
+					max.serializedObject.Update();
+				}
 			}
-
-			EditorHelper.EndChangeIndentLevel();
-			EditorHelper.EndChangeLabelWidth();
 		}
 
 		private void DelayedPropertyField( Rect position, SerializedProperty property )

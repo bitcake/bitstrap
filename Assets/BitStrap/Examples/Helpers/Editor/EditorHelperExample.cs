@@ -29,11 +29,12 @@ namespace BitStrap.Examples
 
 		private void OnGUI()
 		{
-			EditorGUILayout.BeginHorizontal( EditorStyles.toolbar );
-			if( EditorHelper.DropDownButton( "Drop Down Button", EditorStyles.toolbarDropDown ) )
-				dropDownMenu.DropDown( EditorHelper.DropDownRect );
-			GUILayout.FlexibleSpace();
-			EditorGUILayout.EndHorizontal();
+			using( new Horizontal( EditorStyles.toolbar ) )
+			{
+				if( EditorHelper.DropDownButton( "Drop Down Button", EditorStyles.toolbarDropDown ) )
+					dropDownMenu.DropDown( EditorHelper.DropDownRect );
+				GUILayout.FlexibleSpace();
+			}
 
 			EditorGUILayout.LabelField( "Selection Style", EditorHelper.Styles.Selection );
 			EditorGUILayout.LabelField( "PreDrop Style", EditorHelper.Styles.PreDrop );
@@ -41,9 +42,10 @@ namespace BitStrap.Examples
 			EditorGUILayout.LabelField( "Minus Style", EditorHelper.Styles.Minus );
 			EditorGUILayout.LabelField( "Warning Style", EditorHelper.Styles.Warning, GUILayout.Height( 24.0f ) );
 
-			EditorHelper.BeginChangeLabelWidth( 256.0f );
-			EditorGUILayout.IntField( "This is a 256 width label", 0 );
-			EditorHelper.EndChangeLabelWidth();
+			using( new ChangeLabelWidth( 256.0f ) )
+			{
+				EditorGUILayout.IntField( "This is a 256 width label", 0 );
+			}
 
 			EditorHelper.BeginBoxHeader();
 			EditorGUILayout.LabelField( "Awesome Box" );

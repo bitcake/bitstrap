@@ -83,22 +83,22 @@ namespace BitStrap
 		{
 			base.OnInspectorGUI( editor );
 
-			EditorHelper.BeginBox( "Shared Settings" );
-
-			EditorGUILayout.BeginHorizontal();
-			steamSdkPath.Value = EditorGUILayout.TextField( "Steam SDK Folder", steamSdkPath.Value );
-			if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )
+			using( new BoxGroup( "Shared Settings" ) )
 			{
-				string path = EditorUtility.OpenFolderPanel( "Steam SDK Folder Path", steamSdkPath.Value, "" );
-				if( !string.IsNullOrEmpty( path ) )
-					steamSdkPath.Value = path;
+				using( new Horizontal() )
+				{
+					steamSdkPath.Value = EditorGUILayout.TextField( "Steam SDK Folder", steamSdkPath.Value );
+					if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )
+					{
+						string path = EditorUtility.OpenFolderPanel( "Steam SDK Folder Path", steamSdkPath.Value, "" );
+						if( !string.IsNullOrEmpty( path ) )
+							steamSdkPath.Value = path;
+					}
+				}
+
+				steamUsername.Value = EditorGUILayout.TextField( "Steam Username", steamUsername.Value );
+				steamPassword.Value = EditorGUILayout.PasswordField( "Steam Password", steamPassword.Value );
 			}
-			EditorGUILayout.EndHorizontal();
-
-			steamUsername.Value = EditorGUILayout.TextField( "Steam Username", steamUsername.Value );
-			steamPassword.Value = EditorGUILayout.PasswordField( "Steam Password", steamPassword.Value );
-
-			EditorHelper.EndBox();
 
 			GUILayout.FlexibleSpace();
 		}

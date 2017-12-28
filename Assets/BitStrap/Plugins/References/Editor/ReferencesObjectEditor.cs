@@ -13,20 +13,20 @@ namespace BitStrap
 			string referenceCountLabel = string.Format( "{0} references of <{1}>", referencesObjectBase.ReferenceCount, referencesObjectBase.ReferencedType.Name );
 			EditorGUILayout.LabelField( referenceCountLabel, EditorStyles.centeredGreyMiniLabel );
 
-			EditorGUILayout.BeginHorizontal();
-
-			EditorHelper.BeginChangeLabelWidth( 72.0f );
-			SerializedProperty rootFolderProperty = serializedObject.GetMemberProperty<ReferencesBase>( r => r.rootFolder );
-			EditorGUILayout.PropertyField( rootFolderProperty );
-			EditorHelper.EndChangeLabelWidth();
-
-			if( GUILayout.Button( "Update References", EditorStyles.miniButton, GUILayout.Width( 108.0f ) ) )
+			using( new Horizontal() )
 			{
-				referencesObjectBase.UpdateReferences();
-				serializedObject.ApplyModifiedProperties();
-			}
+				using( new ChangeLabelWidth( 72.0f ) )
+				{
+					SerializedProperty rootFolderProperty = serializedObject.GetMemberProperty<ReferencesBase>( r => r.rootFolder );
+					EditorGUILayout.PropertyField( rootFolderProperty );
+				}
 
-			EditorGUILayout.EndHorizontal();
+				if( GUILayout.Button( "Update References", EditorStyles.miniButton, GUILayout.Width( 108.0f ) ) )
+				{
+					referencesObjectBase.UpdateReferences();
+					serializedObject.ApplyModifiedProperties();
+				}
+			}
 
 			if( referencesObjectBase.ContainsNullReference )
 			{

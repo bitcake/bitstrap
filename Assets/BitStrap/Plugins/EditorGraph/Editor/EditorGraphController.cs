@@ -173,9 +173,10 @@ namespace BitStrap
 
 		private void ShowToolbar()
 		{
-			EditorGUILayout.BeginHorizontal( EditorStyles.toolbar );
-			OnToolbarGUI();
-			EditorGUILayout.EndHorizontal();
+			using( new Horizontal( EditorStyles.toolbar ) )
+			{
+				OnToolbarGUI();
+			}
 		}
 
 		private void ShowGraph( EditorWindow host, Rect position )

@@ -65,11 +65,12 @@ namespace BitStrap
 		public override void NodeUI( GraphGUI host )
 		{
 			EditorGUI.BeginChangeCheck();
-			EditorHelper.BeginChangeLabelWidth( 84.0f );
 
-			OnShowNode( host );
+			using( new ChangeLabelWidth( 84.0f ) )
+			{
+				OnShowNode( host );
+			}
 
-			EditorHelper.EndChangeLabelWidth();
 			var editorGraph = graph as EditorGraph;
 			if( EditorGUI.EndChangeCheck() && editorGraph != null )
 				editorGraph.controller.OnNodeChanged( this );

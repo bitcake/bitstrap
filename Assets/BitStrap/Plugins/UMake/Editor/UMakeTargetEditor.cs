@@ -63,9 +63,10 @@ namespace BitStrap
 
 			EditorGUI.BeginChangeCheck();
 
-			EditorHelper.BeginBox( "Build Settings" );
-			ShowBuildSettings( umakeTarget );
-			EditorHelper.EndBox();
+			using( new BoxGroup( "Build Settings" ) )
+			{
+				ShowBuildSettings( umakeTarget );
+			}
 
 			EditorGUILayout.Space();
 			BuildAction action = ShowActions();
@@ -128,30 +129,31 @@ namespace BitStrap
 
 		private BuildAction ShowActions()
 		{
-			EditorGUILayout.BeginHorizontal();
+			BuildAction action;
 
-			var action = BuildAction.None;
+			using( new Horizontal() )
+			{
+				action = BuildAction.None;
 
-			if( GUILayout.Button( "Open Folder", EditorStyles.miniButton ) )
-				action = BuildAction.OpenFolder;
+				if( GUILayout.Button( "Open Folder", EditorStyles.miniButton ) )
+					action = BuildAction.OpenFolder;
 
-			GUILayout.FlexibleSpace();
+				GUILayout.FlexibleSpace();
 
-			GUILayout.Label( "Execute", EditorStyles.centeredGreyMiniLabel );
-			GUI.enabled = CanBuild;
+				GUILayout.Label( "Execute", EditorStyles.centeredGreyMiniLabel );
+				GUI.enabled = CanBuild;
 
-			if( GUILayout.Button( "Pre Actions", EditorStyles.miniButtonLeft ) )
-				action = BuildAction.PreActions;
+				if( GUILayout.Button( "Pre Actions", EditorStyles.miniButtonLeft ) )
+					action = BuildAction.PreActions;
 
-			if( GUILayout.Button( "Build", EditorStyles.miniButtonMid, GUILayout.Width( 64.0f ) ) )
-				action = BuildAction.Build;
+				if( GUILayout.Button( "Build", EditorStyles.miniButtonMid, GUILayout.Width( 64.0f ) ) )
+					action = BuildAction.Build;
 
-			if( GUILayout.Button( "Post Actions", EditorStyles.miniButtonRight ) )
-				action = BuildAction.PostActions;
+				if( GUILayout.Button( "Post Actions", EditorStyles.miniButtonRight ) )
+					action = BuildAction.PostActions;
 
-			GUI.enabled = true;
-
-			EditorGUILayout.EndHorizontal();
+				GUI.enabled = true;
+			}
 
 			return action;
 		}

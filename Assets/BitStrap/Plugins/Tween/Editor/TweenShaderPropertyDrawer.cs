@@ -66,54 +66,54 @@ namespace BitStrap
 				nameProperty.stringValue = cache.properties[index].name;
 				typeProperty.enumValueIndex = ( int ) cache.properties[index].type;
 
-				EditorGUI.BeginDisabledGroup( true );
-				EditorGUI.Popup( typeRect, typeProperty.enumValueIndex, typeProperty.enumDisplayNames );
-				EditorGUI.EndDisabledGroup();
+				using( new DisabledGroup( true ) )
+				{
+					EditorGUI.Popup( typeRect, typeProperty.enumValueIndex, typeProperty.enumDisplayNames );
+				}
 			}
 
 			EditorGUI.PropertyField( curveRect, curveProperty, GUIContent.none );
 
-			EditorHelper.BeginChangeLabelWidth( FromToLabelWidth );
-
-			Vector4 fromVector = fromProperty.vector4Value;
-			Vector4 toVector = toProperty.vector4Value;
-
-			var type = ( TweenShaderProperty.Type ) typeProperty.enumValueIndex;
-			switch( type )
+			using( new ChangeLabelWidth( FromToLabelWidth ) )
 			{
-			case TweenShaderProperty.Type.Float:
-				fromVector.x = EditorGUI.FloatField( fromRect, fromLabel, fromVector.x );
-				fromProperty.vector4Value = fromVector;
+				Vector4 fromVector = fromProperty.vector4Value;
+				Vector4 toVector = toProperty.vector4Value;
 
-				toVector.x = EditorGUI.FloatField( toRect, toLabel, toVector.x );
-				toProperty.vector4Value = toVector;
+				var type = ( TweenShaderProperty.Type ) typeProperty.enumValueIndex;
+				switch( type )
+				{
+				case TweenShaderProperty.Type.Float:
+					fromVector.x = EditorGUI.FloatField( fromRect, fromLabel, fromVector.x );
+					fromProperty.vector4Value = fromVector;
 
-				break;
+					toVector.x = EditorGUI.FloatField( toRect, toLabel, toVector.x );
+					toProperty.vector4Value = toVector;
 
-			case TweenShaderProperty.Type.Vector:
-				float labelWidth = EditorGUIUtility.labelWidth;
+					break;
 
-				EditorGUI.LabelField( fromRect.Left( labelWidth ), fromLabel );
-				fromVector = EditorGUI.Vector4Field( fromRect.Right( -labelWidth ).Row( -1 ), "", fromVector );
-				fromProperty.vector4Value = fromVector;
+				case TweenShaderProperty.Type.Vector:
+					float labelWidth = EditorGUIUtility.labelWidth;
 
-				EditorGUI.LabelField( toRect.Left( labelWidth ), toLabel );
-				toVector = EditorGUI.Vector4Field( toRect.Right( -labelWidth ).Row( -1 ), "", toVector );
-				toProperty.vector4Value = toVector;
+					EditorGUI.LabelField( fromRect.Left( labelWidth ), fromLabel );
+					fromVector = EditorGUI.Vector4Field( fromRect.Right( -labelWidth ).Row( -1 ), "", fromVector );
+					fromProperty.vector4Value = fromVector;
 
-				break;
+					EditorGUI.LabelField( toRect.Left( labelWidth ), toLabel );
+					toVector = EditorGUI.Vector4Field( toRect.Right( -labelWidth ).Row( -1 ), "", toVector );
+					toProperty.vector4Value = toVector;
 
-			case TweenShaderProperty.Type.Color:
-				fromVector = EditorGUI.ColorField( fromRect, fromLabel, fromVector, true, true, true, colorPickerConfig );
-				fromProperty.vector4Value = fromVector;
+					break;
 
-				toVector = EditorGUI.ColorField( toRect, toLabel, toVector, true, true, true, colorPickerConfig );
-				toProperty.vector4Value = toVector;
+				case TweenShaderProperty.Type.Color:
+					fromVector = EditorGUI.ColorField( fromRect, fromLabel, fromVector, true, true, true, colorPickerConfig );
+					fromProperty.vector4Value = fromVector;
 
-				break;
+					toVector = EditorGUI.ColorField( toRect, toLabel, toVector, true, true, true, colorPickerConfig );
+					toProperty.vector4Value = toVector;
+
+					break;
+				}
 			}
-
-			EditorHelper.EndChangeLabelWidth();
 
 			property.serializedObject.ApplyModifiedProperties();
 		}

@@ -14,13 +14,14 @@ namespace BitStrap.Examples
 
 			var self = target as VectorHelperExample;
 
-			EditorGUI.BeginDisabledGroup( true );
-			EditorGUILayout.ToggleLeft( string.Format( "Vector is zero?" ), self.IsVectorZero() );
-			bool betweenVectors = self.IsVectorCBetweenVectorsAAndB();
-			EditorGUILayout.ToggleLeft( string.Format( "Vector C between vectors A and B?" ), betweenVectors );
-			bool onVectorSide = self.IsVectorCOnTheSameSideAsVectorBInRelationToA();
-			EditorGUILayout.ToggleLeft( string.Format( "Vector C on the same side as vectors B in relation to A?" ), onVectorSide );
-			EditorGUI.EndDisabledGroup();
+			using( new DisabledGroup( true ) )
+			{
+				EditorGUILayout.ToggleLeft( string.Format( "Vector is zero?" ), self.IsVectorZero() );
+				bool betweenVectors = self.IsVectorCBetweenVectorsAAndB();
+				EditorGUILayout.ToggleLeft( string.Format( "Vector C between vectors A and B?" ), betweenVectors );
+				bool onVectorSide = self.IsVectorCOnTheSameSideAsVectorBInRelationToA();
+				EditorGUILayout.ToggleLeft( string.Format( "Vector C on the same side as vectors B in relation to A?" ), onVectorSide );
+			}
 
 			var rect = EditorGUILayout.GetControlRect( false, 200.0f );
 
@@ -37,11 +38,12 @@ namespace BitStrap.Examples
 			Handles.color = Color.blue;
 			Handles.DrawLine( center, center + Vector2.Scale( self.vectorC, vectorScale ) );
 
-			EditorGUI.BeginDisabledGroup( true );
-			EditorGUILayout.ColorField( new GUIContent( "Vector A" ), Color.red, false, false, false, hdrConfig );
-			EditorGUILayout.ColorField( new GUIContent( "Vector B" ), Color.green, false, false, false, hdrConfig );
-			EditorGUILayout.ColorField( new GUIContent( "Vector C" ), Color.blue, false, false, false, hdrConfig );
-			EditorGUI.EndDisabledGroup();
+			using( new DisabledGroup( true ) )
+			{
+				EditorGUILayout.ColorField( new GUIContent( "Vector A" ), Color.red, false, false, false, hdrConfig );
+				EditorGUILayout.ColorField( new GUIContent( "Vector B" ), Color.green, false, false, false, hdrConfig );
+				EditorGUILayout.ColorField( new GUIContent( "Vector C" ), Color.blue, false, false, false, hdrConfig );
+			}
 		}
 	}
 }

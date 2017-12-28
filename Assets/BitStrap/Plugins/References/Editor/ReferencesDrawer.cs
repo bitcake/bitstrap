@@ -43,10 +43,11 @@ namespace BitStrap
 			string referenceCountLabel = string.Format( "{0} references of <{1}>", referencesBase.ReferenceCount, referencesBase.ReferencedType.Name );
 			EditorGUI.LabelField( referenceCountRect, referenceCountLabel, EditorStyles.centeredGreyMiniLabel );
 
-			EditorHelper.BeginChangeLabelWidth( 72.0f );
-			SerializedProperty rootFolderProperty = property.GetMemberProperty<ReferencesBase>( r => r.rootFolder );
-			EditorGUI.PropertyField( rootFolderRect, rootFolderProperty );
-			EditorHelper.EndChangeLabelWidth();
+			using( new ChangeLabelWidth( 72.0f ) )
+			{
+				SerializedProperty rootFolderProperty = property.GetMemberProperty<ReferencesBase>( r => r.rootFolder );
+				EditorGUI.PropertyField( rootFolderRect, rootFolderProperty );
+			}
 
 			if( GUI.Button( buttonRect, "Update References", EditorStyles.miniButton ) )
 			{
