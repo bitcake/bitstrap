@@ -14,6 +14,8 @@ namespace BitStrap
 
 		private const float POSITION_MAX = 100000.0f;
 
+		private const float BUTTON_WIDTH = 12.0f;
+
 		private static GUIContent positionGUIContent = new GUIContent( LocalString( "Position" ),
 			LocalString( "The local position of this Game Object relative to the parent." ) );
 
@@ -28,25 +30,26 @@ namespace BitStrap
 		private SerializedProperty positionProperty;
 		private SerializedProperty rotationProperty;
 		private SerializedProperty scaleProperty;
+		private GUILayoutOption[] noOptions = new GUILayoutOption[0];
+		private GUILayoutOption[] buttonWidthOption = new []{GUILayout.Width(BUTTON_WIDTH) };
 
 		private static string LocalString( string text )
 		{
-#if UNITY_5 || UNITY_2017_1 || UNITY_2017_2
-			return LocalizationDatabase.GetLocalizedString( text );
+#if UNITY_5 || UNITY_5_3_OR_NEWER
+            return LocalizationDatabase.GetLocalizedString( text );
 #else
 			return text;
 #endif
 		}
 
-		private static void BeginPropertyWithReset()
+		private void BeginPropertyWithReset()
 		{
-			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.BeginHorizontal( noOptions );
 		}
 
-		private static bool EndPropertyWithReset()
+		private bool EndPropertyWithReset()
 		{
-			float width = 12.0f;
-			var rect = GUILayoutUtility.GetRect( width, EditorGUIUtility.singleLineHeight, GUILayout.Width( width ) );
+			var rect = GUILayoutUtility.GetRect( BUTTON_WIDTH, EditorGUIUtility.singleLineHeight, buttonWidthOption );
 			rect.x -= 2.0f;
 			rect.y += 2.0f;
 
@@ -64,29 +67,32 @@ namespace BitStrap
 
 		public override void OnInspectorGUI()
 		{
-		    if (!EditorGUIUtility.wideMode)
-		    {
-		        EditorGUIUtility.wideMode = true;
-                EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - FIELD_WIDTH; // align field to right of inspector
-		    }
-		    serializedObject.Update();
+			if (!EditorGUIUtility.wideMode)
+			{
+				EditorGUIUtility.wideMode = true;
+				EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - FIELD_WIDTH; // align field to right of inspector
+			}
+			serializedObject.Update();
 
 			BeginPropertyWithReset();
-			EditorGUILayout.PropertyField( positionProperty, positionGUIContent );
+			EditorGUILayout.PropertyField( positionProperty, positionGUIContent, noOptions);
 			if( EndPropertyWithReset() )
 				positionProperty.vector3Value = Vector3.zero;
+			GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
 			BeginPropertyWithReset();
-			RotationPropertyField( rotationProperty, rotationGUIContent );
+			RotationPropertyField( rotationGUIContent );
 			if( EndPropertyWithReset() )
 				rotationProperty.quaternionValue = Quaternion.identity;
+			GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
 			BeginPropertyWithReset();
-			EditorGUILayout.PropertyField( scaleProperty, scaleGUIContent );
+			EditorGUILayout.PropertyField( scaleProperty, scaleGUIContent, noOptions);
 			if( EndPropertyWithReset() )
 				scaleProperty.vector3Value = Vector3.one;
+			GUILayout.Space(3f * EditorGUIUtility.standardVerticalSpacing);
 
-			if( !ValidatePosition( ( ( Transform ) target ).position ) )
+			if ( !ValidatePosition( ( ( Transform ) target ).position ) )
 				EditorGUILayout.HelpBox( positionWarningText, MessageType.Warning );
 
 			serializedObject.ApplyModifiedProperties();
@@ -106,7 +112,7 @@ namespace BitStrap
 				&& Mathf.Abs( position.z ) <= POSITION_MAX;
 		}
 
-		private void RotationPropertyField( SerializedProperty rotationProperty, GUIContent content )
+		private void RotationPropertyField( GUIContent content )
 		{
 			Transform transform = ( Transform ) targets[0];
 			Quaternion localRotation = transform.localRotation;
@@ -121,7 +127,7 @@ namespace BitStrap
 			}
 
 			EditorGUI.BeginChangeCheck();
-			Vector3 eulerAngles = EditorGUILayout.Vector3Field( content, localRotation.eulerAngles );
+			Vector3 eulerAngles = EditorGUILayout.Vector3Field( content, localRotation.eulerAngles, noOptions);
 			if( EditorGUI.EndChangeCheck() )
 			{
 				Undo.RecordObjects( targets, "Rotation Changed" );
