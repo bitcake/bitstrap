@@ -33,10 +33,10 @@ namespace BitStrap
 		private GUILayoutOption[] noOptions = new GUILayoutOption[0];
 		private GUILayoutOption[] buttonWidthOption = new []{GUILayout.Width(BUTTON_WIDTH) };
 
-		private static string LocalString( string text )
-		{
-#if UNITY_5 || UNITY_5_3_OR_NEWER
-            return LocalizationDatabase.GetLocalizedString( text );
+        private static string LocalString(string text)
+        {
+#if UNITY_5 || UNITY_2017_1 || UNITY_2017_2
+            return LocalizationDatabase.GetLocalizedString(text);
 #else
 			return text;
 #endif
