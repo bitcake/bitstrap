@@ -4,15 +4,15 @@
 
 + ResultExamples: Added some Result examples
 + UnityWebRequestHelper: helper class for compatibility between Unity versions
-+ BoxGroup: editor code inside using(new BoxGroup()) will be drawn inside a nice editor box
-+ ChangeIndentLevel: editor code inside using(new ChangeIndentLevel()) will be drawn with a different indentation
-+ ChangeLabelWidth: editor code inside using(new ChangeLabelWidth()) will be drawn with a different label width
-+ DisabledGroup: editor code inside using(new DisabledGroup()) will behave like inside a EditorGUI.BeginDisabledGroup()
-+ FadeGroup: editor code inside using(new FadeGroup()) will behave like inside a EditorGUI.BeginFadeGroup()
-+ Horizontal: editor code inside using(new Horizontal()) will behave like inside a EditorGUI.BeginHorizontal()
-+ PropertyGUI: editor code inside using(new PropertyGUI()) will behave like inside a EditorGUI.BeginProperty()
-+ ScrollView: editor code inside using(new PropertyGUI()) will behave like inside a EditorGUI.BeginScrollView()
-+ Vertical: editor code inside using(new Vertical()) will behave like inside a EditorGUI.BeginVertical()
++ BoxGroup: editor code inside using(BoxGroup.Do()) will be drawn inside a nice editor box
++ IndentLevel: editor code inside using(ChangeIndentLevel.Do()) will be drawn with a different indentation
++ LabelWidth: editor code inside using(ChangeLabelWidth.Do()) will be drawn with a different label width
++ DisabledGroup: editor code inside using(DisabledGroup.Do()) will behave like inside a EditorGUI.BeginDisabledGroup()
++ FadeGroup: editor code inside using(FadeGroup.Do()) will behave like inside a EditorGUI.BeginFadeGroup()
++ Horizontal: editor code inside using(Horizontal.Do()) will behave like inside a EditorGUI.BeginHorizontal()
++ PropertyGUI: editor code inside using(PropertyGUI.Do()) will behave like inside a EditorGUI.BeginProperty()
++ ScrollView: editor code inside using(PropertyGUI.Do()) will behave like inside a EditorGUI.BeginScrollView()
++ Vertical: editor code inside using(Vertical.Do()) will behave like inside a EditorGUI.BeginVertical()
 * EditorHelper: refactored some methods to a class inside Plugins/Inspector/Editor/EditorUtil
 * WebAction.Request(): now returns a Promise instead of WebRequest
 * RuntimeConsole: now has a keyCombination property
