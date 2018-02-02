@@ -138,7 +138,6 @@ namespace BitStrap
 
 			return diff;
 		}
-
 #endif
 
 		private void Update()

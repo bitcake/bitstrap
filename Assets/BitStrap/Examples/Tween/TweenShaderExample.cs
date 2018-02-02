@@ -2,7 +2,7 @@
 
 namespace BitStrap.Examples
 {
-	public class TweenShaderExample : MonoBehaviour
+	public sealed class TweenShaderExample : MonoBehaviour
 	{
 		private TweenShader tween;
 
