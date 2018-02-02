@@ -7,9 +7,15 @@ namespace BitStrap
 	{
 		public readonly bool visible;
 
-		public FadeGroup( float value )
+		public static FadeGroup Do( float value )
 		{
-			visible = EditorGUILayout.BeginFadeGroup( value );
+			var visible = EditorGUILayout.BeginFadeGroup( value );
+			return new FadeGroup( visible );
+		}
+
+		private FadeGroup( bool visible )
+		{
+			this.visible = visible;
 		}
 
 		public void Dispose()

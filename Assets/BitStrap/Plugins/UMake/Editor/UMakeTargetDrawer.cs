@@ -28,7 +28,7 @@ namespace BitStrap
 			UMakeTarget target;
 			UMakeTargetEditor.BuildAction action;
 
-			using( new ChangeIndentLevel( 0 ) )
+			using( IndentLevel.Do( 0 ) )
 			{
 				EditorGUI.PropertyField( propertyRect, property, GUIContent.none );
 

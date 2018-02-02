@@ -5,9 +5,10 @@ namespace BitStrap
 {
 	public struct DisabledGroup : System.IDisposable
 	{
-		public DisabledGroup( bool disabled )
+		public static DisabledGroup Do( bool disabled )
 		{
 			EditorGUI.BeginDisabledGroup( disabled );
+			return new DisabledGroup();
 		}
 
 		public void Dispose()

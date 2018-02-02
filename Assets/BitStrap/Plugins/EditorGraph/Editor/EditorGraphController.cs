@@ -173,7 +173,7 @@ namespace BitStrap
 
 		private void ShowToolbar()
 		{
-			using( new Horizontal( EditorStyles.toolbar ) )
+			using( Horizontal.Do( EditorStyles.toolbar ) )
 			{
 				OnToolbarGUI();
 			}

@@ -13,9 +13,9 @@ namespace BitStrap
 			string referenceCountLabel = string.Format( "{0} references of <{1}>", referencesObjectBase.ReferenceCount, referencesObjectBase.ReferencedType.Name );
 			EditorGUILayout.LabelField( referenceCountLabel, EditorStyles.centeredGreyMiniLabel );
 
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
-				using( new ChangeLabelWidth( 72.0f ) )
+				using( LabelWidth.Do( 72.0f ) )
 				{
 					SerializedProperty rootFolderProperty = serializedObject.GetMemberProperty<ReferencesBase>( r => r.rootFolder );
 					EditorGUILayout.PropertyField( rootFolderProperty );

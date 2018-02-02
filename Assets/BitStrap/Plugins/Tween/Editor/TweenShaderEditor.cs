@@ -37,8 +37,8 @@ namespace BitStrap
 			var tweenShader = target as TweenShader;
 
 			EditorGUILayout.Space();
-			
-			using( new Horizontal() )
+
+			using( Horizontal.Do() )
 			{
 				if( GUILayout.Button( "Play Forward", EditorStyles.miniButtonLeft ) )
 				{

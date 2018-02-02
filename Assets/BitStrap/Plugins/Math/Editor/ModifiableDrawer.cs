@@ -27,14 +27,14 @@ namespace BitStrap
 
 			bool modified;
 
-			using( new ChangeLabelWidth( 56.0f ) )
-			using( new ChangeIndentLevel( 0 ) )
+			using( LabelWidth.Do( 56.0f ) )
+			using( IndentLevel.Do( 0 ) )
 			{
 				EditorGUI.BeginChangeCheck();
 				EditorGUI.PropertyField( originalPosition, originalValue, new GUIContent( "Original" ) );
 				modified = EditorGUI.EndChangeCheck();
 
-				using( new DisabledGroup( true ) )
+				using( DisabledGroup.Do( true ) )
 				{
 					EditorGUI.PropertyField( modifiedPosition, modifiedValue, new GUIContent( "Modified" ) );
 				}

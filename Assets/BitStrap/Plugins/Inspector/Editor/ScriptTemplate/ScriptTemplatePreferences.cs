@@ -57,7 +57,7 @@ public sealed class #SCRIPTNAME# : Editor
 
 		public static void OnPreferencesGUI()
 		{
-			using( new BoxGroup( ref scroll, "Script Templates" ) )
+			using( BoxGroup.Do( ref scroll, "Script Templates" ) )
 			{
 				bool windowsLineEnding = EditorGUILayout.Toggle( "Use windows line ending format", ScriptTemplateUseWindowsLineEnding.Value );
 

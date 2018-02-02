@@ -7,14 +7,21 @@ namespace BitStrap
 	{
 		public readonly Rect rect;
 
-		public Vertical( params GUILayoutOption[] options )
+		public static Vertical Do( params GUILayoutOption[] options )
 		{
-			rect = EditorGUILayout.BeginVertical( options );
+			var rect = EditorGUILayout.BeginVertical( options );
+			return new Vertical( rect );
 		}
 
-		public Vertical( GUIStyle style, params GUILayoutOption[] options )
+		public static Vertical Do( GUIStyle style, params GUILayoutOption[] options )
 		{
-			rect = EditorGUILayout.BeginVertical( style, options );
+			var rect = EditorGUILayout.BeginVertical( style, options );
+			return new Vertical( rect );
+		}
+
+		private Vertical( Rect rect )
+		{
+			this.rect = rect;
 		}
 
 		public void Dispose()

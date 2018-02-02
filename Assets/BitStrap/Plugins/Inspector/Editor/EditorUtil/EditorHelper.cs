@@ -234,7 +234,7 @@ namespace BitStrap
 		/// <returns></returns>
 		public static string SearchField( string search )
 		{
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
 				search = EditorGUILayout.TextField( search, Styles.SearchTextField );
 
@@ -256,7 +256,7 @@ namespace BitStrap
 		/// <returns></returns>
 		public static string DelayedSearchField( string search )
 		{
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
 				search = EditorGUILayout.DelayedTextField( search, Styles.SearchTextField );
 
@@ -282,14 +282,14 @@ namespace BitStrap
 			string searchLower = searchField.ToLower( CultureInfo.InvariantCulture );
 			EditorGUILayout.Space();
 
-			using( new ScrollView( ref scroll ) )
+			using( ScrollView.Do( ref scroll ) )
 			{
 				foreach( GUIStyle style in GUI.skin.customStyles )
 				{
 					if( string.IsNullOrEmpty( searchField ) ||
 						style.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
 					{
-						using( new Horizontal() )
+						using( Horizontal.Do() )
 						{
 							EditorGUILayout.TextField( style.name, EditorStyles.label );
 							GUILayout.Label( style.name, style );
@@ -316,7 +316,7 @@ namespace BitStrap
 			string searchLower = searchField.ToLower( CultureInfo.InvariantCulture );
 			EditorGUILayout.Space();
 
-			using( new ScrollView( ref scroll ) )
+			using( ScrollView.Do( ref scroll ) )
 			{
 				foreach( Texture texture in unityIcons )
 				{
@@ -329,7 +329,7 @@ namespace BitStrap
 					if( string.IsNullOrEmpty( searchField ) ||
 						texture.name.ToLower( CultureInfo.InvariantCulture ).Contains( searchLower ) )
 					{
-						using( new Horizontal() )
+						using( Horizontal.Do() )
 						{
 							EditorGUILayout.TextField( texture.name, EditorStyles.label );
 							GUILayout.Label( new GUIContent( texture ) );

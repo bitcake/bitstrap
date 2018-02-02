@@ -83,9 +83,9 @@ namespace BitStrap
 		{
 			base.OnInspectorGUI( editor );
 
-			using( new BoxGroup( "Shared Settings" ) )
+			using( BoxGroup.Do( "Shared Settings" ) )
 			{
-				using( new Horizontal() )
+				using( Horizontal.Do() )
 				{
 					steamSdkPath.Value = EditorGUILayout.TextField( "Steam SDK Folder", steamSdkPath.Value );
 					if( GUILayout.Button( "Change", GUILayout.Width( 64.0f ) ) )

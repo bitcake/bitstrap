@@ -49,13 +49,12 @@ namespace BitStrap
 				if( !memberProperty.Next( true ) )
 					return null;
 
-				string memberNameWithMPrefix = "m_" + memberName;
+				string niceMemberName = ObjectNames.NicifyVariableName( memberName );
 
 				do
 				{
-					if( string.Compare( memberProperty.name, memberName, true ) == 0 )
-						return memberProperty;
-					if( string.Compare( memberProperty.name, memberNameWithMPrefix, true ) == 0 )
+					string currentMemberNiceName = ObjectNames.NicifyVariableName( memberProperty.name );
+					if( string.Equals( niceMemberName, currentMemberNiceName ) )
 						return memberProperty;
 				} while( !memberProperty.Next( false ) );
 			}

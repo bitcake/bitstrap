@@ -69,7 +69,7 @@ namespace BitStrap
 			Undo.RecordObject( animation, "AnimatorControllerEditor" );
 
 			EditorGUI.BeginChangeCheck();
-			using( new ChangeLabelWidth( 24.0f ) )
+			using( LabelWidth.Do( 24.0f ) )
 			{
 				animation.name = EditorGUI.DelayedTextField( rect, animationIconGuiContent, animation.name );
 			}

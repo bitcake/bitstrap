@@ -109,12 +109,15 @@
 			return onNone();
 		}
 
-		public Unit IfSome( System.Action<A> onSome )
+		public bool IfSome( System.Action<A> onSome )
 		{
 			if( IsSome )
+			{
 				onSome( value );
+				return true;
+			}
 
-			return Functional.Unit;
+			return false;
 		}
 
 		public Option<B> And<B>( Option<B> other )

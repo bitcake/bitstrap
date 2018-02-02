@@ -4,14 +4,16 @@ namespace BitStrap
 {
 	public struct BoxGroup : System.IDisposable
 	{
-		public BoxGroup( string label )
+		public static BoxGroup Do( string label )
 		{
 			EditorHelper.BeginBox( label );
+			return new BoxGroup();
 		}
 
-		public BoxGroup( ref Vector2 scroll, string label )
+		public static BoxGroup Do( ref Vector2 scroll, string label )
 		{
 			scroll = EditorHelper.BeginBox( scroll, label );
+			return new BoxGroup();
 		}
 
 		public void Dispose()

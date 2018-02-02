@@ -63,7 +63,7 @@ namespace BitStrap
 
 			EditorGUI.BeginChangeCheck();
 
-			using( new BoxGroup( "Build Settings" ) )
+			using( BoxGroup.Do( "Build Settings" ) )
 			{
 				ShowBuildSettings( umakeTarget );
 			}
@@ -131,7 +131,7 @@ namespace BitStrap
 		{
 			BuildAction action;
 
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
 				action = BuildAction.None;
 

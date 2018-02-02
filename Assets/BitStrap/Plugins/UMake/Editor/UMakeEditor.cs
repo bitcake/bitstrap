@@ -25,7 +25,7 @@ namespace BitStrap
 
 		public override void OnInspectorGUI()
 		{
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
 				EditorGUI.BeginChangeCheck();
 				string buildPath = EditorGUILayout.TextField( "Build Path", UMake.BuildPathPref );

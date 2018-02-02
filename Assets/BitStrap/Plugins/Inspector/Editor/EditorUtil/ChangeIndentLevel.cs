@@ -3,14 +3,21 @@ using UnityEngine;
 
 namespace BitStrap
 {
-	public struct ChangeIndentLevel : System.IDisposable
+	public struct IndentLevel : System.IDisposable
 	{
 		private readonly int savedIndentLevel;
 
-		public ChangeIndentLevel( int indentLevel )
+		public static IndentLevel Do( int indentLevel )
 		{
-			savedIndentLevel = EditorGUI.indentLevel;
+			var savedIndentLevel = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = indentLevel;
+
+			return new IndentLevel( savedIndentLevel );
+		}
+
+		private IndentLevel( int savedIndentLevel )
+		{
+			this.savedIndentLevel = savedIndentLevel;
 		}
 
 		public void Dispose()

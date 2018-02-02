@@ -66,7 +66,7 @@ namespace BitStrap
 				nameProperty.stringValue = cache.properties[index].name;
 				typeProperty.enumValueIndex = ( int ) cache.properties[index].type;
 
-				using( new DisabledGroup( true ) )
+				using( DisabledGroup.Do( true ) )
 				{
 					EditorGUI.Popup( typeRect, typeProperty.enumValueIndex, typeProperty.enumDisplayNames );
 				}
@@ -74,7 +74,7 @@ namespace BitStrap
 
 			EditorGUI.PropertyField( curveRect, curveProperty, GUIContent.none );
 
-			using( new ChangeLabelWidth( FromToLabelWidth ) )
+			using( LabelWidth.Do( FromToLabelWidth ) )
 			{
 				Vector4 fromVector = fromProperty.vector4Value;
 				Vector4 toVector = toProperty.vector4Value;
@@ -88,18 +88,17 @@ namespace BitStrap
 
 					toVector.x = EditorGUI.FloatField( toRect, toLabel, toVector.x );
 					toProperty.vector4Value = toVector;
-
 					break;
 
 				case TweenShaderProperty.Type.Vector:
 					float labelWidth = EditorGUIUtility.labelWidth;
 
 					EditorGUI.LabelField( fromRect.Left( labelWidth ), fromLabel );
-					fromVector = EditorGUI.Vector4Field( fromRect.Right( -labelWidth ).Row( -1 ), "", fromVector );
+					fromVector = EditorGUI.Vector4Field( fromRect.Right( -labelWidth ).Row( 0 ), "", fromVector );
 					fromProperty.vector4Value = fromVector;
 
 					EditorGUI.LabelField( toRect.Left( labelWidth ), toLabel );
-					toVector = EditorGUI.Vector4Field( toRect.Right( -labelWidth ).Row( -1 ), "", toVector );
+					toVector = EditorGUI.Vector4Field( toRect.Right( -labelWidth ).Row( 0 ), "", toVector );
 					toProperty.vector4Value = toVector;
 
 					break;

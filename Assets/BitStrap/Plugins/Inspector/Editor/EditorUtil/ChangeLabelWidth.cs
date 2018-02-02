@@ -3,14 +3,21 @@ using UnityEditor;
 
 namespace BitStrap
 {
-	public struct ChangeLabelWidth : System.IDisposable
+	public struct LabelWidth : System.IDisposable
 	{
 		private readonly float savedLabelWidth;
 
-		public ChangeLabelWidth( float labelWidth )
+		public static LabelWidth Do( float labelWidth )
 		{
-			savedLabelWidth = EditorGUIUtility.labelWidth;
+			var savedLabelWidth = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = labelWidth;
+
+			return new LabelWidth( savedLabelWidth );
+		}
+
+		private LabelWidth( float savedLabelWidth )
+		{
+			this.savedLabelWidth = savedLabelWidth;
 		}
 
 		public void Dispose()

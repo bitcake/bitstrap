@@ -66,7 +66,7 @@ namespace BitStrap
 		{
 			EditorGUI.BeginChangeCheck();
 
-			using( new ChangeLabelWidth( 84.0f ) )
+			using( LabelWidth.Do( 84.0f ) )
 			{
 				OnShowNode( host );
 			}

@@ -33,8 +33,8 @@ namespace BitStrap
 			SerializedProperty max = property.GetMemberProperty<IntRange>( b => b.Max );
 			SerializedProperty min = property.GetMemberProperty<IntRange>( b => b.Min );
 
-			using( new ChangeLabelWidth( 32.0f ) )
-			using( new ChangeIndentLevel( 0 ) )
+			using( LabelWidth.Do( 32.0f ) )
+			using( IndentLevel.Do( 0 ) )
 			{
 				EditorGUI.BeginChangeCheck();
 				DelayedPropertyField( minPosition, min );

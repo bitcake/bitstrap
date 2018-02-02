@@ -37,7 +37,7 @@ namespace BitStrap
 			}
 			templateCode.Value = EditorGUILayout.TextArea( templateCode.Value );
 
-			using( new Horizontal() )
+			using( Horizontal.Do() )
 			{
 				if( GUILayout.Button( "Load from file" ) )
 				{

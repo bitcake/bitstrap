@@ -3,18 +3,25 @@ using UnityEngine;
 
 namespace BitStrap
 {
-	public struct Horizontal : System.IDisposable
+	public sealed class Horizontal : System.IDisposable
 	{
 		public readonly Rect rect;
 
-		public Horizontal( params GUILayoutOption[] options )
+		public static Horizontal Do( params GUILayoutOption[] options )
 		{
-			rect = EditorGUILayout.BeginHorizontal( options );
+			var rect = EditorGUILayout.BeginHorizontal( options );
+			return new Horizontal( rect );
 		}
 
-		public Horizontal( GUIStyle style, params GUILayoutOption[] options )
+		public static Horizontal Do( GUIStyle style, params GUILayoutOption[] options )
 		{
-			rect = EditorGUILayout.BeginHorizontal( style, options );
+			var rect = EditorGUILayout.BeginHorizontal( style, options );
+			return new Horizontal( rect );
+		}
+
+		private Horizontal( Rect rect )
+		{
+			this.rect = rect;
 		}
 
 		public void Dispose()

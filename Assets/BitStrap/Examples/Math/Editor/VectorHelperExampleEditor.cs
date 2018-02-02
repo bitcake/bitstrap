@@ -14,7 +14,7 @@ namespace BitStrap.Examples
 
 			var self = target as VectorHelperExample;
 
-			using( new DisabledGroup( true ) )
+			using( DisabledGroup.Do( true ) )
 			{
 				EditorGUILayout.ToggleLeft( string.Format( "Vector is zero?" ), self.IsVectorZero() );
 				bool betweenVectors = self.IsVectorCBetweenVectorsAAndB();
@@ -38,7 +38,7 @@ namespace BitStrap.Examples
 			Handles.color = Color.blue;
 			Handles.DrawLine( center, center + Vector2.Scale( self.vectorC, vectorScale ) );
 
-			using( new DisabledGroup( true ) )
+			using( DisabledGroup.Do( true ) )
 			{
 				EditorGUILayout.ColorField( new GUIContent( "Vector A" ), Color.red, false, false, false, hdrConfig );
 				EditorGUILayout.ColorField( new GUIContent( "Vector B" ), Color.green, false, false, false, hdrConfig );
