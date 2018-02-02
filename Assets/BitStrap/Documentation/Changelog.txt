@@ -15,6 +15,7 @@
 + Vertical: editor code inside using(new Vertical()) will behave like inside a EditorGUI.BeginVertical()
 * EditorHelper: refactored some methods to a class inside Plugins/Inspector/Editor/EditorUtil
 * WebAction.Request(): now returns a Promise instead of WebRequest
+* RuntimeConsole: now has a keyCombination property
 - WebRequest: a Promise is used in its place now
 
 

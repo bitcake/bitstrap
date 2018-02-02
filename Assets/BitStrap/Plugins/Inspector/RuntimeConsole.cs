@@ -15,43 +15,20 @@ namespace BitStrap
 			public LogType logType;
 			public string message;
 			public string stackTrace;
-
-			public bool AsGUI( bool showLog, bool showWarning, bool showError )
-			{
-				switch( logType )
-				{
-				case LogType.Error:
-				case LogType.Exception:
-				case LogType.Assert:
-					if( !showError )
-						return false;
-					GUI.color = Color.red;
-					break;
-
-				case LogType.Warning:
-					if( !showWarning )
-						return false;
-					GUI.color = Color.yellow;
-					break;
-
-				case LogType.Log:
-					if( !showLog )
-						return false;
-					GUI.color = Color.white;
-					break;
-				}
-
-				bool isSelected = GUILayout.Button( string.Concat( "> ", message ), GUI.skin.label );
-				GUI.color = Color.white;
-
-				return isSelected;
-			}
 		}
 
 		/// <summary>
 		/// Max number of logs saved.
 		/// </summary>
 		public int maxLogs = 100;
+
+		/// <summary>
+		/// The key combination necessary to show the console.
+		/// </summary>
+		public KeyCode[] keyCombination = new KeyCode[] {
+			KeyCode.LeftShift,
+			KeyCode.C
+		};
 
 		private List<Log> logs = new List<Log>();
 		private int selectedLog = -1;
@@ -64,10 +41,14 @@ namespace BitStrap
 
 		private GUIStyle windowStyle = null;
 
-		private void Awake()
+		private void OnEnable()
 		{
-			if( enabled )
-				Application.logMessageReceived += AddMessage;
+			Application.logMessageReceived += AddMessage;
+		}
+
+		private void OnDisable()
+		{
+			Application.logMessageReceived -= AddMessage;
 		}
 
 		private void TryAdjustWindowBgColor()
@@ -84,9 +65,7 @@ namespace BitStrap
 
 			Color[] pixels = new Color[width * height];
 			for( int i = 0; i < pixels.Length; i++ )
-			{
 				pixels[i] = new Color( 0.0f, 0.0f, 0.0f, 0.8f );
-			}
 
 			windowBgTexture.SetPixels( pixels );
 			windowBgTexture.Apply();
@@ -96,70 +75,105 @@ namespace BitStrap
 
 		private void AddMessage( string message, string stackTrace, LogType logType )
 		{
-			if( enabled )
-			{
-				Log log = new Log();
-				log.logType = logType;
-				log.message = message;
-				log.stackTrace = stackTrace;
+			Log log = new Log();
+			log.logType = logType;
+			log.message = message;
+			log.stackTrace = stackTrace;
 
-				logs.Insert( logs.Count, log );
-				if( logs.Count > maxLogs && maxLogs > 0 )
-				{
-					logs.RemoveAt( 0 );
-				}
+			logs.Insert( logs.Count, log );
+			if( logs.Count > maxLogs && maxLogs > 0 )
+				logs.RemoveAt( 0 );
+		}
+
+		private bool ShouldShow()
+		{
+			foreach( var key in keyCombination )
+			{
+				if( !Input.GetKey( key ) )
+					return false;
 			}
+
+			return true;
 		}
 
 		private void OnGUI()
 		{
 			TryAdjustWindowBgColor();
 
-			if( Input.GetKey( KeyCode.LeftShift ) && Input.GetKey( KeyCode.C ) )
+			if( !ShouldShow() )
+				return;
+
+			Rect screenRect = new Rect( 0.0f, 0.0f, Screen.width, Screen.height );
+			GUILayout.BeginArea( screenRect, windowStyle );
+
+			GUILayout.BeginHorizontal();
+			GUILayout.Label( "LOGS" );
+			GUILayout.FlexibleSpace();
+			showLog = GUILayout.Toggle( showLog, "Log", GUI.skin.button );
+			showWarning = GUILayout.Toggle( showWarning, "Warning", GUI.skin.button );
+			showError = GUILayout.Toggle( showError, "Error", GUI.skin.button );
+			if( GUILayout.Button( "Clear" ) )
 			{
-				Rect screenRect = new Rect( 0.0f, 0.0f, Screen.width, Screen.height );
-				GUILayout.BeginArea( screenRect, windowStyle );
-
-				GUILayout.BeginHorizontal();
-				GUILayout.Label( "LOGS" );
-				GUILayout.FlexibleSpace();
-				showLog = GUILayout.Toggle( showLog, "Log", GUI.skin.button );
-				showWarning = GUILayout.Toggle( showWarning, "Warning", GUI.skin.button );
-				showError = GUILayout.Toggle( showError, "Error", GUI.skin.button );
-				if( GUILayout.Button( "Clear" ) )
-				{
-					logs.Clear();
-					selectedLog = -1;
-				}
-				GUILayout.EndHorizontal();
-
-				scroll = GUILayout.BeginScrollView( scroll );
-
-				for( int i = 0; i < logs.Count; i++ )
-				{
-					if( logs[i].AsGUI( showLog, showWarning, showError ) )
-					{
-						selectedLog = i;
-					}
-				}
-
-				GUILayout.FlexibleSpace();
-				GUILayout.EndScrollView();
-
-				if( selectedLog >= 0 )
-				{
-					GUILayout.Label( "-------------------------------------------------------------------------" );
-
-					stackTraceScroll = GUILayout.BeginScrollView( stackTraceScroll, GUILayout.Height( 128.0f ) );
-
-					Log log = logs[selectedLog];
-					GUILayout.Label( log.stackTrace );
-
-					GUILayout.EndScrollView();
-				}
-
-				GUILayout.EndArea();
+				logs.Clear();
+				selectedLog = -1;
 			}
+			GUILayout.EndHorizontal();
+
+			scroll = GUILayout.BeginScrollView( scroll );
+
+			for( int i = 0; i < logs.Count; i++ )
+			{
+				if( DrawLogGUI( logs[i], showLog, showWarning, showError ) )
+					selectedLog = i;
+			}
+
+			GUILayout.FlexibleSpace();
+			GUILayout.EndScrollView();
+
+			if( selectedLog >= 0 )
+			{
+				GUILayout.Label( "-------------------------------------------------------------------------" );
+
+				stackTraceScroll = GUILayout.BeginScrollView( stackTraceScroll, GUILayout.Height( 128.0f ) );
+
+				Log log = logs[selectedLog];
+				GUILayout.Label( log.stackTrace );
+
+				GUILayout.EndScrollView();
+			}
+
+			GUILayout.EndArea();
+		}
+
+		private bool DrawLogGUI( Log log, bool showLog, bool showWarning, bool showError )
+		{
+			switch( log.logType )
+			{
+			case LogType.Error:
+			case LogType.Exception:
+			case LogType.Assert:
+				if( !showError )
+					return false;
+				GUI.color = Color.red;
+				break;
+
+			case LogType.Warning:
+				if( !showWarning )
+					return false;
+				GUI.color = Color.yellow;
+				break;
+
+			case LogType.Log:
+				if( !showLog )
+					return false;
+				GUI.color = Color.white;
+				break;
+			}
+
+			bool isSelected = GUILayout.Button( string.Concat( "> ", log.message ), GUI.skin.label );
+			GUI.color = Color.white;
+
+			return isSelected;
 		}
 	}
 }
