@@ -17,15 +17,21 @@ Alternatively, you can add all assets inside `Assets/BitStrap` to an already exi
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
 
+### Common Use Cases
+
+If you're unsure of how can BitStrap help you, here's a list of common use cases where BitStrap shines!
+
+[[List of common use cases](wiki/Common-Use-Cases)]
+
 ## Documentation
 
 NOTE: Right now we're moving all the documentation to this repository [Wiki](https://github.com/bitcake/bitstrap/wiki)!
 
-Although all the classes are already documented, we also have a simple web page
+Although the classes are already documented, we also have a simple web page
 containing a feature list followed by a quick explanation of each. You can think
 of it as a "table of contents".
 
-[Documentation Link](https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub)
+[Legacy documentation Link](https://docs.google.com/document/d/1LzsjBetzXnpR-nto8zqYLRxRvjW_DcPP_zOH-stSWVA/pub)
 
 ## I need ~healing~ help
 
