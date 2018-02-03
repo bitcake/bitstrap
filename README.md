@@ -21,7 +21,7 @@ It is also possible to import it directly from the [AssetStore](https://www.asse
 
 If you're unsure of how can BitStrap help you, here's a list of common use cases where BitStrap shines!
 
-[[List of common use cases](wiki/Common-Use-Cases)]
+[[List of common use cases](../../wiki/Common-Use-Cases)]
 
 ## Documentation
 
