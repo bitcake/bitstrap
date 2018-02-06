@@ -10,18 +10,18 @@ We hope this will ease other people lives when working with Unity.
 
 You are free to use these tools in whatever project you're doing. Make us proud! :D
 
+## Common Use Cases
+
+If you're unsure of how can BitStrap help you, here's a list of common use cases where BitStrap shines!
+
+[List of common use cases](../../wiki/Common-Use-Cases)
+
 ## Getting started
 
 Easy! Since this is a Unity project, just download it and then continue from there.
 Alternatively, you can add all assets inside `Assets/BitStrap` to an already existing Unity project.
 
 It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
-
-### Common Use Cases
-
-If you're unsure of how can BitStrap help you, here's a list of common use cases where BitStrap shines!
-
-[List of common use cases](../../wiki/Common-Use-Cases)
 
 ## Documentation
 
