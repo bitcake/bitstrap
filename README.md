@@ -1,7 +1,6 @@
 # BitStrap
 
-This is BitCake's set of useful tools that will let you quickly bootstrap a new Unity project.
-We use it in our projects and hope it will be of help for yours! :)
+BitStrap is BitCake's collection of Unity tools that improve our workflow. We use it across several projects and hope it will be of help for yours! :)
 
 ## What is this project for?
 
