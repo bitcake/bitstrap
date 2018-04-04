@@ -23,7 +23,7 @@ namespace BitStrap
 			}
 
 			EditorGUI.PropertyField( position, lengthProperty, label );
-			UnitDrawer.DrawUnit( position, "seconds", Functional.None );
+			UnitDrawer.DrawUnit( position, "seconds", EditorStyles.centeredGreyMiniLabel );
 
 			if( lengthProperty.floatValue < 0.0f )
 			{

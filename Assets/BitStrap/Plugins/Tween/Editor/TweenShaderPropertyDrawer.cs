@@ -12,7 +12,10 @@ namespace BitStrap
 		private const float FromToPadding = 32.0f;
 		private const float FromToLabelWidth = 48.0f;
 
+#if UNITY_5 || UNITY_2017
 		private readonly static ColorPickerHDRConfig colorPickerConfig = new ColorPickerHDRConfig( 0.0f, float.MaxValue, 0.0f, float.MaxValue );
+#endif
+
 		private readonly static GUIContent fromLabel = new GUIContent( "From" );
 		private readonly static GUIContent toLabel = new GUIContent( "To" );
 
@@ -26,7 +29,6 @@ namespace BitStrap
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
 		{
 			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
-			property.serializedObject.Update();
 
 			var nameProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.name );
 			var typeProperty = property.GetMemberProperty<TweenShaderProperty>( p => p.type );
@@ -63,8 +65,13 @@ namespace BitStrap
 				int index = System.Array.IndexOf( cache.propertyNameOptions, nameProperty.stringValue );
 				index = EditorGUI.Popup( nameRect, index, cache.propertyNameOptions );
 
-				nameProperty.stringValue = cache.properties[index].name;
-				typeProperty.enumValueIndex = ( int ) cache.properties[index].type;
+				if( index < 0 )
+					return;
+
+				var shaderProperty = cache.properties[index];
+
+				nameProperty.stringValue = shaderProperty.name;
+				typeProperty.enumValueIndex = ( int ) shaderProperty.type;
 
 				using( DisabledGroup.Do( true ) )
 				{
@@ -104,10 +111,15 @@ namespace BitStrap
 					break;
 
 				case TweenShaderProperty.Type.Color:
+#if UNITY_5 || UNITY_2017
 					fromVector = EditorGUI.ColorField( fromRect, fromLabel, fromVector, true, true, true, colorPickerConfig );
-					fromProperty.vector4Value = fromVector;
-
 					toVector = EditorGUI.ColorField( toRect, toLabel, toVector, true, true, true, colorPickerConfig );
+#else
+					fromVector = EditorGUI.ColorField( fromRect, fromLabel, fromVector, true, true, true );
+					toVector = EditorGUI.ColorField( toRect, toLabel, toVector, true, true, true );
+#endif
+
+					fromProperty.vector4Value = fromVector;
 					toProperty.vector4Value = toVector;
 
 					break;

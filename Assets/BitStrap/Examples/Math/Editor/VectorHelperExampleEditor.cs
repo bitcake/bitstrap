@@ -6,7 +6,9 @@ namespace BitStrap.Examples
 	[CustomEditor( typeof( VectorHelperExample ) )]
 	public class VectorHelperExampleEditor : Editor
 	{
+#if UNITY_5 || UNITY_2017
 		private static readonly ColorPickerHDRConfig hdrConfig = new ColorPickerHDRConfig( 0.0f, 1.0f, 0.0f, 1.0f );
+#endif
 
 		public override void OnInspectorGUI()
 		{
@@ -40,9 +42,15 @@ namespace BitStrap.Examples
 
 			using( DisabledGroup.Do( true ) )
 			{
+#if UNITY_5 || UNITY_2017
 				EditorGUILayout.ColorField( new GUIContent( "Vector A" ), Color.red, false, false, false, hdrConfig );
 				EditorGUILayout.ColorField( new GUIContent( "Vector B" ), Color.green, false, false, false, hdrConfig );
 				EditorGUILayout.ColorField( new GUIContent( "Vector C" ), Color.blue, false, false, false, hdrConfig );
+#else
+				EditorGUILayout.ColorField( new GUIContent( "Vector A" ), Color.red, false, false, false );
+				EditorGUILayout.ColorField( new GUIContent( "Vector B" ), Color.green, false, false, false );
+				EditorGUILayout.ColorField( new GUIContent( "Vector C" ), Color.blue, false, false, false );
+#endif
 			}
 		}
 	}

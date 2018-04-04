@@ -6,13 +6,12 @@ namespace BitStrap
 	[CustomPropertyDrawer( typeof( UnitAttribute ) )]
 	public sealed class UnitDrawer : PropertyDrawer
 	{
-		public static void DrawUnit( Rect fieldPosition, string unitText, Option<GUIStyle> unitStyle )
+		public static void DrawUnit( Rect fieldPosition, string unitText, GUIStyle unitStyle )
 		{
 			var content = new GUIContent( unitText );
-			GUIStyle labelStyle = unitStyle.UnwrapOr( EditorStyles.centeredGreyMiniLabel );
-			float labelWidth = labelStyle.CalcSize( content ).x;
+			float labelWidth = unitStyle.CalcSize( content ).x;
 
-			GUI.Label( fieldPosition.Right( labelWidth + 2.0f ), content, labelStyle );
+			GUI.Label( fieldPosition.Right( labelWidth + 2.0f ), content, unitStyle );
 		}
 
 		public override void OnGUI( Rect position, SerializedProperty property, GUIContent label )
