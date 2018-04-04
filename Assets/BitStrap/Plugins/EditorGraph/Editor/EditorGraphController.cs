@@ -108,13 +108,22 @@ namespace BitStrap
 		/// <param name="position"></param>
 		public void OnGUI( EditorWindow host, Rect position )
 		{
-			TryInitialize();
+			if( graph == null || graphGUI == null )
+				Initialize();
 
 			if( graphNeedsUpdate )
 				UpdateGraphImmediate();
 
-			ShowToolbar();
-			ShowGraph( host, position );
+			using( Horizontal.Do( EditorStyles.toolbar ) )
+			{
+				OnToolbarGUI();
+			}
+
+			float toolbarHeight = EditorGUIUtility.singleLineHeight + 1.0f;
+
+			graphGUI.BeginGraphGUI( host, new Rect( 0, toolbarHeight, position.width, position.height - toolbarHeight ) );
+			graphGUI.OnGraphGUI();
+			graphGUI.EndGraphGUI();
 		}
 
 		/// <summary>
@@ -163,29 +172,6 @@ namespace BitStrap
 			{
 				graph.IsCreatingGraph = false;
 			}
-		}
-
-		private void TryInitialize()
-		{
-			if( graph == null || graphGUI == null )
-				Initialize();
-		}
-
-		private void ShowToolbar()
-		{
-			using( Horizontal.Do( EditorStyles.toolbar ) )
-			{
-				OnToolbarGUI();
-			}
-		}
-
-		private void ShowGraph( EditorWindow host, Rect position )
-		{
-			float toolbarHeight = EditorGUIUtility.singleLineHeight + 1.0f;
-
-			graphGUI.BeginGraphGUI( host, new Rect( 0, toolbarHeight, position.width, position.height - toolbarHeight ) );
-			graphGUI.OnGraphGUI();
-			graphGUI.EndGraphGUI();
 		}
 	}
 }
