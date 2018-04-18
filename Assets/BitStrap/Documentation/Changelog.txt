@@ -5,6 +5,8 @@
 * Fix TweenShader not being able to change properties in inspector
 * Fix TweenShader index out of range when no Renderer was selected
 * UnitDrawer: always receives a Style parameter
+* SteamUploadBuildAction: now possible to get steam credentials from cli through the args "steam-username" and "steam-password"
+* EditorPrefProperty: moved into the "#Core" folder
 
 
 ### 1.15.0
