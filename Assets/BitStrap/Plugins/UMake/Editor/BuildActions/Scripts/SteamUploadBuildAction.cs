@@ -20,10 +20,15 @@ namespace BitStrap
 			{
 				string buildPath = UMake.GetBuildPath();
 				string steamBuildScript = buildScript;
+				string username = steamUsername.Value;
+				string password = steamPassword.Value;
+
 				if( UMakeCli.IsInCli )
 				{
 					UMakeCli.Args.TryGetValue( "path", out buildPath );
 					UMakeCli.Args.TryGetValue( "script", out steamBuildScript );
+					UMakeCli.Args.TryGetValue( "steam-username", out username );
+					UMakeCli.Args.TryGetValue( "steam-password", out password );
 				}
 
 				if( !CopyContent( target, umake.version, buildPath ) )
@@ -48,7 +53,7 @@ namespace BitStrap
 				var uploaderProcess = new System.Diagnostics.Process();
 				uploaderProcess.StartInfo.FileName = steamCmdPath;
 				uploaderProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName( Path.GetDirectoryName( steamCmdPath ) );
-				uploaderProcess.StartInfo.Arguments = string.Format( steamCmdArgFormat, steamUsername.Value, steamPassword.Value, steamBuildScript );
+				uploaderProcess.StartInfo.Arguments = string.Format( steamCmdArgFormat, username, password, steamBuildScript );
 
 				if( UMakeCli.IsInCli )
 				{
