@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace BitStrap
 {
-	public struct PropertyGUI : System.IDisposable
+	public struct Property : System.IDisposable
 	{
-		public static PropertyGUI Do( Rect totalPosition, GUIContent label, SerializedProperty property )
+		public static Property Do( Rect totalPosition, GUIContent label, SerializedProperty property )
 		{
 			EditorGUI.BeginProperty( totalPosition, label, property );
-			return new PropertyGUI();
+			return new Property();
 		}
 
 		public void Dispose()

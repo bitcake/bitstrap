@@ -12,7 +12,7 @@ namespace BitStrap
 
 			if( property.propertyType == SerializedPropertyType.String )
 			{
-				using( PropertyGUI.Do( position, label, property ) )
+				using( Property.Do( position, label, property ) )
 				{
 					property.stringValue = EditorGUI.TagField( position, label, property.stringValue );
 				}

@@ -2,11 +2,14 @@
 
 ### 1.15.1
 
++ FieldWidth: a scoped change to field width that will behave like EditorGUIUtility.fieldWidth
 * Fix TweenShader not being able to change properties in inspector
 * Fix TweenShader index out of range when no Renderer was selected
 * UnitDrawer: always receives a Style parameter
 * SteamUploadBuildAction: now possible to get steam credentials from cli through the args "steam-username" and "steam-password"
 * EditorPrefProperty: moved into the "#Core" folder
+* SteamUploadBuildAction: added skipSteamContentCopy to skip the steam content copy phase before upload. Useful when you build directly to the content folder. Also, it is now possible to override some values when invoking UMake from the cli.
+* Proeprty: renamed from PropertyGUI
 
 
 ### 1.15.0
