@@ -9,6 +9,9 @@
 * SteamUploadBuildAction: now possible to get steam credentials from cli through the args "steam-username" and "steam-password"
 * EditorPrefProperty: moved into the "#Core" folder
 * EditorHelper: moved into the "#Core" folder
+* RectExtensions: moved into the "#Core" folder
+* StaticReflectionHelper: moved into the "#Core" folder
+* Moved EditorUtil folder into the "#Core" folder
 * SteamUploadBuildAction: added skipSteamContentCopy to skip the steam content copy phase before upload. Useful when you build directly to the content folder. Also, it is now possible to override some values when invoking UMake from the cli.
 * Proeprty: renamed from PropertyGUI
 
