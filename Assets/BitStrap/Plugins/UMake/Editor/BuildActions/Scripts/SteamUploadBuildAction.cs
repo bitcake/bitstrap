@@ -6,9 +6,10 @@ namespace BitStrap
 {
 	public sealed class SteamUploadBuildAction : UMakeBuildAction
 	{
-		private const string steamCmdArgFormat = "+login {0} {1} +run_app_build_http \"../scripts/{2}\" +quit";
+		private const string steamCmdArgFormat = "+login {0} {1} +run_app_build_http \"{2}\" +quit";
 		public string contentSubFolder = "windows_content/x86";
 		public string buildScript = "app_build_<steam_appid>.vdf";
+		public bool skipSteamContentCopy = false;
 
 		private EditorPrefString steamSdkPath = new EditorPrefString( "UMakeSteam_SteamSdkPath" );
 		private EditorPrefString steamUsername = new EditorPrefString( "UMakeSteam_Username" );
@@ -20,33 +21,40 @@ namespace BitStrap
 			{
 				string buildPath = UMake.GetBuildPath();
 				string steamBuildScript = buildScript;
+				string sdkPath = steamSdkPath.Value;
 				string username = steamUsername.Value;
 				string password = steamPassword.Value;
+				bool skipCopy = skipSteamContentCopy;
 
 				if( UMakeCli.IsInCli )
 				{
 					UMakeCli.Args.TryGetValue( "path", out buildPath );
 					UMakeCli.Args.TryGetValue( "script", out steamBuildScript );
+					UMakeCli.Args.TryGetValue( "steam-sdk", out sdkPath );
 					UMakeCli.Args.TryGetValue( "steam-username", out username );
 					UMakeCli.Args.TryGetValue( "steam-password", out password );
+
+					string skipCopyStringValue;
+					UMakeCli.Args.TryGetValue( "skip-steam-content-copy", out skipCopyStringValue );
+					bool.TryParse( skipCopyStringValue, out skipCopy );
 				}
 
-				if( !CopyContent( target, umake.version, buildPath ) )
+				if( !Directory.Exists( sdkPath ) )
 				{
-					Debug.Log( "Could not copy content to Steam folder." );
+					Debug.LogFormat( "SteamSDK \"{0}\" not found.", sdkPath );
 					return;
 				}
 
-				if( !Directory.Exists( steamSdkPath.Value ) )
-				{
-					Debug.LogFormat( "SteamSDK \"{0}\" not found.", steamSdkPath.Value );
-					return;
-				}
-
-				string steamCmdPath = GetSteamCmdPath();
+				string steamCmdPath = Path.Combine( sdkPath, "tools/ContentBuilder/builder/steamcmd.exe" ); ;
 				if( !File.Exists( steamCmdPath ) )
 				{
 					Debug.LogFormat( "SteamCMD \"{0}\" not found.", steamCmdPath );
+					return;
+				}
+
+				if( !skipCopy && !CopyContent( sdkPath, target, umake.version, buildPath ) )
+				{
+					Debug.Log( "Could not copy content to Steam folder." );
 					return;
 				}
 
@@ -108,19 +116,9 @@ namespace BitStrap
 			GUILayout.FlexibleSpace();
 		}
 
-		private string GetSteamCmdPath()
+		private bool CopyContent( string sdkPath, UMakeTarget umakeTarget, string version, string buildPath )
 		{
-			return Path.Combine( steamSdkPath.Value, "tools/ContentBuilder/builder/steamcmd.exe" );
-		}
-
-		private string GetContentFolderPath()
-		{
-			return Path.Combine( steamSdkPath.Value, "tools/ContentBuilder/content" );
-		}
-
-		private bool CopyContent( UMakeTarget umakeTarget, string version, string buildPath )
-		{
-			string contentFolderPath = GetContentFolderPath();
+			string contentFolderPath = Path.Combine( sdkPath, "tools/ContentBuilder/content" );
 
 			if( !Directory.Exists( contentFolderPath ) )
 			{
