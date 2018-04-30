@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.16.0
+
+* Changed folder structure to better accommodate AssemblyDefinition files
+
+
 ### 1.15.1
 
 + FieldWidth: a scoped change to field width that will behave like EditorGUIUtility.fieldWidth

@@ -1,0 +1,8 @@
+{
+    "name": "BitStrapRuntimeAssembly",
+    "references": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

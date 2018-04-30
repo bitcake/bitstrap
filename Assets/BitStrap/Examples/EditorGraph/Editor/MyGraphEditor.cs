@@ -121,7 +121,7 @@ namespace BitStrap.Examples
 		/// Add the possibility to open the asset by just double clicking a my graph scriptable object
 		/// </summary>
 		/// <returns>True if the clicked item was of the type <see cref="MyGraph"/></returns>
-		[OnOpenAsset( 10 )]
+		[OnOpenAsset( 0 )]
 		public static bool OnOpenGraphAsset( int instanceID, int line )
 		{
 			UnityEngine.Object obj = EditorUtility.InstanceIDToObject( instanceID );
