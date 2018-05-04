@@ -54,6 +54,7 @@ of it as a "table of contents".
 * Timothy McGill ([DragonSmack.com](http://dragonsmack.com) | dragonsmackgames@gmail.com)
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))
 * Johannes Deml ([johannesdeml.com](http://johannesdeml.com) | [@DemlJohannes](https://twitter.com/DemlJohannes))
+* Luiz Wendt ([github.com/Lawendt](https://github.com/Lawendt))
 
 ### [Licensed under _MIT License_](LICENSE)
 
