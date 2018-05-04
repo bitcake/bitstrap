@@ -36,8 +36,9 @@ namespace BitStrap
 		public void SampleAt( float t )
 		{
 			propertyBlock.Clear();
+            targetRenderer.GetPropertyBlock(propertyBlock);
 
-			foreach( TweenShaderProperty p in shaderProperties )
+            foreach ( TweenShaderProperty p in shaderProperties )
 				p.Evaluate( propertyBlock, t );
 
 			targetRenderer.SetPropertyBlock( propertyBlock );
