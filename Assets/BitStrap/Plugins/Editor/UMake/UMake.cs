@@ -22,9 +22,9 @@ namespace BitStrap
 
 		public static Option<UMake> Get()
 		{
-			instance = instance.OrElse( () =>
-				from path in AssetDatabase.FindAssets( "t:" + typeof( UMake ).Name ).First()
-				select AssetDatabase.LoadAssetAtPath<UMake>( path )
+			instance = instance.OrElse(() =>
+				from guid in AssetDatabase.FindAssets("t:" + typeof(UMake).Name).First()
+				select AssetDatabase.LoadAssetAtPath<UMake>(AssetDatabase.GUIDToAssetPath(guid))
 			);
 
 			return instance;
