@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.17.0
+
+* TweenShader: now it's possible to edit textures tiling and offset
+
+
 ### 1.16.0
 
 * Changed folder structure to better accommodate AssemblyDefinition files

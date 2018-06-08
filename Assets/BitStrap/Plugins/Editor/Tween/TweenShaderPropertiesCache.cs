@@ -46,23 +46,34 @@ namespace BitStrap
 					{
 					case ShaderUtil.ShaderPropertyType.Float:
 					case ShaderUtil.ShaderPropertyType.Range:
-						properties.Add( new ShaderProperty {
+						properties.Add( new ShaderProperty
+						{
 							name = ShaderUtil.GetPropertyName( shader, i ),
 							type = TweenShaderProperty.Type.Float
 						} );
 						break;
 
 					case ShaderUtil.ShaderPropertyType.Vector:
-						properties.Add( new ShaderProperty {
+						properties.Add( new ShaderProperty
+						{
 							name = ShaderUtil.GetPropertyName( shader, i ),
 							type = TweenShaderProperty.Type.Vector
 						} );
 						break;
 
 					case ShaderUtil.ShaderPropertyType.Color:
-						properties.Add( new ShaderProperty {
+						properties.Add( new ShaderProperty
+						{
 							name = ShaderUtil.GetPropertyName( shader, i ),
 							type = TweenShaderProperty.Type.Color
+						} );
+						break;
+
+					case ShaderUtil.ShaderPropertyType.TexEnv:
+						properties.Add( new ShaderProperty
+						{
+							name = ShaderUtil.GetPropertyName( shader, i ) + "_ST",
+							type = TweenShaderProperty.Type.Vector
 						} );
 						break;
 					}

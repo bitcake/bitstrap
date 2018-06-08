@@ -19,7 +19,7 @@ namespace BitStrap
 		private readonly static GUIContent fromLabel = new GUIContent( "From" );
 		private readonly static GUIContent toLabel = new GUIContent( "To" );
 
-		private readonly static Dictionary<Renderer, TweenShaderPropertiesCache> propertiesCache = new Dictionary<Renderer, TweenShaderPropertiesCache>();
+		private TweenShaderPropertiesCache propertiesCache = new TweenShaderPropertiesCache();
 
 		public override float GetPropertyHeight( SerializedProperty property, GUIContent label )
 		{
@@ -53,22 +53,15 @@ namespace BitStrap
 			}
 			else
 			{
-				TweenShaderPropertiesCache cache;
-				if( !propertiesCache.TryGetValue( targetRenderer, out cache ) )
-				{
-					cache = new TweenShaderPropertiesCache();
-					propertiesCache.Add( targetRenderer, cache );
-				}
+				propertiesCache.UpdateProperties( tweenShader );
 
-				cache.UpdateProperties( tweenShader );
-
-				int index = System.Array.IndexOf( cache.propertyNameOptions, nameProperty.stringValue );
-				index = EditorGUI.Popup( nameRect, index, cache.propertyNameOptions );
+				int index = System.Array.IndexOf( propertiesCache.propertyNameOptions, nameProperty.stringValue );
+				index = EditorGUI.Popup( nameRect, index, propertiesCache.propertyNameOptions );
 
 				if( index < 0 )
 					return;
 
-				var shaderProperty = cache.properties[index];
+				var shaderProperty = propertiesCache.properties[index];
 
 				nameProperty.stringValue = shaderProperty.name;
 				typeProperty.enumValueIndex = ( int ) shaderProperty.type;
