@@ -11,5 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac0cd4115ae4624386f3f581f109360, type: 3}
   m_Name: ShortcutsReferences
   m_EditorClassIdentifier: 
-  references:
+  assets:
+  - {fileID: 102900000, guid: d75e6d03558e490429dd2eff28d8c024, type: 3}
   - {fileID: 199646, guid: 946400d70782d5c4f8b83f32dc0bafc5, type: 2}

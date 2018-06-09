@@ -34,8 +34,10 @@ namespace BitStrap
 			const float padding = 8.0f;
 			const float margin = 4.0f;
 
-			var clickCount = Event.current.clickCount;
-			var mousePosition = Event.current.mousePosition;
+			var currentEvent = Event.current;
+			var eventType = currentEvent.type;
+			var clickCount = currentEvent.clickCount;
+			var mousePosition = currentEvent.mousePosition;
 
 			for( int i = 0; i < references.assets.Length; i++ )
 			{
@@ -75,6 +77,42 @@ namespace BitStrap
 				GUI.Label( labelRect, a.name, labelStyle );
 			}
 			GUILayout.EndArea();
+
+			// Delete
+			if( eventType == EventType.KeyUp && currentEvent.keyCode == KeyCode.Delete )
+			{
+				Undo.RecordObject( references, UndoString );
+				for( int i = 0; i < references.assets.Length; i++ )
+				{
+					var a = references.assets[i];
+					if( Selection.Contains( a ) )
+						ArrayUtility.RemoveAt( ref references.assets, i );
+				}
+
+				Repaint();
+			}
+
+			// Drag and drop
+			if( eventType == EventType.DragUpdated || eventType == EventType.DragPerform )
+			{
+				bool anyFromProject = DragAndDrop.objectReferences.Any( o => !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) );
+				if( anyFromProject )
+					DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+				if( eventType == EventType.DragPerform )
+				{
+					DragAndDrop.AcceptDrag();
+					Undo.RecordObject( references, UndoString );
+
+					foreach( var o in DragAndDrop.objectReferences )
+					{
+						if( !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) && !ArrayUtility.Contains( references.assets, o ) )
+							ArrayUtility.Add( ref references.assets, o );
+					}
+				}
+
+				Event.current.Use();
+			}
 			return;
 
 			var indexToDelete = -1;
@@ -115,28 +153,7 @@ namespace BitStrap
 				ArrayUtility.RemoveAt( ref references.assets, indexToDelete );
 			}
 
-			// Drag and drop
-			var eventType = Event.current.type;
-			if( eventType == EventType.DragUpdated || eventType == EventType.DragPerform )
-			{
-				bool anyFromProject = DragAndDrop.objectReferences.Any( o => !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) );
-				if( anyFromProject )
-					DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
 
-				if( eventType == EventType.DragPerform )
-				{
-					DragAndDrop.AcceptDrag();
-					Undo.RecordObject( references, UndoString );
-
-					foreach( var o in DragAndDrop.objectReferences )
-					{
-						if( !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) )
-							ArrayUtility.Add( ref references.assets, o );
-					}
-				}
-
-				Event.current.Use();
-			}
 		}
 	}
 }
