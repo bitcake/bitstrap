@@ -32,12 +32,15 @@ namespace BitStrap
 			GUILayout.BeginArea( areaRect );
 
 			const float padding = 8.0f;
-			const float margin = 4.0f;
+			const float width = 80.0f;
+			const float height = 80.0f;
 
 			var currentEvent = Event.current;
 			var eventType = currentEvent.type;
 			var clickCount = currentEvent.clickCount;
 			var mousePosition = currentEvent.mousePosition;
+
+			var columnCount = Mathf.Max( Mathf.FloorToInt( areaRect.width / width ), 1 );
 
 			for( int i = 0; i < references.assets.Length; i++ )
 			{
@@ -46,13 +49,10 @@ namespace BitStrap
 					continue;
 
 				var previewTexture = AssetPreview.GetMiniThumbnail( a );
-				var width = previewTexture.width + padding;
-				var previewHeight = previewTexture.height;
-				var labelHeight = EditorGUIUtility.singleLineHeight;
-				var x = i * ( width + margin ) + padding * 0.5f;
-				var y = 0.0f;
+				var x = ( i % columnCount ) * width + padding * 0.5f;
+				var y = ( i / columnCount ) * height + padding * 0.5f;
 
-				var totalRect = new Rect( x, y, width, previewHeight + labelHeight );
+				var totalRect = new Rect( x, y, width, height );
 				var totalRectAbsolute = new Rect( totalRect );
 				totalRectAbsolute.position = position.position;
 
@@ -69,10 +69,10 @@ namespace BitStrap
 				if( isSelected )
 					EditorGUI.DrawRect( totalRect, Colors.SelectionColor );
 
-				var previewRect = new Rect( x, y, width, previewHeight );
+				var previewRect = new Rect( x + ( width - previewTexture.width ) * 0.5f, y, width, previewTexture.height );
 				GUI.Label( previewRect, previewTexture );
 
-				var labelRect = new Rect( x, y + previewHeight, width, labelHeight );
+				var labelRect = new Rect( x, y + previewTexture.height, width, EditorGUIUtility.singleLineHeight );
 				var labelStyle = isSelected ? EditorStyles.whiteLabel : EditorStyles.label;
 				GUI.Label( labelRect, a.name, labelStyle );
 			}
@@ -113,47 +113,6 @@ namespace BitStrap
 
 				Event.current.Use();
 			}
-			return;
-
-			var indexToDelete = -1;
-			for( int i = 0; i < references.assets.Length; i++ )
-			{
-				var r = references.assets[i];
-				var previewTexture = AssetPreview.GetMiniThumbnail( r );
-				var width = previewTexture.width;
-
-				using( Horizontal.Do( GUILayout.Width( width ) ) )
-				{
-					using( Vertical.Do() )
-					{
-						GUILayout.Label( previewTexture );
-						GUILayout.Label( r.name, GUILayout.Width( width ) );
-
-						//*
-						if( GUILayout.Button( previewTexture, EditorStyles.label ) )
-						{
-							Selection.activeObject = r;
-							EditorGUIUtility.PingObject( r );
-						}
-						//*/
-					}
-
-					//*
-					GUI.backgroundColor = Color.red;
-					if( GUILayout.Button( "X", GUILayout.Width( 32.0f ) ) )
-						indexToDelete = i;
-					GUI.backgroundColor = Color.white;
-					//*/
-				}
-			}
-
-			if( indexToDelete >= 0 )
-			{
-				Undo.RecordObject( references, UndoString );
-				ArrayUtility.RemoveAt( ref references.assets, indexToDelete );
-			}
-
-
 		}
 	}
 }
