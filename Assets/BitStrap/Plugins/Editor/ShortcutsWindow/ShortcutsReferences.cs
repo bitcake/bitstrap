@@ -4,6 +4,6 @@ namespace BitStrap
 {
 	public sealed class ShortcutsReferences : ScriptableObject
 	{
-		public Object[] references;
+		public Object[] assets = new Object[0];
 	}
 }

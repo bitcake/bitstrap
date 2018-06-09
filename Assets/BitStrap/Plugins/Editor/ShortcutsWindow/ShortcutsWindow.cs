@@ -37,11 +37,13 @@ namespace BitStrap
 			var clickCount = Event.current.clickCount;
 			var mousePosition = Event.current.mousePosition;
 
-			for( int i = 0; i < references.references.Length; i++ )
+			for( int i = 0; i < references.assets.Length; i++ )
 			{
-				var r = references.references[i];
+				var a = references.assets[i];
+				if( a == null )
+					continue;
 
-				var previewTexture = AssetPreview.GetMiniThumbnail( r );
+				var previewTexture = AssetPreview.GetMiniThumbnail( a );
 				var width = previewTexture.width + padding;
 				var previewHeight = previewTexture.height;
 				var labelHeight = EditorGUIUtility.singleLineHeight;
@@ -54,11 +56,14 @@ namespace BitStrap
 
 				if( clickCount > 0 && totalRect.Contains( mousePosition ) )
 				{
-					Selection.activeObject = r;
+					Selection.activeObject = a;
 					Repaint();
+
+					if( clickCount > 1 )
+						AssetDatabase.OpenAsset( a );
 				}
 
-				bool isSelected = Selection.Contains( r );
+				bool isSelected = Selection.Contains( a );
 				if( isSelected )
 					EditorGUI.DrawRect( totalRect, Colors.SelectionColor );
 
@@ -67,15 +72,15 @@ namespace BitStrap
 
 				var labelRect = new Rect( x, y + previewHeight, width, labelHeight );
 				var labelStyle = isSelected ? EditorStyles.whiteLabel : EditorStyles.label;
-				GUI.Label( labelRect, r.name, labelStyle );
+				GUI.Label( labelRect, a.name, labelStyle );
 			}
 			GUILayout.EndArea();
 			return;
 
 			var indexToDelete = -1;
-			for( int i = 0; i < references.references.Length; i++ )
+			for( int i = 0; i < references.assets.Length; i++ )
 			{
-				var r = references.references[i];
+				var r = references.assets[i];
 				var previewTexture = AssetPreview.GetMiniThumbnail( r );
 				var width = previewTexture.width;
 
@@ -107,7 +112,7 @@ namespace BitStrap
 			if( indexToDelete >= 0 )
 			{
 				Undo.RecordObject( references, UndoString );
-				ArrayUtility.RemoveAt( ref references.references, indexToDelete );
+				ArrayUtility.RemoveAt( ref references.assets, indexToDelete );
 			}
 
 			// Drag and drop
@@ -126,7 +131,7 @@ namespace BitStrap
 					foreach( var o in DragAndDrop.objectReferences )
 					{
 						if( !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) )
-							ArrayUtility.Add( ref references.references, o );
+							ArrayUtility.Add( ref references.assets, o );
 					}
 				}
 
