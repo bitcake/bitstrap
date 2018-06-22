@@ -39,8 +39,10 @@ namespace BitStrap
 			var currentEvent = Event.current;
 			var eventType = currentEvent.type;
 			var clickCount = currentEvent.clickCount;
+			var holdingControl = currentEvent.control;
 			var mousePosition = currentEvent.mousePosition;
 
+			var clickedItem = false;
 			var columnCount = Mathf.Max( Mathf.FloorToInt( areaRect.width / width ), 1 );
 
 			for( int i = 0; i < references.assets.Length; i++ )
@@ -57,13 +59,29 @@ namespace BitStrap
 				var totalRectAbsolute = new Rect( totalRect );
 				totalRectAbsolute.position = position.position;
 
+				// Click item
 				if( clickCount > 0 && totalRect.Contains( mousePosition ) )
 				{
-					Selection.activeObject = a;
-					Repaint();
+					clickedItem = true;
+
+					if( clickCount == 1 && holdingControl )
+					{
+						var selected = Selection.objects;
+						if( !ArrayUtility.Contains( selected, a ) )
+						{
+							ArrayUtility.Add( ref selected, a );
+							Selection.objects = selected;
+						}
+					}
+					else
+					{
+						Selection.activeObject = a;
+					}
 
 					if( clickCount > 1 )
 						AssetDatabase.OpenAsset( a );
+
+					Repaint();
 				}
 
 				bool isSelected = Selection.Contains( a );
@@ -78,6 +96,13 @@ namespace BitStrap
 				GUI.Label( labelRect, a.name, labelStyle );
 			}
 			GUILayout.EndArea();
+
+			// Clear selection
+			if( clickCount > 0 && !clickedItem )
+			{
+				Selection.objects = new Object[0];
+				Repaint();
+			}
 
 			// Delete
 			if( eventType == EventType.KeyUp && currentEvent.keyCode == KeyCode.Delete )
