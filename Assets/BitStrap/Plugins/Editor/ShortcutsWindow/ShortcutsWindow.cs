@@ -11,6 +11,7 @@ namespace BitStrap
 		}
 
 		private const string UndoString = "ShortcutsWindow_Undo";
+		private const string DragString = "ShortcutsWindow_Drag";
 
 		private Option<ShortcutsReferences> shortcutsReferences;
 
@@ -93,7 +94,18 @@ namespace BitStrap
 			}
 
 			// Drag and drop
-			if( eventType == EventType.DragUpdated || eventType == EventType.DragPerform )
+			if( eventType == EventType.MouseDrag )
+			{
+				var selected = Selection.objects;
+				if( selected.Length > 0 )
+				{
+					DragAndDrop.PrepareStartDrag();
+					DragAndDrop.objectReferences = selected;
+					DragAndDrop.StartDrag( DragString );
+					Event.current.Use();
+				}
+			}
+			else if( eventType == EventType.DragUpdated || eventType == EventType.DragPerform )
 			{
 				bool anyFromProject = DragAndDrop.objectReferences.Any( o => !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) );
 				if( anyFromProject )
