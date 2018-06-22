@@ -56,8 +56,6 @@ namespace BitStrap
 				var y = ( i / columnCount ) * height + padding * 0.5f;
 
 				var totalRect = new Rect( x, y, width, height );
-				var totalRectAbsolute = new Rect( totalRect );
-				totalRectAbsolute.position = position.position;
 
 				// Click item
 				if( clickCount > 0 && totalRect.Contains( mousePosition ) )
@@ -139,12 +137,26 @@ namespace BitStrap
 				if( eventType == EventType.DragPerform )
 				{
 					DragAndDrop.AcceptDrag();
+
+					var x = Mathf.FloorToInt( mousePosition.x / width );
+					var y = Mathf.FloorToInt( mousePosition.y / height );
+					var index = y * columnCount + x;
+
 					Undo.RecordObject( references, UndoString );
 
 					foreach( var o in DragAndDrop.objectReferences )
 					{
-						if( !string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) && !ArrayUtility.Contains( references.assets, o ) )
+						if( string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) )
+							continue;
+
+						if( ArrayUtility.Contains( references.assets, o ) )
+							ArrayUtility.Remove( ref references.assets, o );
+
+						if( index >= references.assets.Length )
 							ArrayUtility.Add( ref references.assets, o );
+						else
+							ArrayUtility.Insert( ref references.assets, index, o );
+						index++;
 					}
 				}
 
