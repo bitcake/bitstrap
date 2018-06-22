@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace BitStrap
 {
 	public sealed class ShortcutsReferences : ScriptableObject
 	{
-		public Object[] assets = new Object[0];
+		public List<Object> assets = new List<Object>();
 	}
 }

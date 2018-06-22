@@ -15,10 +15,10 @@ namespace BitStrap
 
 		private Option<ShortcutsReferences> shortcutsReferences;
 
-		[MenuItem( "Window/BitStrap/Shortcuts Window" )]
+		[MenuItem( "Window/BitStrap/Shortcuts Window %&s" )]
 		private static void OpenWindow()
 		{
-			var window = GetWindow<ShortcutsWindow>( "ShortcutsWindow" );
+			var window = GetWindow<ShortcutsWindow>( "Shortcuts" );
 			window.Show();
 		}
 
@@ -33,8 +33,7 @@ namespace BitStrap
 			GUILayout.BeginArea( areaRect );
 
 			const float padding = 8.0f;
-			const float width = 80.0f;
-			const float height = 80.0f;
+			const float size = 80.0f;
 
 			var currentEvent = Event.current;
 			var eventType = currentEvent.type;
@@ -43,19 +42,24 @@ namespace BitStrap
 			var mousePosition = currentEvent.mousePosition;
 
 			var clickedItem = false;
-			var columnCount = Mathf.Max( Mathf.FloorToInt( areaRect.width / width ), 1 );
+			var columnCount = Mathf.Max( Mathf.FloorToInt( areaRect.width / size ), 1 );
 
-			for( int i = 0; i < references.assets.Length; i++ )
+			references.assets.RemoveAll( a => a == null );
+
+			for( int i = 0; i < references.assets.Count; i++ )
 			{
 				var a = references.assets[i];
 				if( a == null )
 					continue;
 
-				var previewTexture = AssetPreview.GetMiniThumbnail( a );
-				var x = ( i % columnCount ) * width + padding * 0.5f;
-				var y = ( i / columnCount ) * height + padding * 0.5f;
+				var previewTexture = AssetPreview.GetAssetPreview( a );
+				if( previewTexture == null )
+					previewTexture = AssetPreview.GetMiniThumbnail( a );
 
-				var totalRect = new Rect( x, y, width, height );
+				var x = ( i % columnCount ) * size + padding * 0.5f;
+				var y = ( i / columnCount ) * size + padding * 0.5f;
+
+				var totalRect = new Rect( x, y, size, size );
 
 				// Click item
 				if( clickCount > 0 && totalRect.Contains( mousePosition ) )
@@ -86,12 +90,21 @@ namespace BitStrap
 				if( isSelected )
 					EditorGUI.DrawRect( totalRect, Colors.SelectionColor );
 
-				var previewRect = new Rect( x + ( width - previewTexture.width ) * 0.5f, y, width, previewTexture.height );
+				// Preview texture
+				var maxPreviewTextureSize = size - EditorGUIUtility.singleLineHeight;
+				var previewTextureSize = Mathf.Min( previewTexture.height, maxPreviewTextureSize );
+
+				var previewRect = new Rect( x + ( size - previewTextureSize ) * 0.5f, y, size, previewTextureSize );
 				GUI.Label( previewRect, previewTexture );
 
-				var labelRect = new Rect( x, y + previewTexture.height, width, EditorGUIUtility.singleLineHeight );
+				// Centered label
 				var labelStyle = isSelected ? EditorStyles.whiteLabel : EditorStyles.label;
-				GUI.Label( labelRect, a.name, labelStyle );
+				var labelContent = new GUIContent( a.name );
+				var labelTextSize = labelStyle.CalcSize( labelContent );
+				labelTextSize.x = Mathf.Min( labelTextSize.x, size );
+
+				var labelRect = new Rect( x + ( size - labelTextSize.x ) * 0.5f, y + previewTextureSize, size, EditorGUIUtility.singleLineHeight );
+				GUI.Label( labelRect, labelContent, labelStyle );
 			}
 			GUILayout.EndArea();
 
@@ -106,11 +119,11 @@ namespace BitStrap
 			if( eventType == EventType.KeyUp && currentEvent.keyCode == KeyCode.Delete )
 			{
 				Undo.RecordObject( references, UndoString );
-				for( int i = 0; i < references.assets.Length; i++ )
+				for( int i = 0; i < references.assets.Count; i++ )
 				{
 					var a = references.assets[i];
 					if( Selection.Contains( a ) )
-						ArrayUtility.RemoveAt( ref references.assets, i );
+						references.assets.RemoveAt( i );
 				}
 
 				Repaint();
@@ -138,8 +151,8 @@ namespace BitStrap
 				{
 					DragAndDrop.AcceptDrag();
 
-					var x = Mathf.FloorToInt( mousePosition.x / width );
-					var y = Mathf.FloorToInt( mousePosition.y / height );
+					var x = Mathf.FloorToInt( mousePosition.x / size );
+					var y = Mathf.FloorToInt( mousePosition.y / size );
 					var index = y * columnCount + x;
 
 					Undo.RecordObject( references, UndoString );
@@ -149,13 +162,13 @@ namespace BitStrap
 						if( string.IsNullOrEmpty( AssetDatabase.GetAssetPath( o ) ) )
 							continue;
 
-						if( ArrayUtility.Contains( references.assets, o ) )
-							ArrayUtility.Remove( ref references.assets, o );
+						if( references.assets.Contains( o ) )
+							references.assets.Remove( o );
 
-						if( index >= references.assets.Length )
-							ArrayUtility.Add( ref references.assets, o );
+						if( index >= references.assets.Count )
+							references.assets.Add( o );
 						else
-							ArrayUtility.Insert( ref references.assets, index, o );
+							references.assets.Insert( index, o );
 						index++;
 					}
 				}
