@@ -13,20 +13,18 @@
 
 	public struct Option<A>
 	{
-		private static readonly Option<A> None = default( Option<A> );
-
 		private readonly A value;
 		private readonly bool isSome;
 
 		public bool IsSome
 		{
-			get { return isSome && value != null; }
+			get { return isSome && !value.Equals( null ); }
 		}
 
 		public Option( A value )
 		{
 			this.value = value;
-			isSome = value != null;
+			isSome = !value.Equals( null );
 		}
 
 		public static implicit operator Option<A>( A value )
@@ -36,7 +34,7 @@
 
 		public static implicit operator Option<A>( None value )
 		{
-			return None;
+			return default( Option<A> );
 		}
 
 		public bool TryGet( out A value )
@@ -125,7 +123,7 @@
 			if( IsSome )
 				return other;
 
-			return Option<B>.None;
+			return default( Option<B> );
 		}
 
 		public Option<B> AndThen<B>( System.Func<A, Option<B>> onOther )
@@ -133,7 +131,7 @@
 			if( IsSome )
 				return onOther( value );
 
-			return Option<B>.None;
+			return default( Option<B> );
 		}
 
 		public Option<A> Or( Option<A> other )
@@ -157,7 +155,7 @@
 			if( IsSome )
 				return select( value );
 
-			return Option<B>.None;
+			return default( Option<B> );
 		}
 
 		public Option<A> Where( System.Predicate<A> predicate )
@@ -165,17 +163,17 @@
 			if( IsSome && predicate( value ) )
 				return this;
 
-			return None;
+			return default( Option<A> );
 		}
 
 		public Option<C> SelectMany<B, C>( System.Func<A, Option<B>> func, System.Func<A, B, C> select )
 		{
 			if( !IsSome )
-				return Option<C>.None;
+				return default( Option<C> );
 
 			var b = func( value );
 			if( !b.IsSome )
-				return Option<C>.None;
+				return default( Option<C> );
 
 			return select( value, b.value );
 		}

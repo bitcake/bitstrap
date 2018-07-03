@@ -125,6 +125,7 @@ namespace BitStrap
 					if( Selection.Contains( a ) )
 						references.assets.RemoveAt( i );
 				}
+				EditorUtility.SetDirty( references );
 
 				Repaint();
 			}
@@ -171,6 +172,8 @@ namespace BitStrap
 							references.assets.Insert( index, o );
 						index++;
 					}
+
+					EditorUtility.SetDirty( references );
 				}
 
 				Event.current.Use();
