@@ -3,7 +3,7 @@
 ### 1.17.0
 
 * TweenShader: now it's possible to edit textures tiling and offset
-* 
+* Option: fix not working correctly with Unity Objects after they're destroyed
 
 
 ### 1.16.0
