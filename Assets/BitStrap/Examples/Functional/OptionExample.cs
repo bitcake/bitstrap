@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace BitStrap.Examples
 {
@@ -53,6 +54,29 @@ namespace BitStrap.Examples
 		public void TestWithNull()
 		{
 			Option<object> a = null;
+			Debug.Log( "Has value? " + a.IsSome );
+		}
+
+		[Button]
+		public void TestWithObjectDestruction()
+		{
+			if( !Application.isPlaying )
+			{
+				Debug.LogWarning( "In order to see Option working, please enter Play mode." );
+				return;
+			}
+
+			StartCoroutine( TestWithObjectDestructionCoroutine() );
+		}
+
+		private IEnumerator TestWithObjectDestructionCoroutine()
+		{
+			Option<GameObject> a = new GameObject();
+			Destroy( a.Unwrap() );
+
+			yield return null;
+			yield return null;
+
 			Debug.Log( "Has value? " + a.IsSome );
 		}
 	}

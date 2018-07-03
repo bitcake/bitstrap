@@ -13,18 +13,26 @@
 
 	public struct Option<A>
 	{
+		private readonly static bool IsValue;
+
 		private readonly A value;
 		private readonly bool isSome;
 
 		public bool IsSome
 		{
-			get { return isSome && !value.Equals( null ); }
+			get { return isSome && ( IsValue || !ReferenceEquals( value, null ) && !value.Equals( null ) ); }
+		}
+
+		static Option()
+		{
+			IsValue = typeof( A ).IsValueType;
 		}
 
 		public Option( A value )
 		{
 			this.value = value;
-			isSome = !value.Equals( null );
+			isSome = true;
+			isSome = IsSome;
 		}
 
 		public static implicit operator Option<A>( A value )
