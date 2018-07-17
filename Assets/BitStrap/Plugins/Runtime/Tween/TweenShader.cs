@@ -14,7 +14,8 @@ namespace BitStrap
 		/// <summary>
 		/// The tween duration.
 		/// </summary>
-		public Timer duration = new Timer( 1.0f );
+		public Timer.Duration duration = new Timer.Duration( 1.0f );
+		public Timer timer = new Timer();
 
 		/// <summary>
 		/// List of shader properties to be interpolated.
@@ -36,9 +37,9 @@ namespace BitStrap
 		public void SampleAt( float t )
 		{
 			propertyBlock.Clear();
-            targetRenderer.GetPropertyBlock(propertyBlock);
+			targetRenderer.GetPropertyBlock( propertyBlock );
 
-            foreach ( TweenShaderProperty p in shaderProperties )
+			foreach( TweenShaderProperty p in shaderProperties )
 				p.Evaluate( propertyBlock, t );
 
 			targetRenderer.SetPropertyBlock( propertyBlock );
@@ -68,7 +69,7 @@ namespace BitStrap
 		/// </summary>
 		public void Stop()
 		{
-			duration.Stop();
+			timer.Stop();
 			SampleAt( 0.0f );
 			enabled = false;
 		}
@@ -81,21 +82,15 @@ namespace BitStrap
 			propertyBlock.Clear();
 			targetRenderer.SetPropertyBlock( propertyBlock );
 
-			duration.Stop();
+			timer.Stop();
 			enabled = false;
 		}
 
 		private void Play( bool forward )
 		{
 			playingForward = forward;
-			duration.Start();
+			timer.Start();
 			enabled = true;
-		}
-
-		private void OnTimer()
-		{
-			SampleAt( playingForward ? 1.0f : 0.0f );
-			enabled = false;
 		}
 
 		private void Init()
@@ -105,11 +100,7 @@ namespace BitStrap
 #endif
 
 			if( propertyBlock == null )
-			{
 				propertyBlock = new MaterialPropertyBlock();
-				duration.onTimer.UnregisterAll();
-				duration.onTimer.Register( OnTimer );
-			}
 		}
 
 		private void Reset()
@@ -144,12 +135,16 @@ namespace BitStrap
 		private void Update()
 		{
 #if UNITY_EDITOR
-			duration.OnUpdate( GetEditorDeltaTime() );
+			if( timer.Update( duration, GetEditorDeltaTime() ) )
 #else
-			duration.OnUpdate();
+			if( timer.Update( duration ) )
 #endif
+			{
+				SampleAt( playingForward ? 1.0f : 0.0f );
+				enabled = false;
+			}
 
-			float t = duration.Progress;
+			float t = timer.GetProgress( duration );
 			t = playingForward ? t : 1.0f - t;
 			SampleAt( t );
 		}

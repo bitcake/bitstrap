@@ -99,7 +99,7 @@ namespace BitStrap
 			TryInitReflection();
 			initMethod.Invoke( tweenShader, new object[0] );
 
-			if( !tweenShader.duration.IsRunning )
+			if( !tweenShader.timer.isRunning )
 				wasTweenEnabled = tweenShader.enabled;
 		}
 
@@ -119,7 +119,7 @@ namespace BitStrap
 				SceneView.RepaintAll();
 				Repaint();
 
-				if( !tweenShader.duration.IsRunning )
+				if( !tweenShader.timer.isRunning )
 					break;
 
 				yield return null;

@@ -58,7 +58,7 @@ namespace BitStrap
 			targetFrom = from;
 			targetTo = to;
 
-			duration.Start();
+			timer.Start();
 			enabled = true;
 		}
 	}

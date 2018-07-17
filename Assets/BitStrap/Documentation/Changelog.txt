@@ -4,6 +4,9 @@
 
 * TweenShader: now it's possible to edit textures tiling and offset
 * Option: fix not working correctly with Unity Objects after they're destroyed
+* Timer: rework and api simplification
+* Timer.OnUpdate(): renamed to Timer.Update(), also it enables you to check if the timer completed inside an if
+* Timer.IsRunning: renamed to Timer.isRunning
 
 
 ### 1.16.0

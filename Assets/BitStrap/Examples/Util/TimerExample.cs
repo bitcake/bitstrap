@@ -2,13 +2,17 @@
 
 namespace BitStrap.Examples
 {
-	public class TimerExample : MonoBehaviour
+	public sealed class TimerExample : MonoBehaviour
 	{
 		[Header( "Edit the fields and click the buttons to test them!" )]
-		public Timer timer = new Timer( 4.0f );
+		public Timer.Duration timerDuration = new Timer.Duration( 4.0f );
+		private Timer timer = new Timer();
+		private SafeAction timerAction = new SafeAction();
 
 		[ReadOnly]
 		public float remainingTime = 0.0f;
+		[ReadOnly]
+		public float progress = 0.0f;
 
 		[ReadOnly]
 		public bool isRunning = false;
@@ -48,14 +52,16 @@ namespace BitStrap.Examples
 
 		private void Awake()
 		{
-			timer.onTimer.Register( OnTimer );
+			timerAction.Register( OnTimer );
 		}
 
 		private void Update()
 		{
-			timer.OnUpdate();
-			remainingTime = timer.RemainingTime;
-			isRunning = timer.IsRunning;
+			timer.Update( timerDuration ).TryCall( timerAction );
+
+			remainingTime = timerDuration.length - timer.elapsedTime;
+			progress = timer.GetProgress( timerDuration );
+			isRunning = timer.isRunning;
 		}
 	}
 }

@@ -6,85 +6,78 @@ namespace BitStrap
 	/// Timer utility class. Allows you to receive a callback after a certain
 	/// amount of time has elapsed.
 	/// </summary>
-	[System.Serializable]
-	public class Timer
+	public struct Timer
 	{
-		/// <summary>
-		/// The timer's length in seconds.
-		/// </summary>
-		public float length = 1.0f;
-
-		/// <summary>
-		/// Callback that gets called when "length" seconds has elapsed.
-		/// </summary>
-		public readonly SafeAction onTimer = new SafeAction();
-
-		/// <summary>
-		/// Similar to 'onTimer' but it takes as a parameter the callback latency
-		/// E.g. how much time has passed since it was meant to be called.
-		/// </summary>
-		public readonly SafeAction<float> onTimerPrecise = new SafeAction<float>();
-
-		private float elapsedTime = -1.0f;
-
-		/// <summary>
-		/// The countdown time in seconds.
-		/// </summary>
-		public float RemainingTime
+		[System.Serializable]
+		public struct Duration
 		{
-			get { return elapsedTime < 0.0f ? 0.0f : Mathf.Max( length - elapsedTime, 0.0f ); }
+			public readonly float length;
+
+			public Duration( float length )
+			{
+				this.length = Mathf.Max( length, Mathf.Epsilon );
+			}
 		}
+
+		public struct Latency
+		{
+			public readonly float length;
+
+			public Latency( float latency )
+			{
+				this.length = latency;
+			}
+
+			public static implicit operator bool( Latency self )
+			{
+				return self.length >= 0.0f;
+			}
+
+			public Latency TryCall( SafeAction onTimer )
+			{
+				if( length >= 0.0f )
+					onTimer.Call();
+
+				return this;
+			}
+		}
+
+		public bool isRunning;
+		public float elapsedTime;
 
 		/// <summary>
 		/// Return a 0.0 to 1.0 number where 1.0 means the timer completed and is now stopped.
 		/// </summary>
-		public float Progress
+		public float GetProgress( Duration duration )
 		{
-			get { return elapsedTime < 0.0f ? 1.0f : Mathf.Clamp01( elapsedTime / length ); }
-		}
-
-		/// <summary>
-		/// Is the timer countdown running?
-		/// </summary>
-		public bool IsRunning
-		{
-			get { return elapsedTime >= 0.0f; }
-		}
-
-		public Timer()
-		{
-		}
-
-		public Timer( float length )
-		{
-			this.length = length;
+			return Mathf.Clamp01( elapsedTime / duration.length );
 		}
 
 		/// <summary>
 		/// You need to manually call this at your script Update() method for the timer to work properly.
-		/// Uses Time.unscaledDeltaTime for delta time.
+		/// Uses Time.deltaTime for delta time.
 		/// </summary>
-		public void OnUpdate()
+		public Latency Update( Duration duration )
 		{
-			OnUpdate( Time.unscaledDeltaTime );
+			return Update( duration, Time.deltaTime );
 		}
 
 		/// <summary>
 		/// You need to manually call this at your script Update() method for the timer to work properly.
 		/// </summary>
 		/// <param name="deltaTime"></param>
-		public void OnUpdate( float deltaTime )
+		public Latency Update( Duration duration, float deltaTime )
 		{
-			if( elapsedTime >= 0.0f )
-				elapsedTime += deltaTime;
+			if( !isRunning )
+				return new Latency( -1.0f );
 
-			float latency = elapsedTime - length;
+			elapsedTime += deltaTime;
+
+			float latency = elapsedTime - duration.length;
 			if( latency >= 0 )
-			{
-				elapsedTime = -1.0f;
-				onTimer.Call();
-				onTimerPrecise.Call( latency );
-			}
+				isRunning = false;
+
+			return new Latency( latency );
 		}
 
 		/// <summary>
@@ -92,7 +85,7 @@ namespace BitStrap
 		/// </summary>
 		public void Stop()
 		{
-			elapsedTime = -1.0f;
+			isRunning = false;
 		}
 
 		/// <summary>
@@ -101,14 +94,16 @@ namespace BitStrap
 		public void Start()
 		{
 			elapsedTime = 0.0f;
+			isRunning = true;
 		}
 
 		/// <summary>
 		/// Start the timer at 'timeOffset' and play its counter.
 		/// </summary>
-		public void Start( float timeOffset )
+		public void StartAt( Latency latency )
 		{
-			elapsedTime = timeOffset;
+			elapsedTime = latency.length;
+			isRunning = true;
 		}
 	}
 }
