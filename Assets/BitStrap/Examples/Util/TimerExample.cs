@@ -13,7 +13,6 @@ namespace BitStrap.Examples
 		public float remainingTime = 0.0f;
 		[ReadOnly]
 		public float progress = 0.0f;
-
 		[ReadOnly]
 		public bool isRunning = false;
 

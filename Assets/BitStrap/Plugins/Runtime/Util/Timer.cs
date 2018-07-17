@@ -11,7 +11,7 @@ namespace BitStrap
 		[System.Serializable]
 		public struct Duration
 		{
-			public readonly float length;
+			public float length;
 
 			public Duration( float length )
 			{

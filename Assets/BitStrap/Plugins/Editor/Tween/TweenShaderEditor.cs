@@ -8,7 +8,7 @@ namespace BitStrap
 {
 	[CanEditMultipleObjects]
 	[CustomEditor( typeof( TweenShader ) )]
-	public class TweenShaderEditor : Editor
+	public sealed class TweenShaderEditor : Editor
 	{
 		private ReorderableList shaderProperiesList;
 		private Option<EditorCoroutine> playCoroutine;
