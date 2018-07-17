@@ -74,8 +74,7 @@ namespace BitStrap
 			elapsedTime += deltaTime;
 
 			float latency = elapsedTime - duration.length;
-			if( latency >= 0 )
-				isRunning = false;
+			isRunning = latency < 0.0f;
 
 			return new Latency( latency );
 		}
