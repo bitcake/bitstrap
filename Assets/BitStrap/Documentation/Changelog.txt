@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.17.1
+* AnimationParameterDrawer: fix warning when GameObject is disabled or when there's no AnimatorController
+
+
 ### 1.17.0
 
 * TweenShader: now it's possible to edit textures tiling and offset

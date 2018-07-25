@@ -33,7 +33,7 @@ namespace BitStrap
 				}
 			}
 
-			if( animator == null || animator.parameterCount == 0 )
+			if( animator == null || !animator.isActiveAndEnabled || animator.runtimeAnimatorController == null )
 			{
 				EditorGUI.PropertyField( position, nameProperty, label );
 			}
