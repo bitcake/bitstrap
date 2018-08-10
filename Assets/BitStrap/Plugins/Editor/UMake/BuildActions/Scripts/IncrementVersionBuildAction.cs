@@ -6,6 +6,7 @@ namespace BitStrap
 	public sealed class IncrementVersionBuildAction : UMakeBuildAction
 	{
 		public char separator = '.';
+        public bool updateApplicationVersion = false;
 
 		public override void Execute( UMake umake, UMakeTarget target )
 		{
@@ -22,6 +23,11 @@ namespace BitStrap
 				umake.version = string.Join( separator.ToString(), parts );
 			}
 
+            if (updateApplicationVersion)
+            {
+                PlayerSettings.bundleVersion = umake.version;
+                Debug.Log("The application is now with version " + Application.version);
+            }
 			EditorUtility.SetDirty( umake );
 		}
 	}

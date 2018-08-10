@@ -8,8 +8,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28f8962e78ca5c048a194a8543cd6de5, type: 3}
-  m_Name: IncrementVersionBuildAction
+  m_Script: {fileID: 11500000, guid: 56c5a4b8137e7aa44b1c33f59abb58dd, type: 3}
+  m_Name: IncrementBundleVersion
   m_EditorClassIdentifier: 
-  separator: 46
-  updateApplicationVersion: 0
