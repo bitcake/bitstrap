@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Name: IncrementVersionBuildAction
   m_EditorClassIdentifier: 
   separator: 46
+  updateApplicationVersion: 0
