@@ -20,6 +20,10 @@ namespace BitStrap
 			EditorGUI.PropertyField( position, property, label );
 
 			var unitAttribute = attribute as UnitAttribute;
+            if(unitAttribute.style == null)
+            {
+                unitAttribute.style = new GUIStyle();
+            }
 			DrawUnit( position, unitAttribute.text, unitAttribute.style );
 		}
 	}
