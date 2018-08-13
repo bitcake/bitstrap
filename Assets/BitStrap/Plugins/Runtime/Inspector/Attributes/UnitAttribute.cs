@@ -16,9 +16,9 @@ namespace BitStrap
 	public sealed class UnitAttribute : PropertyAttribute
 	{
 		public string text;
-		public GUIStyle style;
+		public GUIStyle style = GUI.skin.label;
 
-		public UnitAttribute( string label )
+        public UnitAttribute( string label )
 		{
 			this.text = label;
 		}
