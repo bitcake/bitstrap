@@ -35,7 +35,8 @@ namespace BitStrap
 			if( !UMake.Get().TryGet( out umake ) )
 				return;
 
-			UMakeTarget.Path targetPath;
+			string buildPath;
+            UMakeTarget.Path targetPath;
 
 			switch( action )
 			{
@@ -43,8 +44,8 @@ namespace BitStrap
 				EditorApplication.delayCall += () => t.ExecutePreBuildActions( umake );
 				break;
 			case BuildAction.Build:
-				targetPath = t.GetTargetPath( umake.version, UMake.GetBuildPath() );
-				EditorApplication.delayCall += () => t.Build( umake, targetPath );
+                buildPath = UMake.GetBuildPath();
+                EditorApplication.delayCall += () => t.Build( umake, buildPath);
 				break;
 			case BuildAction.PostActions:
 				EditorApplication.delayCall += () => t.ExecutePostBuildActions( umake );

@@ -13,6 +13,15 @@ namespace BitStrap
             {
                 PlayerSettings.Android.bundleVersionCode++;
             }
+            else if(target.buildTarget == BuildTarget.iOS) 
+            {
+            	int buildNumber = 0;
+            	if(int.TryParse(PlayerSettings.iOS.buildNumber, out buildNumber)) 
+            	{
+            		buildNumber++;
+            		PlayerSettings.iOS.buildNumber = buildNumber.ToString();
+            	}
+            }
         }
     }
 }
