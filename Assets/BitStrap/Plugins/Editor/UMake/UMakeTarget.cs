@@ -53,12 +53,12 @@ namespace BitStrap
 			if( string.IsNullOrEmpty(buildPath) )
 				return;
 
-            ExecutePreBuildActions(umake);
+			ExecutePreBuildActions(umake);
 
-            Path targetPath = GetTargetPath(umake.version, UMake.GetBuildPath());
+			Path targetPath = GetTargetPath(umake.version, UMake.GetBuildPath());
 
 
-            if ( Directory.Exists(targetPath.directoryPath ) )
+			if ( Directory.Exists(targetPath.directoryPath ) )
 			{
 				Directory.Delete(targetPath.directoryPath, true );
 				Directory.CreateDirectory(targetPath.directoryPath );
@@ -68,10 +68,10 @@ namespace BitStrap
 			string[] levels = EditorBuildSettings.scenes.Where( s => s.enabled ).Select( s => s.path ).ToArray();
 			BuildPipeline.BuildPlayer( levels, targetPath.path, buildTarget, buildOptions );
 
-            if ( umake.executePostBuildEverytime)
-            {
-                ExecutePostBuildActions( umake);
-            }
+			if ( umake.executePostBuildEverytime)
+			{
+				ExecutePostBuildActions( umake);
+			}
 		}
 
 		public Path GetTargetPath( string version, string buildPath )

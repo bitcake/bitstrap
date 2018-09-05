@@ -9,14 +9,14 @@ namespace BitStrap
 
 		public string version = "0.0";
 
-        public bool executePostBuildEverytime = false;
+		public bool executePostBuildEverytime = false;
 
 		[UMakeTargetActions]
 		public UMakeTarget[] targets;
 
 		private static Option<UMake> instance = Functional.None;
 
-        public static string BuildPathPref
+		public static string BuildPathPref
 		{
 			get { return EditorPrefs.GetString( buildPathPrefKey + PlayerSettings.productName, "" ); }
 			set { EditorPrefs.SetString( buildPathPrefKey + PlayerSettings.productName, value ); }
