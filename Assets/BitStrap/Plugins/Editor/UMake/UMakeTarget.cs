@@ -68,10 +68,6 @@ namespace BitStrap
 			string[] levels = EditorBuildSettings.scenes.Where( s => s.enabled ).Select( s => s.path ).ToArray();
 			BuildPipeline.BuildPlayer( levels, targetPath.path, buildTarget, buildOptions );
 
-			if ( umake.executePostBuildEverytime)
-			{
-				ExecutePostBuildActions( umake);
-			}
 		}
 
 		public Path GetTargetPath( string version, string buildPath )

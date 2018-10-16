@@ -9,8 +9,6 @@ namespace BitStrap
 
 		public string version = "0.0";
 
-		public bool executePostBuildEverytime = false;
-
 		[UMakeTargetActions]
 		public UMakeTarget[] targets;
 
