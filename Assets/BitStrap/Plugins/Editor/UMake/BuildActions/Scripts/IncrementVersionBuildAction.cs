@@ -23,11 +23,11 @@ namespace BitStrap
 				umake.version = string.Join( separator.ToString(), parts );
 			}
 
-            if (updateApplicationVersion)
-            {
-                PlayerSettings.bundleVersion = umake.version;
-                Debug.Log("The application is now with version " + Application.version);
-            }
+			if ( updateApplicationVersion )
+			{
+				PlayerSettings.bundleVersion = umake.version;
+				Debug.Log( "The application is now with version " + Application.version );
+			}
 			EditorUtility.SetDirty( umake );
 		}
 	}
