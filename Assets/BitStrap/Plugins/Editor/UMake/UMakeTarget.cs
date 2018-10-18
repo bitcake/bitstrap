@@ -47,21 +47,27 @@ namespace BitStrap
 			AssetDatabase.SaveAssets();
 		}
 
-		public void Build( UMake umake, Path targetPath )
+		public void Build( UMake umake, string buildPath )
 		{
-			if( string.IsNullOrEmpty( targetPath.path ) )
+
+			if( string.IsNullOrEmpty(buildPath) )
 				return;
 
-			if( Directory.Exists( targetPath.directoryPath ) )
+			ExecutePreBuildActions(umake);
+
+			Path targetPath = GetTargetPath(umake.version, UMake.GetBuildPath());
+
+
+			if ( Directory.Exists(targetPath.directoryPath ) )
 			{
-				Directory.Delete( targetPath.directoryPath, true );
-				Directory.CreateDirectory( targetPath.directoryPath );
+				Directory.Delete(targetPath.directoryPath, true );
+				Directory.CreateDirectory(targetPath.directoryPath );
 			}
 
-			ExecutePreBuildActions( umake );
 
 			string[] levels = EditorBuildSettings.scenes.Where( s => s.enabled ).Select( s => s.path ).ToArray();
 			BuildPipeline.BuildPlayer( levels, targetPath.path, buildTarget, buildOptions );
+
 		}
 
 		public Path GetTargetPath( string version, string buildPath )

@@ -84,8 +84,7 @@ namespace BitStrap
 
 				Debug.LogFormat( "\n\nBuilding for target: '{0}' at '{1}'.\n\n", target.name, buildPath );
 
-				UMakeTarget.Path targetPath = target.GetTargetPath( umake.version, buildPath );
-				target.Build( umake, targetPath );
+				target.Build( umake, buildPath);
 			} );
 		}
 
