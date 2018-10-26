@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace Bitstrap
+namespace BitStrap
 {
 	/// <summary>
 	/// Controls the custom behavior of double clicks on scriptable objects.
