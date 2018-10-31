@@ -1,6 +1,6 @@
 # BitStrap
 
-BitStrap is BitCake's collection of Unity tools that improve our workflow.
+BitStrap is [BitCake](http://bitcakestudio.com/)'s collection of Unity tools that improve our workflow.
 
 We use it across several projects and hope it will be of help for yours! :)
 
