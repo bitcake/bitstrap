@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.18.0
+
++ InlineScriptableObjectAttribute: show ScriptableObject editors inline as property
+
+
 ### 1.17.1
 * AnimationParameterDrawer: fix warning when GameObject is disabled or when there's no AnimatorController
 
