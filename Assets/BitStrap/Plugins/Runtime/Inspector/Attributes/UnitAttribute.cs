@@ -18,9 +18,9 @@ namespace BitStrap
 		public string text;
 		public GUIStyle style = GUI.skin.label;
 
-        public UnitAttribute( string label )
+		public UnitAttribute( string label )
 		{
-			this.text = label;
+			text = label;
 		}
 	}
 }

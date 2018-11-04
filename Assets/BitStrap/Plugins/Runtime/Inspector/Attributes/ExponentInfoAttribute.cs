@@ -16,6 +16,6 @@ namespace BitStrap
 	[System.AttributeUsage( System.AttributeTargets.Field, AllowMultiple = true )]
 	public sealed class ExponentInfoAttribute : PropertyAttribute
 	{
-		public GUIStyle style;
+		public GUIStyle style = GUI.skin.label;
 	}
 }
