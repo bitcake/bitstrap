@@ -37,6 +37,11 @@ namespace BitStrap.Examples
 		[Nullable]
 		public GameObject nullableGameObjectReference;
 
+		public DummyScriptableObjectExample scriptableObject;
+
+		[ScriptableObject]
+		public DummyScriptableObjectExample scriptableObjectWithAttribute;
+
 		[Button]
 		public void ButtonTest()
 		{
