@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
-namespace Bitstrap
+namespace BitStrap
 {
 	public class #SCRIPTNAME# : MonoBehaviour 
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace Bitstrap
+namespace BitStrap
 {
 	/// <summary>
 	/// A window like the inspector that shows the information of a scriptable object in a separate window.
