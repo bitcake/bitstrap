@@ -15,8 +15,8 @@ namespace BitStrap
 	/// Shows you all values under the object reference
 	/// Also provides a button to create a new ScriptableObject if property is null.
 	/// </summary>
-	[CustomPropertyDrawer(typeof(ScriptableObjectAttribute), true)]
-	public class ScriptableObjectAttributeDrawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(InlineScriptableObjectAttribute), true)]
+	public sealed class InlineScriptableObjectAttributeDrawer : PropertyDrawer
 	{
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

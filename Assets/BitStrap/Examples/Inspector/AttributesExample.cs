@@ -39,7 +39,7 @@ namespace BitStrap.Examples
 
 		public DummyScriptableObjectExample scriptableObject;
 
-		[ScriptableObject]
+		[InlineScriptableObject]
 		public DummyScriptableObjectExample scriptableObjectWithAttribute;
 
 		[Button]
