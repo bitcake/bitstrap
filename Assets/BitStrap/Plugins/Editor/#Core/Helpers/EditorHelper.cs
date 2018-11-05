@@ -238,9 +238,9 @@ namespace BitStrap
 			{
 				search = EditorGUILayout.TextField( search, Styles.SearchTextField );
 
-				GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
-				if( !string.IsNullOrEmpty( search ) )
-					buttonStyle = Styles.SearchCancelButton;
+				var buttonStyle = string.IsNullOrEmpty( search ) ?
+					EditorHelper.Styles.SearchCancelButtonEmpty :
+					EditorHelper.Styles.SearchCancelButton;
 
 				if( GUILayout.Button( GUIContent.none, buttonStyle ) )
 					search = "";
@@ -260,9 +260,9 @@ namespace BitStrap
 			{
 				search = EditorGUILayout.DelayedTextField( search, Styles.SearchTextField );
 
-				GUIStyle buttonStyle = Styles.SearchCancelButtonEmpty;
-				if( !string.IsNullOrEmpty( search ) )
-					buttonStyle = Styles.SearchCancelButton;
+				var buttonStyle = string.IsNullOrEmpty( search ) ?
+					EditorHelper.Styles.SearchCancelButtonEmpty :
+					EditorHelper.Styles.SearchCancelButton;
 
 				if( GUILayout.Button( GUIContent.none, buttonStyle ) )
 					search = "";
