@@ -7,7 +7,7 @@ public static class FuzzyFinder
 	private const int RecursionLimit = 8;
 
 	private const string Separators = " /\\_-";
-	private const int SequentialBonus = 15; // bonus for adjacent matches
+	private const int SequentialBonus = 20; // bonus for adjacent matches
 	private const int SeparatorBonus = 30; // bonus if match occurs after a separator
 	private const int CamelBonus = 30; // bonus if match is uppercase and prev is lower
 	private const int FirstLetterBonus = 15; // bonus if the first letter is matched
@@ -22,10 +22,11 @@ public static class FuzzyFinder
 		return MatchRecursive( pattern, 0, str, 0, out score, 0, new List<byte>(), new List<byte>(), ref recursionCount );
 	}
 
-	private static void Copy<T>( List<T> destination, List<T> source, int count )
+	private static void Copy<T>( List<T> destination, List<T> source )
 	{
 		destination.Clear();
-		for( int i = 0; i < count; i++ )
+		var count = source.Count;
+		for( var i = 0; i < count; i++ )
 			destination.Add( source[i] );
 	}
 
@@ -55,9 +56,9 @@ public static class FuzzyFinder
 			if( char.ToLower( pattern[patternIndex] ) == char.ToLower( str[strIndex] ) )
 			{
 				// "Copy-on-Write" srcMatches into matches
-				if( first_match )
+				if( first_match && srcMatches.Count > 0 )
 				{
-					Copy( matches, srcMatches, matches.Count );
+					Copy( matches, srcMatches );
 					first_match = false;
 				}
 
@@ -69,7 +70,7 @@ public static class FuzzyFinder
 					// Pick best recursive score
 					if( !recursiveMatch || recursiveScore > bestRecursiveScore )
 					{
-						Copy( bestRecursiveMatches, recursiveMatches, recursiveMatches.Count );
+						Copy( bestRecursiveMatches, recursiveMatches );
 						bestRecursiveScore = recursiveScore;
 					}
 					recursiveMatch = true;
@@ -143,7 +144,7 @@ public static class FuzzyFinder
 		if( recursiveMatch && ( !matched || bestRecursiveScore > outScore ) )
 		{
 			// Recursive score is better than "this"
-			Copy( matches, bestRecursiveMatches, bestRecursiveMatches.Count );
+			Copy( matches, bestRecursiveMatches );
 			outScore = bestRecursiveScore;
 			return true;
 		}

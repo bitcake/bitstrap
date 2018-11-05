@@ -65,7 +65,7 @@ namespace BitStrap
 					pattern = "";
 			}
 
-			const int MaxResults = 5;
+			const int MaxResults = 25;
 
 			if( EditorGUI.EndChangeCheck() )
 			{
@@ -84,6 +84,8 @@ namespace BitStrap
 							} );
 						}
 					}
+
+					results.Sort( ( a, b ) => b.score - a.score );
 				}
 			}
 
