@@ -1,13 +1,21 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace BitStrap
 {
 	public sealed class FuzzyFinderWindow : EditorWindow
 	{
+		private struct Result
+		{
+			public string match;
+			public int score;
+		}
+
 		private bool needControlFocus = false;
 		private string pattern = "";
-		private string[] results = new string[0];
+		private List<Result> results = new List<Result>();
+		private string[] allAssetPathsCache;
 
 		[MenuItem( "Window/BitStrap/Fuzzy Finder %k" )]
 		public static void Open()
@@ -27,6 +35,9 @@ namespace BitStrap
 		private void OnGUI()
 		{
 			const string ControlName = "FuzzyFinderSearch";
+
+			if( allAssetPathsCache == null )
+				allAssetPathsCache = AssetDatabase.GetAllAssetPaths();
 
 			var currentEvent = Event.current;
 			if( currentEvent.type == EventType.KeyDown )
@@ -54,21 +65,32 @@ namespace BitStrap
 					pattern = "";
 			}
 
-			if( EditorGUI.EndChangeCheck() )
-			{
-				if( pattern.Length > 0 )
-					results = AssetDatabase.FindAssets( pattern );
-				else
-					results = new string[0];
-			}
-
 			const int MaxResults = 5;
 
-			for( var i = 0; i < MaxResults && i < results.Length; i++ )
+			if( EditorGUI.EndChangeCheck() )
+			{
+				results.Clear();
+				if( pattern.Length > 0 )
+				{
+					foreach( var path in allAssetPathsCache )
+					{
+						int score;
+						if( FuzzyFinder.Match( pattern, path, out score ) )
+						{
+							results.Add( new Result
+							{
+								match = path,
+								score = score,
+							} );
+						}
+					}
+				}
+			}
+
+			for( var i = 0; i < MaxResults && i < results.Count; i++ )
 			{
 				var result = results[i];
-				var path = AssetDatabase.GUIDToAssetPath( result );
-				EditorGUILayout.LabelField( path );
+				EditorGUILayout.LabelField( result.score + " " + result.match );
 			}
 
 			if( needControlFocus )
