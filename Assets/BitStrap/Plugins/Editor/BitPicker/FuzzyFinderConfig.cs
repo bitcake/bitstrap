@@ -1,20 +1,23 @@
 using UnityEngine;
 
-[System.Serializable]
-public sealed class FuzzyFinderConfig
+namespace BitStrap
 {
-	public static readonly FuzzyFinderConfig Default = new FuzzyFinderConfig();
+	[System.Serializable]
+	public sealed class FuzzyFinderConfig
+	{
+		public static readonly FuzzyFinderConfig Default = new FuzzyFinderConfig();
 
-	[Range( 1, 10 )]
-	public int recursionLimit = 8;
+		[Range( 1, 10 )]
+		public int recursionLimit = 8;
 
-	public string separators = " /\\_-";
-	public int sequentialBonus = 30; // bonus for adjacent matches
-	public int separatorBonus = 30; // bonus if match occurs after a separator
-	public int camelBonus = 30; // bonus if match is uppercase and prev is lower
-	public int firstLetterBonus = 15; // bonus if the first letter is matched
+		public string separators = " /\\_-";
+		public int sequentialBonus = 30; // bonus for adjacent matches
+		public int separatorBonus = 30; // bonus if match occurs after a separator
+		public int camelBonus = 30; // bonus if match is uppercase and prev is lower
+		public int firstLetterBonus = 15; // bonus if the first letter is matched
 
-	public int leadingLetterPenalty = -5; // penalty applied for every letter in str before the first match
-	public int maxLeadingLetterPenalty = -15; // maximum penalty for leading letters
-	public int unmatchedLetterPenalty = -1; // penalty for every letter that doesn't matter
+		public int leadingLetterPenalty = -5; // penalty applied for every letter in str before the first match
+		public int maxLeadingLetterPenalty = -15; // maximum penalty for leading letters
+		public int unmatchedLetterPenalty = -1; // penalty for every letter that doesn't matter
+	}
 }

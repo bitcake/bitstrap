@@ -35,7 +35,7 @@ namespace BitStrap
 			if( showInterfacesAttribute == null )
 				return;
 
-			position = position.Center( Width );
+			position = position.CenterHorizontally( Width );
 
 			var box = new Rect( position );
 			box.height -= Padding - 1;

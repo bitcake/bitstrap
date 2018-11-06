@@ -47,10 +47,10 @@ namespace BitStrap.Examples
 			EditorGUI.LabelField( floatedRightRect, "Floated Right Rect" );
 
 			lineRect = rect.Row( 3 );
-			Rect centerRect = lineRect.Center( lineRect.width * widthPercentage );
+			Rect centerRect = lineRect.CenterHorizontally( lineRect.width * widthPercentage );
 
 			lineRect = rect.Row( 4 );
-			Rect floatedCenterRect = lineRect.Center( lineRect.width * ( -widthPercentage ) );
+			Rect floatedCenterRect = lineRect.CenterHorizontally( lineRect.width * ( -widthPercentage ) );
 
 			GUI.backgroundColor = Color.yellow;
 			GUI.Box( centerRect, GUIContent.none );

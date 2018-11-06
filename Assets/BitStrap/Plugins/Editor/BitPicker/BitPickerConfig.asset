@@ -21,3 +21,5 @@ MonoBehaviour:
     leadingLetterPenalty: -5
     maxLeadingLetterPenalty: -15
     unmatchedLetterPenalty: -1
+  providers:
+  - {fileID: 11400000, guid: e3e3807cd6c82964296342e43ec95818, type: 2}

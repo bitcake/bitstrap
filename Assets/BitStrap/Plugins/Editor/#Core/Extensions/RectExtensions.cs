@@ -33,11 +33,11 @@ namespace BitStrap
 		/// <param name="position"></param>
 		/// <param name="width"></param>
 		/// <returns></returns>
-		public static Rect Center( this Rect position, float width )
+		public static Rect CenterHorizontally( this Rect position, float width )
 		{
 			if( width > 0.0f )
 			{
-				float diff = position.width - Mathf.Abs( width );
+				float diff = position.width - width;
 				position.x += diff * 0.5f;
 				position.width = width;
 			}
@@ -45,6 +45,23 @@ namespace BitStrap
 			{
 				position.x -= width * 0.5f;
 				position.width += width;
+			}
+
+			return position;
+		}
+
+		public static Rect CenterVertically( this Rect position, float height )
+		{
+			if( height > 0.0f )
+			{
+				float diff = position.height - height;
+				position.y += diff * 0.5f;
+				position.height = height;
+			}
+			else
+			{
+				position.y -= height * 0.5f;
+				position.height += height;
 			}
 
 			return position;
@@ -84,6 +101,26 @@ namespace BitStrap
 			return position;
 		}
 
+		public static Rect Up( this Rect position, float height )
+		{
+			if( height > 0.0f )
+				position.height = height;
+			else
+				position.height += height;
+
+			return position;
+		}
+
+		public static Rect Down( this Rect position, float height )
+		{
+			if( height > 0.0f )
+				position.yMin = position.yMax - height;
+			else
+				position.yMin -= height;
+
+			return position;
+		}
+
 		public static Rect Left( this Rect position, float width, out Rect target )
 		{
 			target = position.Left( width );
@@ -94,6 +131,23 @@ namespace BitStrap
 		{
 			target = position.Right( width );
 			return position.Left( -width );
+		}
+
+		public static Rect Up( this Rect position, float width, out Rect target )
+		{
+			target = position.Up( width );
+			return position.Down( -width );
+		}
+
+		public static Rect Down( this Rect position, float width, out Rect target )
+		{
+			target = position.Down( width );
+			return position.Up( -width );
+		}
+
+		public static void Expant( this Rect position, out Rect target )
+		{
+			target = position;
 		}
 	}
 }
