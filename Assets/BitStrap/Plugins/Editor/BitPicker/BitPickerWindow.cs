@@ -168,14 +168,31 @@ namespace BitStrap
 					{
 						for( int i = 0; i < providedItems.Count; i++ )
 						{
-							int score;
-							if( FuzzyFinder.Match(
+							var item = providedItems[i];
+
+							int nameScore;
+							var nameMatched = FuzzyFinder.Match(
 								config.fuzzyFinderConfig,
 								pattern,
-								providedItems[i].fullName,
-								out score
-							) )
+								item.name,
+								out nameScore
+							);
+
+							int fullNameScore;
+							var fullNameMatched = FuzzyFinder.Match(
+								config.fuzzyFinderConfig,
+								pattern,
+								item.fullName,
+								out fullNameScore
+							);
+
+							if( nameMatched || fullNameMatched )
 							{
+								var score = Mathf.Max(
+									nameScore + config.fuzzyFinderConfig.nameMatchBonus,
+									fullNameScore
+								);
+
 								results.Add( new Result( score, i ) );
 							}
 						}
@@ -195,7 +212,9 @@ namespace BitStrap
 					if( item.icon == null )
 						item.icon = item.provider.GetItemIcon( item );
 
-					var nameContent = new GUIContent( item.name );
+					var nameContent = config.showScores ?
+						new GUIContent( result.score + " - " + item.name ) :
+						new GUIContent( item.name );
 					var fullNameContent = new GUIContent( item.fullName );
 
 					var nameSize = nameStyle.CalcSize( nameContent );

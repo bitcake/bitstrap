@@ -16,6 +16,7 @@ namespace BitStrap
 		}
 
 		public FuzzyFinderConfig fuzzyFinderConfig;
+		public bool showScores = false;
 		public BitPickerProvider[] providers;
 	}
 }

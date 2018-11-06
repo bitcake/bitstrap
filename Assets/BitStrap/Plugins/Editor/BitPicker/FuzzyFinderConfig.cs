@@ -19,5 +19,7 @@ namespace BitStrap
 		public int leadingLetterPenalty = -5; // penalty applied for every letter in str before the first match
 		public int maxLeadingLetterPenalty = -15; // maximum penalty for leading letters
 		public int unmatchedLetterPenalty = -1; // penalty for every letter that doesn't matter
+
+		public int nameMatchBonus = 15;
 	}
 }

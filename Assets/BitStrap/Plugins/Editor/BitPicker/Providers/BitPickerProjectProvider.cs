@@ -11,12 +11,28 @@ namespace BitStrap
 		public string[] openAssetByExtensions = {
 			".cs"
 		};
+		public string[] folderWhitelist = {
+			"Assets",
+			"ProjectSettings"
+		};
 
 		public override void Provide( List<BitPickerItem> providedItems )
 		{
 			foreach( var path in AssetDatabase.GetAllAssetPaths() )
 			{
 				if( excludeFolders && AssetDatabase.IsValidFolder( path ) )
+					continue;
+
+				var isWhitelisted = false;
+				foreach( var whitelistedFolder in folderWhitelist )
+				{
+					if( path.StartsWith( whitelistedFolder ) )
+					{
+						isWhitelisted = true;
+						break;
+					}
+				}
+				if( !isWhitelisted )
 					continue;
 
 				providedItems.Add( new BitPickerItem(
