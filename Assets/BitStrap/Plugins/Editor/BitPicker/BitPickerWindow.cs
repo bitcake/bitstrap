@@ -6,16 +6,22 @@ namespace BitStrap
 {
 	public struct BitPickerItem
 	{
-		readonly public BitPickerProvider provider;
-		readonly public string name;
-		readonly public string fullName;
+		public static readonly Texture2D EmptyIcon = new Texture2D( 4, 4 );
+
+		public readonly BitPickerProvider provider;
+		public readonly string name;
+		public readonly string fullName;
+
+		public readonly object data;
 		public Texture2D icon;
 
-		public BitPickerItem( BitPickerProvider provider, string name, string fullName )
+		public BitPickerItem( BitPickerProvider provider, string name, string fullName, object data )
 		{
 			this.provider = provider;
 			this.name = name;
 			this.fullName = fullName;
+
+			this.data = data;
 			this.icon = null;
 		}
 	}
@@ -197,8 +203,8 @@ namespace BitStrap
 
 					var resultRect = GUILayoutUtility.GetRect( position.width, nameSize.y + fullNameSize.y );
 
-					var sourceContent = new GUIContent( item.provider.GetItemProvisionSource( item ) );
-					var sourceStyle = sourceStyles[sourceContent.text.GetHashCode() % sourceStyles.Length];
+					var sourceContent = new GUIContent( item.provider.GetProvisionSource() );
+					var sourceStyle = GetSourceStyle( sourceContent.text );
 					var sourceSize = sourceStyle.CalcSize( sourceContent );
 
 					if( selectedResultIndex == i )
@@ -217,7 +223,9 @@ namespace BitStrap
 
 					sourceRect = sourceRect.CenterVertically( sourceSize.y );
 
-					GUI.Label( iconRect, item.icon );
+					if( item.icon != BitPickerItem.EmptyIcon )
+						GUI.Label( iconRect, item.icon );
+
 					GUI.Label( sourceRect, sourceContent, sourceStyle );
 					GUI.Label( fullNameRect, fullNameContent, fullNameStyle );
 
@@ -244,6 +252,14 @@ namespace BitStrap
 
 			if( item.provider != null )
 				item.provider.OnSelectItem( item );
+		}
+
+		private GUIStyle GetSourceStyle( string source )
+		{
+			var hash = source.GetHashCode();
+			var count = sourceStyles.Length;
+			var index = ( ( hash % count ) + count ) % count;
+			return sourceStyles[index];
 		}
 	}
 }

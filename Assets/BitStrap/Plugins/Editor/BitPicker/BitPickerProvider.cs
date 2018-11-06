@@ -9,18 +9,19 @@ namespace BitStrap
 		{
 		}
 
-		public virtual string GetItemProvisionSource( BitPickerItem item )
+		public virtual string GetProvisionSource()
 		{
 			return "<nowhere>";
 		}
 
 		public virtual Texture2D GetItemIcon( BitPickerItem item )
 		{
-			return Texture2D.whiteTexture;
+			return BitPickerItem.EmptyIcon;
 		}
 
 		public virtual void OnSelectItem( BitPickerItem selectedItem )
 		{
+			Debug.LogFormat( "On selected item {0} ({1})", selectedItem.name, selectedItem.fullName );
 		}
 	}
 }
