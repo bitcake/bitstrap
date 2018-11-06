@@ -6,100 +6,153 @@ namespace BitStrap
 {
 	public sealed class FuzzyFinderWindow : EditorWindow
 	{
+		private static class Consts
+		{
+			public const string SearchControlName = "FuzzyFinderSearch";
+			public const int PatternFontSize = 24;
+			public const int ResultsFontSize = 20;
+			public const int MaxResults = 10;
+			public const float WindowHeightOffset = 200.0f;
+
+			public static readonly Vector2 WindowSize = new Vector2( 800.0f, 320.0f );
+			public static readonly Color SelectionColor = new Color32( 0, 122, 255, 255 );
+		}
+
 		private struct Result
 		{
 			public string match;
 			public int score;
 		}
 
-		private bool needControlFocus = false;
+		private bool initialized = false;
 		private string pattern = "";
 		private List<Result> results = new List<Result>();
 		private string[] allAssetPathsCache;
+		private int selectedResult = 0;
+
+		private GUIStyle patternStyle;
+		private GUIStyle resultStyle;
 
 		[MenuItem( "Window/BitStrap/Fuzzy Finder %k" )]
 		public static void Open()
 		{
-			var window = GetWindow<FuzzyFinderWindow>( true, "Fuzzy Find", true );
-
-			var position = window.position;
-			position.x = ( Screen.currentResolution.width - position.width ) * 0.5f;
-			position.y = ( Screen.currentResolution.height - position.height ) * 0.5f;
-			window.position = position;
-
-			window.needControlFocus = true;
-
+			var window = EditorWindow.GetWindow<FuzzyFinderWindow>( true, "Fuzzy Finder", true );
 			window.Show();
+			window.position = new Rect(
+				( Screen.currentResolution.width - Consts.WindowSize.x ) * 0.5f,
+				( Screen.currentResolution.height - Consts.WindowSize.y ) * 0.5f - Consts.WindowHeightOffset,
+				Consts.WindowSize.x,
+				Consts.WindowSize.y
+			);
+
+			//PopupWindow.Show( rect, new FuzzyFinderWindow() );
 		}
 
-		private void OnGUI()
+		public void Init()
 		{
-			const string ControlName = "FuzzyFinderSearch";
+			allAssetPathsCache = AssetDatabase.GetAllAssetPaths();
 
-			if( allAssetPathsCache == null )
-				allAssetPathsCache = AssetDatabase.GetAllAssetPaths();
+			patternStyle = new GUIStyle( GUI.skin.textField );
+			patternStyle.fontSize = Consts.PatternFontSize;
 
-			var currentEvent = Event.current;
-			if( currentEvent.type == EventType.KeyDown )
+			resultStyle = new GUIStyle( GUI.skin.label );
+			resultStyle.fontSize = Consts.ResultsFontSize;
+		}
+
+		public void OnGUI()
+		{
+			if( !initialized )
+				Init();
+
+			// Events
 			{
-				switch( currentEvent.keyCode )
+				var resultsCount = Mathf.Min( Consts.MaxResults, results.Count );
+
+				var currentEvent = Event.current;
+				if( currentEvent.type == EventType.KeyDown )
 				{
-				case KeyCode.Escape:
-					Close();
-					break;
-				}
-			}
-
-			EditorGUI.BeginChangeCheck();
-
-			using( Horizontal.Do() )
-			{
-				GUI.SetNextControlName( ControlName );
-				pattern = EditorGUILayout.TextField( pattern, EditorHelper.Styles.SearchTextField );
-
-				var buttonStyle = string.IsNullOrEmpty( pattern ) ?
-					EditorHelper.Styles.SearchCancelButtonEmpty :
-					EditorHelper.Styles.SearchCancelButton;
-
-				if( GUILayout.Button( GUIContent.none, buttonStyle ) )
-					pattern = "";
-			}
-
-			const int MaxResults = 25;
-
-			if( EditorGUI.EndChangeCheck() )
-			{
-				results.Clear();
-				if( pattern.Length > 0 )
-				{
-					foreach( var path in allAssetPathsCache )
+					switch( currentEvent.keyCode )
 					{
-						int score;
-						if( FuzzyFinder.Match( pattern, path, out score ) )
-						{
-							results.Add( new Result
-							{
-								match = path,
-								score = score,
-							} );
-						}
+					case KeyCode.Escape:
+						Close();
+						break;
+					case KeyCode.UpArrow:
+						selectedResult = ( selectedResult - 1 + resultsCount ) % resultsCount;
+						break;
+					case KeyCode.DownArrow:
+						selectedResult = ( selectedResult + 1 ) % resultsCount;
+						break;
+					case KeyCode.Return:
+						OnSelectResult( results[selectedResult] );
+						break;
 					}
-
-					results.Sort( ( a, b ) => b.score - a.score );
 				}
 			}
 
-			for( var i = 0; i < MaxResults && i < results.Count; i++ )
+			// Pattern match
 			{
-				var result = results[i];
-				EditorGUILayout.LabelField( result.score + " " + result.match );
+				EditorGUI.BeginChangeCheck();
+
+				GUI.SetNextControlName( Consts.SearchControlName );
+				var patternRect = GUILayoutUtility.GetRect( GUIContent.none, patternStyle );
+				pattern = EditorGUI.TextField( patternRect, pattern, patternStyle );
+
+				if( EditorGUI.EndChangeCheck() )
+				{
+					results.Clear();
+					if( pattern.Length > 0 )
+					{
+						foreach( var path in allAssetPathsCache )
+						{
+							int score;
+							if( FuzzyFinder.Match( pattern, path, out score ) )
+							{
+								results.Add( new Result
+								{
+									match = path,
+									score = score,
+								} );
+							}
+						}
+
+						results.Sort( ( a, b ) => b.score - a.score );
+					}
+				}
 			}
 
-			if( needControlFocus )
+			// Show Results
 			{
-				EditorGUI.FocusTextInControl( ControlName );
-				needControlFocus = false;
+				var resultsCount = Mathf.Min( Consts.MaxResults, results.Count );
+				for( var i = 0; i < resultsCount; i++ )
+				{
+					var result = results[i];
+					var content = new GUIContent( result.score + " " + result.match );
+					var resultRect = GUILayoutUtility.GetRect( content, resultStyle );
+
+					if( selectedResult == i )
+						EditorGUI.DrawRect( resultRect, Consts.SelectionColor );
+
+					if( GUI.Button( resultRect, content, resultStyle ) )
+						OnSelectResult( results[selectedResult] );
+				}
 			}
+
+			if( !initialized )
+			{
+				EditorGUI.FocusTextInControl( Consts.SearchControlName );
+				initialized = true;
+			}
+		}
+
+		private void OnLostFocus()
+		{
+			Close();
+		}
+
+		private void OnSelectResult( Result result )
+		{
+			Debug.Log( "RESULT SELECTED " + result.match );
+			Close();
 		}
 	}
 }
