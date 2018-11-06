@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53b94a6819be27f42bf45dfcdaebc05b, type: 3}
+  m_Name: BitPickerConfig
+  m_EditorClassIdentifier: 
+  fuzzyFinderConfig:
+    recursionLimit: 8
+    separators: ' /\_-'
+    sequentialBonus: 30
+    separatorBonus: 30
+    camelBonus: 30
+    firstLetterBonus: 15
+    leadingLetterPenalty: -5
+    maxLeadingLetterPenalty: -15
+    unmatchedLetterPenalty: -1

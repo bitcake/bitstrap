@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace BitStrap
 {
-	public sealed class FuzzyFinderWindow : EditorWindow
+	public sealed class BitPickerWindow : EditorWindow
 	{
 		private static class Consts
 		{
-			public const string SearchControlName = "FuzzyFinderSearch";
+			public const string SearchControlName = "BitPickerSearch";
 			public const int PatternFontSize = 24;
 			public const int ResultsFontSize = 20;
 			public const int MaxResults = 10;
@@ -24,8 +24,9 @@ namespace BitStrap
 			public int score;
 		}
 
-		private static bool editorNotReloaded;
+		private static bool editorReloaded = true;
 
+		private BitPickerConfig config;
 		private bool initialized = false;
 		private string pattern = "";
 		private List<Result> results = new List<Result>();
@@ -35,12 +36,18 @@ namespace BitStrap
 		private GUIStyle patternStyle;
 		private GUIStyle resultStyle;
 
-		[MenuItem( "Window/BitStrap/Fuzzy Finder %k" )]
+		[MenuItem( "Window/BitStrap/BitPicker %k" )]
 		public static void Open()
 		{
-			editorNotReloaded = true;
+			editorReloaded = false;
 
-			var window = EditorWindow.GetWindow<FuzzyFinderWindow>( true, "Fuzzy Finder", true );
+			BitPickerConfig config;
+			if( !BitPickerConfig.Instance.TryGet( out config ) )
+				return;
+
+			var window = EditorWindow.GetWindow<BitPickerWindow>( true, "BitPicker", true );
+			window.config = config;
+
 			window.Show();
 			window.position = new Rect(
 				( Screen.currentResolution.width - Consts.WindowSize.x ) * 0.5f,
@@ -65,7 +72,7 @@ namespace BitStrap
 
 		public void OnGUI()
 		{
-			if( !editorNotReloaded )
+			if( editorReloaded )
 			{
 				Close();
 				return;
@@ -111,13 +118,14 @@ namespace BitStrap
 
 				if( EditorGUI.EndChangeCheck() )
 				{
+					selectedResult = 0;
 					results.Clear();
 					if( pattern.Length > 0 )
 					{
 						foreach( var path in allAssetPathsCache )
 						{
 							int score;
-							if( FuzzyFinder.Match( pattern, path, out score ) )
+							if( FuzzyFinder.Match( config.fuzzyFinderConfig, pattern, path, out score ) )
 							{
 								results.Add( new Result
 								{
@@ -138,11 +146,9 @@ namespace BitStrap
 				for( var i = 0; i < resultsCount; i++ )
 				{
 					var result = results[i];
-					var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
 
-					var assetTexture = AssetPreview.GetAssetPreview( asset );
-					if( assetTexture == null )
-						assetTexture = AssetPreview.GetMiniThumbnail( asset );
+					var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
+					var assetTexture = AssetPreview.GetMiniThumbnail( asset );
 
 					var content = new GUIContent( result.match );
 					var resultRect = GUILayoutUtility.GetRect( content, resultStyle );
@@ -174,15 +180,15 @@ namespace BitStrap
 
 		private void OnSelectResult( Result result )
 		{
+			Close();
+
 			var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
 			if( asset != null )
 			{
 				EditorGUIUtility.PingObject( asset );
 				Selection.activeObject = asset;
-				AssetDatabase.OpenAsset( asset );
+				//AssetDatabase.OpenAsset( asset );
 			}
-
-			Close();
 		}
 	}
 }
