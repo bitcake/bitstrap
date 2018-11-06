@@ -24,6 +24,8 @@ namespace BitStrap
 			public int score;
 		}
 
+		private static bool editorNotReloaded;
+
 		private bool initialized = false;
 		private string pattern = "";
 		private List<Result> results = new List<Result>();
@@ -36,6 +38,8 @@ namespace BitStrap
 		[MenuItem( "Window/BitStrap/Fuzzy Finder %k" )]
 		public static void Open()
 		{
+			editorNotReloaded = true;
+
 			var window = EditorWindow.GetWindow<FuzzyFinderWindow>( true, "Fuzzy Finder", true );
 			window.Show();
 			window.position = new Rect(
@@ -61,6 +65,12 @@ namespace BitStrap
 
 		public void OnGUI()
 		{
+			if( !editorNotReloaded )
+			{
+				Close();
+				return;
+			}
+
 			if( !initialized )
 				Init();
 
@@ -78,9 +88,11 @@ namespace BitStrap
 						break;
 					case KeyCode.UpArrow:
 						selectedResult = ( selectedResult - 1 + resultsCount ) % resultsCount;
+						currentEvent.Use();
 						break;
 					case KeyCode.DownArrow:
 						selectedResult = ( selectedResult + 1 ) % resultsCount;
+						currentEvent.Use();
 						break;
 					case KeyCode.Return:
 						OnSelectResult( results[selectedResult] );
@@ -152,6 +164,14 @@ namespace BitStrap
 		private void OnSelectResult( Result result )
 		{
 			Debug.Log( "RESULT SELECTED " + result.match );
+			var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
+			if( asset != null )
+			{
+				EditorGUIUtility.PingObject( asset );
+				Selection.activeObject = asset;
+				AssetDatabase.OpenAsset( asset );
+			}
+
 			Close();
 		}
 	}
