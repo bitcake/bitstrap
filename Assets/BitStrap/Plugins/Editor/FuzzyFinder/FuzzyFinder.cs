@@ -7,7 +7,7 @@ public static class FuzzyFinder
 	private const int RecursionLimit = 8;
 
 	private const string Separators = " /\\_-";
-	private const int SequentialBonus = 20; // bonus for adjacent matches
+	private const int SequentialBonus = 30; // bonus for adjacent matches
 	private const int SeparatorBonus = 30; // bonus if match occurs after a separator
 	private const int CamelBonus = 30; // bonus if match is uppercase and prev is lower
 	private const int FirstLetterBonus = 15; // bonus if the first letter is matched
