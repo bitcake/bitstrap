@@ -26,11 +26,11 @@ namespace BitStrap
 		{
 			public const string SearchControlName = "BitPickerSearch";
 			public const int PatternFontSize = 24;
-			public const int ResultsFontSize = 20;
+			public const int ResultsNameFontSize = 14;
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 200.0f;
 
-			public static readonly Vector2 WindowSize = new Vector2( 800.0f, 320.0f );
+			public static readonly Vector2 WindowSize = new Vector2( 800.0f, 400.0f );
 			public static readonly Color SelectionColor = new Color32( 0, 122, 255, 255 );
 		}
 
@@ -56,7 +56,8 @@ namespace BitStrap
 		private int selectedResultIndex = 0;
 
 		private GUIStyle patternStyle;
-		private GUIStyle resultStyle;
+		private GUIStyle nameStyle;
+		private GUIStyle fullNameStyle;
 		private GUIStyle[] sourceStyles;
 
 		[MenuItem( "Window/BitStrap/BitPicker %k" )]
@@ -82,11 +83,14 @@ namespace BitStrap
 
 		public void Init()
 		{
-			patternStyle = new GUIStyle( GUI.skin.textField );
+			patternStyle = new GUIStyle( EditorStyles.textField );
 			patternStyle.fontSize = Consts.PatternFontSize;
 
-			resultStyle = new GUIStyle( GUI.skin.label );
-			resultStyle.fontSize = Consts.ResultsFontSize;
+			nameStyle = new GUIStyle( EditorStyles.label );
+			nameStyle.fontSize = Consts.ResultsNameFontSize;
+			nameStyle.alignment = TextAnchor.MiddleLeft;
+
+			fullNameStyle = EditorStyles.miniLabel;
 
 			sourceStyles = new GUIStyle[] {
 				GUI.skin.GetStyle( "sv_label_0" ),
@@ -185,8 +189,13 @@ namespace BitStrap
 					if( item.icon == null )
 						item.icon = item.provider.GetItemIcon( item );
 
-					var content = new GUIContent( item.fullName );
-					var resultRect = GUILayoutUtility.GetRect( content, resultStyle );
+					var nameContent = new GUIContent( item.name );
+					var fullNameContent = new GUIContent( item.fullName );
+
+					var nameSize = nameStyle.CalcSize( nameContent );
+					var fullNameSize = fullNameStyle.CalcSize( fullNameContent );
+
+					var resultRect = GUILayoutUtility.GetRect( position.width, nameSize.y + fullNameSize.y );
 
 					var sourceContent = new GUIContent( item.provider.GetItemProvisionSource( item ) );
 					var sourceStyle = sourceStyles[sourceContent.text.GetHashCode() % sourceStyles.Length];
@@ -197,15 +206,22 @@ namespace BitStrap
 
 					Rect iconRect;
 					Rect sourceRect;
-					Rect labelRect = resultRect
+					Rect nameRect;
+					Rect fullNameRect;
+
+					resultRect
 						.Left( resultRect.height, out iconRect )
-						.Right( sourceSize.x, out sourceRect );
+						.Right( sourceSize.x, out sourceRect )
+						.Down( fullNameSize.y, out fullNameRect )
+						.Expand( out nameRect );
+
 					sourceRect = sourceRect.CenterVertically( sourceSize.y );
 
 					GUI.Label( iconRect, item.icon );
 					GUI.Label( sourceRect, sourceContent, sourceStyle );
+					GUI.Label( fullNameRect, fullNameContent, fullNameStyle );
 
-					if( GUI.Button( labelRect, content, resultStyle ) )
+					if( GUI.Button( nameRect, nameContent, nameStyle ) )
 						OnSelectItem( item );
 				}
 			}

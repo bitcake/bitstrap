@@ -145,7 +145,7 @@ namespace BitStrap
 			return position.Up( -width );
 		}
 
-		public static void Expant( this Rect position, out Rect target )
+		public static void Expand( this Rect position, out Rect target )
 		{
 			target = position;
 		}
