@@ -138,12 +138,23 @@ namespace BitStrap
 				for( var i = 0; i < resultsCount; i++ )
 				{
 					var result = results[i];
-					var content = new GUIContent( result.score + " " + result.match );
+					var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
+
+					var assetTexture = AssetPreview.GetAssetPreview( asset );
+					if( assetTexture == null )
+						assetTexture = AssetPreview.GetMiniThumbnail( asset );
+
+					var content = new GUIContent( result.match );
 					var resultRect = GUILayoutUtility.GetRect( content, resultStyle );
 
 					if( selectedResult == i )
 						EditorGUI.DrawRect( resultRect, Consts.SelectionColor );
 
+					var textureRect = resultRect;
+					textureRect.width = textureRect.height;
+					GUI.Label( textureRect, assetTexture );
+
+					resultRect.xMin += textureRect.width;
 					if( GUI.Button( resultRect, content, resultStyle ) )
 						OnSelectResult( results[selectedResult] );
 				}
@@ -163,7 +174,6 @@ namespace BitStrap
 
 		private void OnSelectResult( Result result )
 		{
-			Debug.Log( "RESULT SELECTED " + result.match );
 			var asset = AssetDatabase.LoadAssetAtPath<Object>( result.match );
 			if( asset != null )
 			{
