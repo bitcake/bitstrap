@@ -19,9 +19,13 @@ namespace BitStrap
 			return BitPickerItem.EmptyIcon;
 		}
 
-		public virtual void OnSelectItem( BitPickerItem selectedItem )
+		public virtual void OnPingItem( BitPickerItem item )
 		{
-			Debug.LogFormat( "On selected item {0} ({1})", selectedItem.name, selectedItem.fullName );
+		}
+
+		public virtual void OnOpenItem( BitPickerItem item, string pattern )
+		{
+			Debug.LogFormat( "On selected item {0} ({1})", item.name, item.fullName );
 		}
 	}
 }

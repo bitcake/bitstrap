@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4659a6f34362407478a193d205fe871d, type: 3}
   m_Name: BitPickerProjectProvider
   m_EditorClassIdentifier: 
-  excludeFolders: 0
+  excludeFolders: 1
   openAssetByExtensions:
   - .cs
   folderWhitelist:

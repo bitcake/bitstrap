@@ -55,29 +55,46 @@ namespace BitStrap
 			return AssetPreview.GetMiniThumbnail( asset );
 		}
 
-		public override void OnSelectItem( BitPickerItem selectedItem )
+		public override void OnPingItem( BitPickerItem item )
 		{
-			if( AssetDatabase.IsValidFolder( selectedItem.fullName ) )
-			{
-				EditorUtility.RevealInFinder( selectedItem.fullName );
-				return;
-			}
-
-			var asset = AssetDatabase.LoadAssetAtPath<Object>( selectedItem.fullName );
+			var asset = AssetDatabase.LoadAssetAtPath<Object>( item.fullName );
 			if( asset != null )
 			{
 				EditorGUIUtility.PingObject( asset );
 				Selection.activeObject = asset;
+			}
+		}
 
-				var extension = Path.GetExtension( selectedItem.fullName );
+		public override void OnOpenItem( BitPickerItem item, string pattern )
+		{
+			if( AssetDatabase.IsValidFolder( item.fullName ) )
+			{
+				EditorUtility.RevealInFinder( item.fullName );
+				return;
+			}
+
+			var asset = AssetDatabase.LoadAssetAtPath<Object>( item.fullName );
+			if( asset != null )
+			{
+				var extension = Path.GetExtension( item.fullName );
 				foreach( var e in openAssetByExtensions )
 				{
 					if( extension == e )
 					{
-						AssetDatabase.OpenAsset( asset );
+						var args = BitPickerHelper.GetArgs( pattern );
+						var lineNumber = 0;
+
+						if( int.TryParse( args, out lineNumber ) )
+							AssetDatabase.OpenAsset( asset, lineNumber );
+						else
+							AssetDatabase.OpenAsset( asset );
+
 						return;
 					}
 				}
+
+				EditorGUIUtility.PingObject( asset );
+				Selection.activeObject = asset;
 			}
 		}
 	}

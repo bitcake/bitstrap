@@ -65,9 +65,19 @@ namespace BitStrap
 			return AssetPreview.GetMiniTypeThumbnail( typeof( GameObject ) );
 		}
 
-		public override void OnSelectItem( BitPickerItem selectedItem )
+		public override void OnPingItem( BitPickerItem item )
 		{
-			var gameObject = selectedItem.data as GameObject;
+			var gameObject = item.data as GameObject;
+			if( gameObject != null )
+			{
+				EditorGUIUtility.PingObject( gameObject );
+				Selection.activeGameObject = gameObject;
+			}
+		}
+
+		public override void OnOpenItem( BitPickerItem item, string pattern )
+		{
+			var gameObject = item.data as GameObject;
 			if( gameObject != null )
 			{
 				EditorGUIUtility.PingObject( gameObject );
