@@ -21,6 +21,8 @@ namespace BitStrap
 			}
 		}
 
+		public float offset = 10.0f;
+
 		public FuzzyFinderConfig fuzzyFinderConfig;
 		public ScoreConfig scoreConfig;
 		public bool showScores = false;

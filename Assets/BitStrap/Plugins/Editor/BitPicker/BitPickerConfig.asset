@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b94a6819be27f42bf45dfcdaebc05b, type: 3}
   m_Name: BitPickerConfig
   m_EditorClassIdentifier: 
+  offset: 109
   fuzzyFinderConfig:
     recursionLimit: 8
     separators: ' /\_-'
@@ -21,8 +22,9 @@ MonoBehaviour:
     leadingLetterPenalty: -5
     maxLeadingLetterPenalty: -15
     unmatchedLetterPenalty: -1
-    nameMatchBonus: 0
-  showScores: 1
+  scoreConfig:
+    nameMatchBonus: 15
+  showScores: 0
   providers:
   - {fileID: 11400000, guid: a51ffabea8e66c34fb28f30a70a8bc91, type: 2}
   - {fileID: 11400000, guid: e3e3807cd6c82964296342e43ec95818, type: 2}

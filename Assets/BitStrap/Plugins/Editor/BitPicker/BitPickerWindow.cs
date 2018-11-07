@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BitStrap
 {
@@ -31,13 +32,14 @@ namespace BitStrap
 		private static class Consts
 		{
 			public const string SearchControlName = "BitPickerSearch";
-			public const int PatternFontSize = 24;
-			public const int ResultsNameFontSize = 14;
+			public const int PatternFontSize = 18;
+			public const int ResultsNameFontSize = 12;
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 200.0f;
 
-			public static readonly Vector2 WindowSize = new Vector2( 800.0f, 400.0f );
-			public static readonly Color SelectionColor = new Color32( 0, 122, 255, 255 );
+			public static readonly Vector2 WindowSize = new Vector2( 600.0f, 370.0f );
+			public static readonly Color SelectionColor = new Color32( 62, 95, 150, 255 );
+			public static readonly Color InterleavedBackgroundColor = new Color( 0.0f, 0.0f, 0.0f, 0.1f );
 		}
 
 		private struct Result
@@ -66,6 +68,8 @@ namespace BitStrap
 		private GUIStyle fullNameStyle;
 		private GUIStyle[] sourceStyles;
 
+		private StringBuilder contentCache = new StringBuilder();
+
 		[MenuItem( "Window/BitStrap/BitPicker %k" )]
 		public static void Open()
 		{
@@ -75,27 +79,29 @@ namespace BitStrap
 			if( !BitPickerConfig.Instance.TryGet( out config ) )
 				return;
 
-			var window = EditorWindow.GetWindow<BitPickerWindow>( true, "BitPicker", true );
+			var window = ScriptableObject.CreateInstance<BitPickerWindow>();
 			window.config = config;
 
-			window.Show();
 			window.position = new Rect(
 				( Screen.currentResolution.width - Consts.WindowSize.x ) * 0.5f,
-				( Screen.currentResolution.height - Consts.WindowSize.y ) * 0.5f - Consts.WindowHeightOffset,
+				config.offset,
 				Consts.WindowSize.x,
 				Consts.WindowSize.y
 			);
+
+			window.ShowPopup();
+			EditorWindow.FocusWindowIfItsOpen<BitPickerWindow>();
 		}
 
 		public void Init()
 		{
 			patternStyle = new GUIStyle( EditorStyles.textField );
 			patternStyle.fontSize = Consts.PatternFontSize;
+			patternStyle.margin = new RectOffset( 0, 0, 0, 0 );
 
 			nameStyle = new GUIStyle( EditorStyles.label );
 			nameStyle.fontSize = Consts.ResultsNameFontSize;
 			nameStyle.alignment = TextAnchor.MiddleLeft;
-			nameStyle.fontStyle = FontStyle.Bold;
 
 			fullNameStyle = EditorStyles.miniLabel;
 
@@ -221,9 +227,21 @@ namespace BitStrap
 					if( item.icon == null )
 						item.icon = item.provider.GetItemIcon( item );
 
-					var nameContent = config.showScores ?
-						new GUIContent( result.score + " - " + item.name ) :
-						new GUIContent( item.name );
+					var nameContent = GUIContent.none;
+					if( config.showScores )
+					{
+						contentCache.Length = 0;
+						contentCache.Append( result.score );
+						contentCache.Append( " - " );
+						contentCache.Append( item.name );
+
+						nameContent = new GUIContent( contentCache.ToString() );
+					}
+					else
+					{
+						nameContent = new GUIContent( item.name );
+					}
+
 					var fullNameContent = new GUIContent( item.fullName );
 
 					var nameSize = nameStyle.CalcSize( nameContent );
@@ -237,6 +255,8 @@ namespace BitStrap
 
 					if( selectedResultIndex == i )
 						EditorGUI.DrawRect( resultRect, Consts.SelectionColor );
+					else if( i % 2 == 1 )
+						EditorGUI.DrawRect( resultRect, Consts.InterleavedBackgroundColor );
 
 					Rect iconRect;
 					Rect sourceRect;
