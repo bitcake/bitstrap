@@ -32,6 +32,7 @@ namespace BitStrap
 		private static class Consts
 		{
 			public const string SearchControlName = "BitPickerSearch";
+			public const string DragTitle = "BitPickerDrag";
 			public const int PatternFontSize = 18;
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 109.0f;
@@ -65,6 +66,7 @@ namespace BitStrap
 		private List<BitPickerItem> providedItems = new List<BitPickerItem>( 2048 );
 		private List<Result> results = new List<Result>( 1024 );
 		private int selectedResultIndex = 0;
+		private int viewResultIndex = 0;
 
 		private GUIStyle patternStyle;
 		private GUIStyle nameStyle;
@@ -131,6 +133,17 @@ namespace BitStrap
 				provider.Provide( providedItems );
 		}
 
+		private void SelectResultAt( int newSelected )
+		{
+			var resultCount = results.Count;
+			selectedResultIndex = ( newSelected % resultCount + resultCount ) % resultCount;
+
+			if( selectedResultIndex < viewResultIndex )
+				viewResultIndex = selectedResultIndex;
+			else if( selectedResultIndex >= viewResultIndex + Consts.MaxResults )
+				viewResultIndex = selectedResultIndex - Consts.MaxResults + 1;
+		}
+
 		public void OnGUI()
 		{
 			if( editorReloaded )
@@ -148,19 +161,17 @@ namespace BitStrap
 
 				if( currentEvent.type == EventType.KeyDown )
 				{
-					var resultsCount = Mathf.Min( Consts.MaxResults, results.Count );
-
 					switch( currentEvent.keyCode )
 					{
 					case KeyCode.Escape:
 						Close();
 						break;
 					case KeyCode.UpArrow:
-						selectedResultIndex = ( selectedResultIndex - 1 + resultsCount ) % resultsCount;
+						SelectResultAt( selectedResultIndex - 1 );
 						currentEvent.Use();
 						break;
 					case KeyCode.DownArrow:
-						selectedResultIndex = ( selectedResultIndex + 1 ) % resultsCount;
+						SelectResultAt( selectedResultIndex + 1 );
 						currentEvent.Use();
 						break;
 					case KeyCode.Return:
@@ -172,6 +183,12 @@ namespace BitStrap
 						currentEvent.Use();
 						break;
 					}
+				}
+				else if( currentEvent.type == EventType.ScrollWheel )
+				{
+					var scrollDelta = currentEvent.delta.y > 0.0f ? 1 : -1;
+					SelectResultAt( selectedResultIndex + scrollDelta );
+					currentEvent.Use();
 				}
 			}
 
@@ -186,6 +203,7 @@ namespace BitStrap
 				if( EditorGUI.EndChangeCheck() )
 				{
 					selectedResultIndex = 0;
+					viewResultIndex = 0;
 					results.Clear();
 
 					if( pattern.Length > 0 )
@@ -234,14 +252,15 @@ namespace BitStrap
 
 			// Show Results
 			{
-				var resultsCount = Mathf.Min( Consts.MaxResults, results.Count );
+				var currentEvent = Event.current;
+				var resultsViewCount = Mathf.Min( Consts.MaxResults, results.Count );
 
 				var windowRect = position;
-				windowRect.height = patternStyleHeightCache + resultsCount * nameStyleHeightCache;
+				windowRect.height = patternStyleHeightCache + resultsViewCount * nameStyleHeightCache;
 				position = windowRect;
 				minSize = position.size;
 
-				for( var i = 0; i < resultsCount; i++ )
+				for( var i = viewResultIndex; i < viewResultIndex + resultsViewCount; i++ )
 				{
 					var result = results[i];
 					var item = providedItems[result.itemIndex];
@@ -249,7 +268,7 @@ namespace BitStrap
 						item.icon = item.provider.GetItemIcon( item );
 
 					contentCache.Length = 0;
-					if( config.showScores )
+					if( config.scoreConfig.showScores )
 					{
 						contentCache.Append( result.score );
 						contentCache.Append( " - " );
@@ -293,6 +312,18 @@ namespace BitStrap
 
 					GUI.Label( sourceRect, sourceContent, sourceStyle );
 					GUI.Label( fullNameRect, fullNameContent, fullNameStyle );
+
+					if( currentEvent.type == EventType.MouseDrag && resultRect.Contains( currentEvent.mousePosition ) )
+					{
+						var dragReferences = item.provider.GetItemDragReferences( item );
+						if( dragReferences != null )
+						{
+							DragAndDrop.PrepareStartDrag();
+							DragAndDrop.objectReferences = dragReferences;
+							DragAndDrop.StartDrag( Consts.DragTitle );
+							currentEvent.Use();
+						}
+					}
 
 					if( GUI.Button( nameRect, nameContent, nameStyle ) )
 						SelectItem( item );

@@ -97,5 +97,13 @@ namespace BitStrap
 				Selection.activeObject = asset;
 			}
 		}
+
+		public override Object[] GetItemDragReferences( BitPickerItem item )
+		{
+			var asset = AssetDatabase.LoadAssetAtPath<Object>( item.fullName );
+			if( asset == null)
+				return null;
+			return new Object[] { asset };
+		}
 	}
 }

@@ -85,5 +85,13 @@ namespace BitStrap
 				Selection.activeGameObject = component.gameObject;
 			}
 		}
+
+		public override Object[] GetItemDragReferences( BitPickerItem item )
+		{
+			var component = item.data as Component;
+			if( component == null )
+				return null;
+			return new Object[] { component.gameObject };
+		}
 	}
 }

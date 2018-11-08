@@ -8,6 +8,7 @@ namespace BitStrap
 		[System.Serializable]
 		public sealed class ScoreConfig
 		{
+			public bool showScores = false;
 			public int nameMatchBonus = 15;
 		}
 
@@ -23,7 +24,7 @@ namespace BitStrap
 
 		public FuzzyFinderConfig fuzzyFinderConfig;
 		public ScoreConfig scoreConfig;
-		public bool showScores = false;
+		public float scrollSensitivity = 1.0f;
 
 		[InlineScriptableObject]
 		public BitPickerProvider[] providers;

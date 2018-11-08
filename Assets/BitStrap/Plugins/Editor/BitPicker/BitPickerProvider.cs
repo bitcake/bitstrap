@@ -27,5 +27,10 @@ namespace BitStrap
 		{
 			Debug.LogFormat( "On selected item {0} ({1})", item.name, item.fullName );
 		}
+
+		public virtual Object[] GetItemDragReferences( BitPickerItem item )
+		{
+			return null;
+		}
 	}
 }
