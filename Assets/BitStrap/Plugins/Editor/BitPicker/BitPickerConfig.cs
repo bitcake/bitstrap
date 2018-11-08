@@ -24,7 +24,6 @@ namespace BitStrap
 
 		public FuzzyFinderConfig fuzzyFinderConfig;
 		public ScoreConfig scoreConfig;
-		public float scrollSensitivity = 1.0f;
 
 		[InlineScriptableObject]
 		public BitPickerProvider[] providers;
