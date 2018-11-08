@@ -82,6 +82,10 @@ namespace BitStrap
 		{
 			editorReloaded = false;
 
+			EditorWindow.FocusWindowIfItsOpen<BitPickerWindow>();
+			if( EditorWindow.focusedWindow is BitPickerWindow )
+				return;
+
 			BitPickerConfig config;
 			if( !BitPickerConfig.Instance.TryGet( out config ) )
 				return;
@@ -100,8 +104,12 @@ namespace BitStrap
 			EditorWindow.FocusWindowIfItsOpen<BitPickerWindow>();
 		}
 
-		public void Init()
+		public void TryInit()
 		{
+			if( initialized )
+				return;
+			initialized = true;
+
 			patternStyle = new GUIStyle( EditorStyles.textField );
 			patternStyle.fontSize = Consts.PatternFontSize;
 			patternStyle.margin = new RectOffset( 0, 0, 0, 0 );
@@ -146,14 +154,13 @@ namespace BitStrap
 
 		public void OnGUI()
 		{
-			if( editorReloaded )
+			if( editorReloaded || EditorWindow.focusedWindow != this )
 			{
 				Close();
 				return;
 			}
 
-			if( !initialized )
-				Init();
+			TryInit();
 
 			// Events
 			{
@@ -330,16 +337,13 @@ namespace BitStrap
 				}
 			}
 
-			if( !initialized )
-			{
-				EditorGUI.FocusTextInControl( Consts.SearchControlName );
-				initialized = true;
-			}
+			EditorGUI.FocusTextInControl( Consts.SearchControlName );
 		}
 
-		private void OnLostFocus()
+		private void OnLostFocus2()
 		{
 			Close();
+			DestroyImmediate( this );
 		}
 
 		private void PingItem( BitPickerItem item )
