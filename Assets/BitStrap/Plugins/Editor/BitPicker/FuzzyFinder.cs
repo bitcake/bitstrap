@@ -6,10 +6,11 @@ namespace BitStrap
 	// Based on https://github.com/forrestthewoods/lib_fts/blob/master/code/fts_fuzzy_match.h
 	public static class FuzzyFinder
 	{
-		public static bool Match( FuzzyFinderConfig config, string pattern, string str, out int score )
+		public static bool Match( FuzzyFinderConfig config, string pattern, string text, out int score, List<byte> matches )
 		{
+			matches.Clear();
 			int recursionCount = 0;
-			return MatchRecursive( config, pattern, 0, str, 0, out score, 0, new List<byte>(), new List<byte>(), ref recursionCount );
+			return MatchRecursive( config, pattern, 0, text, 0, out score, 0, new List<byte>(), matches, ref recursionCount );
 		}
 
 		private static bool MatchRecursive( FuzzyFinderConfig config, string pattern, int patternIndex, string str, int strIndex, out int outScore, int strBeginIndex, List<byte> srcMatches, List<byte> matches, ref int recursionCount )
@@ -26,21 +27,22 @@ namespace BitStrap
 				return false;
 
 			// Recursion params
-			List<byte> bestRecursiveMatches = null;
-			var bestRecursiveScore = int.MinValue;
+			bool recursiveMatch = false;
+			var bestRecursiveMatches = new List<byte>();
+			int bestRecursiveScore = 0;
 
 			// Loop through pattern and str looking for a match
-			bool firstMatch = true;
+			bool first_match = true;
 			while( patternIndex != pattern.Length && strIndex != str.Length )
 			{
 				// Found match
 				if( char.ToLower( pattern[patternIndex] ) == char.ToLower( str[strIndex] ) )
 				{
 					// "Copy-on-Write" srcMatches into matches
-					if( firstMatch && srcMatches.Count > 0 )
+					if( first_match && srcMatches.Count > 0 )
 					{
-						matches = srcMatches;
-						firstMatch = false;
+						Copy( matches, srcMatches );
+						first_match = false;
 					}
 
 					// Recursive call that "skips" this match
@@ -49,11 +51,12 @@ namespace BitStrap
 					if( MatchRecursive( config, pattern, patternIndex, str, strIndex + 1, out recursiveScore, strBeginIndex, matches, recursiveMatches, ref recursionCount ) )
 					{
 						// Pick best recursive score
-						if( bestRecursiveMatches == null || recursiveScore > bestRecursiveScore )
+						if( !recursiveMatch || recursiveScore > bestRecursiveScore )
 						{
-							bestRecursiveMatches = recursiveMatches;
+							Copy( bestRecursiveMatches, recursiveMatches );
 							bestRecursiveScore = recursiveScore;
 						}
+						recursiveMatch = true;
 					}
 
 					// Advance
@@ -64,7 +67,7 @@ namespace BitStrap
 			}
 
 			// Determine if full pattern was matched
-			var matched = patternIndex == pattern.Length;
+			bool matched = patternIndex == pattern.Length ? true : false;
 
 			// Calculate score
 			if( matched )
@@ -121,10 +124,10 @@ namespace BitStrap
 			}
 
 			// Return best result
-			if( bestRecursiveMatches != null && ( !matched || bestRecursiveScore > outScore ) )
+			if( recursiveMatch && ( !matched || bestRecursiveScore > outScore ) )
 			{
 				// Recursive score is better than "this"
-				matches = bestRecursiveMatches;
+				Copy( matches, bestRecursiveMatches );
 				outScore = bestRecursiveScore;
 				return true;
 			}
@@ -138,6 +141,14 @@ namespace BitStrap
 				// no match
 				return false;
 			}
+		}
+
+		private static void Copy<T>( List<T> destination, List<T> source )
+		{
+			destination.Clear();
+			var count = source.Count;
+			for( var i = 0; i < count; i++ )
+				destination.Add( source[i] );
 		}
 	}
 }

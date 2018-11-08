@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace BitStrap
@@ -20,6 +22,24 @@ namespace BitStrap
 				return "";
 
 			return pattern.Substring( index + 1 );
+		}
+
+		public static void HighlightMatches( string text, List<byte> matches, StringBuilder stringBuilder )
+		{
+			var beforeMarkup = "<b>";
+			var afterMarkup = "</b>";
+			var markupLength = beforeMarkup.Length + afterMarkup.Length;
+
+			var offset = stringBuilder.Length;
+
+			stringBuilder.Append( text );
+
+			for( int i = 0; i < matches.Count; i++ )
+			{
+				var match = matches[i];
+				stringBuilder.Insert( offset + match + i * markupLength + 1, afterMarkup );
+				stringBuilder.Insert( offset + match + i * markupLength, beforeMarkup );
+			}
 		}
 	}
 }

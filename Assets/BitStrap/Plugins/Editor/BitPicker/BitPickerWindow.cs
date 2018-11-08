@@ -33,7 +33,6 @@ namespace BitStrap
 		{
 			public const string SearchControlName = "BitPickerSearch";
 			public const int PatternFontSize = 18;
-			public const int ResultsNameFontSize = 12;
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 109.0f;
 
@@ -46,11 +45,15 @@ namespace BitStrap
 		{
 			readonly public int score;
 			readonly public int itemIndex;
+			readonly public List<byte> nameMatches;
+			readonly public List<byte> fullNameMatches;
 
-			public Result( int score, int itemIndex )
+			public Result( int score, int itemIndex, List<byte> nameMatches, List<byte> fullNameMatches )
 			{
 				this.score = score;
 				this.itemIndex = itemIndex;
+				this.nameMatches = nameMatches;
+				this.fullNameMatches = fullNameMatches;
 			}
 		}
 
@@ -99,11 +102,11 @@ namespace BitStrap
 			patternStyle.fontSize = Consts.PatternFontSize;
 			patternStyle.margin = new RectOffset( 0, 0, 0, 0 );
 
-			nameStyle = new GUIStyle( EditorStyles.label );
-			nameStyle.fontSize = Consts.ResultsNameFontSize;
-			nameStyle.alignment = TextAnchor.MiddleLeft;
+			nameStyle = new GUIStyle( EditorStyles.largeLabel );
+			nameStyle.richText = true;
 
 			fullNameStyle = EditorStyles.miniLabel;
+			fullNameStyle.richText = true;
 
 			sourceStyles = new GUIStyle[] {
 				GUI.skin.GetStyle( "sv_label_0" ),
@@ -186,19 +189,23 @@ namespace BitStrap
 							var item = providedItems[i];
 
 							int nameScore;
+							var nameMatches = new List<byte>();
 							var nameMatched = FuzzyFinder.Match(
 								config.fuzzyFinderConfig,
 								patternWithoutArgs,
 								item.name,
-								out nameScore
+								out nameScore,
+								nameMatches
 							);
 
 							int fullNameScore;
+							var fullNameMatches = new List<byte>();
 							var fullNameMatched = FuzzyFinder.Match(
 								config.fuzzyFinderConfig,
 								patternWithoutArgs,
 								item.fullName,
-								out fullNameScore
+								out fullNameScore,
+								fullNameMatches
 							);
 
 							if( nameMatched || fullNameMatched )
@@ -208,7 +215,7 @@ namespace BitStrap
 									fullNameScore
 								);
 
-								results.Add( new Result( score, i ) );
+								results.Add( new Result( score, i, nameMatches, fullNameMatches ) );
 							}
 						}
 
@@ -227,22 +234,19 @@ namespace BitStrap
 					if( item.icon == null )
 						item.icon = item.provider.GetItemIcon( item );
 
-					var nameContent = GUIContent.none;
+					contentCache.Length = 0;
 					if( config.showScores )
 					{
-						contentCache.Length = 0;
 						contentCache.Append( result.score );
 						contentCache.Append( " - " );
-						contentCache.Append( item.name );
-
-						nameContent = new GUIContent( contentCache.ToString() );
-					}
-					else
-					{
-						nameContent = new GUIContent( item.name );
 					}
 
-					var fullNameContent = new GUIContent( item.fullName );
+					BitPickerHelper.HighlightMatches( item.name, result.nameMatches, contentCache );
+					var nameContent = new GUIContent( contentCache.ToString() );
+
+					contentCache.Length = 0;
+					BitPickerHelper.HighlightMatches( item.fullName, result.fullNameMatches, contentCache );
+					var fullNameContent = new GUIContent( contentCache.ToString() );
 
 					var nameSize = nameStyle.CalcSize( nameContent );
 					var fullNameSize = fullNameStyle.CalcSize( fullNameContent );
