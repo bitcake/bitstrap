@@ -22,8 +22,8 @@ MonoBehaviour:
     maxLeadingLetterPenalty: -15
     unmatchedLetterPenalty: -1
   scoreConfig:
+    showScores: 0
     nameMatchBonus: 15
-  showScores: 0
   providers:
   - {fileID: 11400000, guid: a51ffabea8e66c34fb28f30a70a8bc91, type: 2}
   - {fileID: 11400000, guid: e3e3807cd6c82964296342e43ec95818, type: 2}

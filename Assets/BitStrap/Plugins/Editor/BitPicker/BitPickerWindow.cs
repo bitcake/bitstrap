@@ -77,7 +77,7 @@ namespace BitStrap
 		private float patternStyleHeightCache;
 		private float nameStyleHeightCache;
 
-		[MenuItem( "Window/BitStrap/BitPicker %k" )]
+		[MenuItem( "Window/BitStrap/BitPicker %," )]
 		public static void Open()
 		{
 			editorReloaded = false;
@@ -89,6 +89,7 @@ namespace BitStrap
 			var window = ScriptableObject.CreateInstance<BitPickerWindow>();
 			window.config = config;
 
+			window.ShowPopup();
 			window.position = new Rect(
 				( Screen.currentResolution.width - Consts.WindowWidth ) * 0.5f,
 				Consts.WindowHeightOffset,
@@ -96,7 +97,6 @@ namespace BitStrap
 				EditorGUIUtility.singleLineHeight
 			);
 
-			window.ShowPopup();
 			EditorWindow.FocusWindowIfItsOpen<BitPickerWindow>();
 		}
 
