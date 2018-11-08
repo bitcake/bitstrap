@@ -35,7 +35,7 @@ namespace BitStrap
 			public const int PatternFontSize = 18;
 			public const int ResultsNameFontSize = 12;
 			public const int MaxResults = 10;
-			public const float WindowHeightOffset = 200.0f;
+			public const float WindowHeightOffset = 109.0f;
 
 			public static readonly Vector2 WindowSize = new Vector2( 600.0f, 370.0f );
 			public static readonly Color SelectionColor = new Color32( 62, 95, 150, 255 );
@@ -84,7 +84,7 @@ namespace BitStrap
 
 			window.position = new Rect(
 				( Screen.currentResolution.width - Consts.WindowSize.x ) * 0.5f,
-				config.offset,
+				Consts.WindowHeightOffset,
 				Consts.WindowSize.x,
 				Consts.WindowSize.y
 			);

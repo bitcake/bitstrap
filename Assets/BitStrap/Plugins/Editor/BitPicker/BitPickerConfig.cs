@@ -21,7 +21,15 @@ namespace BitStrap
 			}
 		}
 
-		public float offset = 10.0f;
+		public string debugPattern;
+		public string debugText;
+
+		[Button]
+		public void Test()
+		{
+			
+		}
+
 
 		public FuzzyFinderConfig fuzzyFinderConfig;
 		public ScoreConfig scoreConfig;
