@@ -11,7 +11,7 @@ namespace BitStrap
 		public override void Provide( List<BitPickerItem> providedItems )
 		{
 			var rootGameObjectsCache = new List<GameObject>( 128 );
-			var transformsCache = new List<Transform>( 32 );
+			var componentCache = new List<Component>( 64 );
 			var pathBuilder = new StringBuilder( 128 );
 			var pathComponentsCache = new List<string>( 16 );
 
@@ -24,17 +24,17 @@ namespace BitStrap
 
 				foreach( var root in rootGameObjectsCache )
 				{
-					transformsCache.Clear();
-					root.GetComponentsInChildren<Transform>( true, transformsCache );
+					componentCache.Clear();
+					root.GetComponentsInChildren<Component>( true, componentCache );
 
-					foreach( var transform in transformsCache )
+					foreach( var component in componentCache )
 					{
 						pathBuilder.Length = 0;
 						pathBuilder.Append( scene.name );
 						pathBuilder.Append( "/" );
 
 						pathComponentsCache.Clear();
-						for( var t = transform; t != null; t = t.parent )
+						for( var t = component.transform; t != null; t = t.parent )
 							pathComponentsCache.Add( t.name );
 
 						for( var j = pathComponentsCache.Count - 1; j > 0; j-- )
@@ -46,9 +46,9 @@ namespace BitStrap
 
 						providedItems.Add( new BitPickerItem(
 							this,
-							transform.name,
+							string.Format( "{0} ({1})", component.name, component.GetType().Name ),
 							pathBuilder.ToString(),
-							transform.gameObject
+							component
 						) );
 					}
 				}
@@ -62,26 +62,27 @@ namespace BitStrap
 
 		public override Texture2D GetItemIcon( BitPickerItem item )
 		{
-			return AssetPreview.GetMiniTypeThumbnail( typeof( GameObject ) );
+			var component = item.data as Component;
+			return AssetPreview.GetMiniTypeThumbnail( component.GetType() );
 		}
 
 		public override void OnPingItem( BitPickerItem item )
 		{
-			var gameObject = item.data as GameObject;
-			if( gameObject != null )
+			var component = item.data as Component;
+			if( component != null )
 			{
-				EditorGUIUtility.PingObject( gameObject );
-				Selection.activeGameObject = gameObject;
+				EditorGUIUtility.PingObject( component.gameObject );
+				Selection.activeGameObject = component.gameObject;
 			}
 		}
 
 		public override void OnOpenItem( BitPickerItem item, string pattern )
 		{
-			var gameObject = item.data as GameObject;
-			if( gameObject != null )
+			var component = item.data as Component;
+			if( component != null )
 			{
-				EditorGUIUtility.PingObject( gameObject );
-				Selection.activeGameObject = gameObject;
+				EditorGUIUtility.PingObject( component.gameObject );
+				Selection.activeGameObject = component.gameObject;
 			}
 		}
 	}
