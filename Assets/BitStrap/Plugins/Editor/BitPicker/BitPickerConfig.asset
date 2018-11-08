@@ -11,7 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b94a6819be27f42bf45dfcdaebc05b, type: 3}
   m_Name: BitPickerConfig
   m_EditorClassIdentifier: 
-  offset: 109
   fuzzyFinderConfig:
     recursionLimit: 8
     separators: ' /\_-'

@@ -36,7 +36,7 @@ namespace BitStrap
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 109.0f;
 
-			public static readonly Vector2 WindowSize = new Vector2( 600.0f, 370.0f );
+			public static readonly Vector2 WindowSize = new Vector2( 600.0f, 300.0f );
 			public static readonly Color SelectionColor = new Color32( 62, 95, 150, 255 );
 			public static readonly Color InterleavedBackgroundColor = new Color( 0.0f, 0.0f, 0.0f, 0.1f );
 		}
@@ -103,9 +103,11 @@ namespace BitStrap
 			patternStyle.margin = new RectOffset( 0, 0, 0, 0 );
 
 			nameStyle = new GUIStyle( EditorStyles.largeLabel );
+			nameStyle.alignment = TextAnchor.MiddleLeft;
 			nameStyle.richText = true;
 
-			fullNameStyle = EditorStyles.miniLabel;
+			fullNameStyle = new GUIStyle( EditorStyles.label );
+			fullNameStyle.alignment = TextAnchor.MiddleLeft;
 			fullNameStyle.richText = true;
 
 			sourceStyles = new GUIStyle[] {
@@ -248,14 +250,13 @@ namespace BitStrap
 					BitPickerHelper.HighlightMatches( item.fullName, result.fullNameMatches, contentCache );
 					var fullNameContent = new GUIContent( contentCache.ToString() );
 
-					var nameSize = nameStyle.CalcSize( nameContent );
-					var fullNameSize = fullNameStyle.CalcSize( fullNameContent );
+					var nameSize = BitPickerHelper.GetStyleLayoutSize( nameStyle, nameContent );
 
-					var resultRect = GUILayoutUtility.GetRect( position.width, nameSize.y + fullNameSize.y );
+					var resultRect = GUILayoutUtility.GetRect( position.width, nameSize.y );
 
 					var sourceContent = new GUIContent( item.provider.GetProvisionSource() );
 					var sourceStyle = GetSourceStyle( sourceContent.text );
-					var sourceSize = sourceStyle.CalcSize( sourceContent );
+					var sourceSize = BitPickerHelper.GetStyleLayoutSize( sourceStyle, sourceContent );
 
 					if( selectedResultIndex == i )
 						EditorGUI.DrawRect( resultRect, Consts.SelectionColor );
@@ -269,9 +270,9 @@ namespace BitStrap
 
 					resultRect
 						.Left( resultRect.height, out iconRect )
+						.Left( nameSize.x, out nameRect )
 						.Right( sourceSize.x, out sourceRect )
-						.Down( fullNameSize.y, out fullNameRect )
-						.Expand( out nameRect );
+						.Expand( out fullNameRect );
 
 					sourceRect = sourceRect.CenterVertically( sourceSize.y );
 

@@ -41,5 +41,14 @@ namespace BitStrap
 				stringBuilder.Insert( offset + match + i * markupLength, beforeMarkup );
 			}
 		}
+
+		public static Vector2 GetStyleLayoutSize( GUIStyle style, GUIContent content )
+		{
+			var size = style.CalcSize( content );
+			size.x += style.margin.horizontal;
+			size.y += style.margin.vertical;
+
+			return size;
+		}
 	}
 }
