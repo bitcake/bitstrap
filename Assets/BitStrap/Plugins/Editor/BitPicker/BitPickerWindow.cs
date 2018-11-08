@@ -36,7 +36,7 @@ namespace BitStrap
 			public const int MaxResults = 10;
 			public const float WindowHeightOffset = 109.0f;
 
-			public static readonly Vector2 WindowSize = new Vector2( 600.0f, 300.0f );
+			public static readonly float WindowWidth = 600.0f;
 			public static readonly Color SelectionColor = new Color32( 62, 95, 150, 255 );
 			public static readonly Color InterleavedBackgroundColor = new Color( 0.0f, 0.0f, 0.0f, 0.1f );
 		}
@@ -72,6 +72,8 @@ namespace BitStrap
 		private GUIStyle[] sourceStyles;
 
 		private StringBuilder contentCache = new StringBuilder();
+		private float patternStyleHeightCache;
+		private float nameStyleHeightCache;
 
 		[MenuItem( "Window/BitStrap/BitPicker %k" )]
 		public static void Open()
@@ -86,10 +88,10 @@ namespace BitStrap
 			window.config = config;
 
 			window.position = new Rect(
-				( Screen.currentResolution.width - Consts.WindowSize.x ) * 0.5f,
+				( Screen.currentResolution.width - Consts.WindowWidth ) * 0.5f,
 				Consts.WindowHeightOffset,
-				Consts.WindowSize.x,
-				Consts.WindowSize.y
+				Consts.WindowWidth,
+				EditorGUIUtility.singleLineHeight
 			);
 
 			window.ShowPopup();
@@ -120,6 +122,10 @@ namespace BitStrap
 				GUI.skin.GetStyle( "sv_label_6" ),
 				GUI.skin.GetStyle( "sv_label_7" ),
 			};
+
+			patternStyleHeightCache = BitPickerHelper.GetStyleLayoutSize( patternStyle, GUIContent.none ).y + 1;
+			nameStyleHeightCache = BitPickerHelper.GetStyleLayoutSize( nameStyle, GUIContent.none ).y + 1;
+			minSize = new Vector2( position.size.x, patternStyleHeightCache );
 
 			foreach( var provider in config.providers )
 				provider.Provide( providedItems );
@@ -229,6 +235,12 @@ namespace BitStrap
 			// Show Results
 			{
 				var resultsCount = Mathf.Min( Consts.MaxResults, results.Count );
+
+				var windowRect = position;
+				windowRect.height = patternStyleHeightCache + resultsCount * nameStyleHeightCache;
+				position = windowRect;
+				minSize = position.size;
+
 				for( var i = 0; i < resultsCount; i++ )
 				{
 					var result = results[i];
