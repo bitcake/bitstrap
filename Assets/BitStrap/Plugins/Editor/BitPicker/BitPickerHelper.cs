@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 
 namespace BitStrap
@@ -22,9 +23,96 @@ namespace BitStrap
 			}
 		}
 
+		private sealed class WorkerData
+		{
+			public readonly ManualResetEvent manualResetEvent;
+			public readonly BitPickerConfig config;
+			public readonly List<BitPickerItem> items;
+			public readonly string pattern;
+			public readonly WorkerState[] states;
+			public readonly int step;
+			public int pendingWorkerCount;
+
+			public WorkerData( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, int workerCount )
+			{
+				this.manualResetEvent = new ManualResetEvent( false );
+				this.config = config;
+				this.items = providedItems;
+				this.pattern = pattern;
+
+				this.states = new WorkerState[workerCount];
+				for( var i = 0; i < workerCount; i++ )
+					states[i] = new WorkerState( this, i );
+
+				this.step = ( providedItems.Count + workerCount - 1 ) / workerCount;
+				this.pendingWorkerCount = workerCount;
+			}
+		}
+
+		private sealed class WorkerState
+		{
+			public readonly WorkerData data;
+			public readonly int index;
+			public readonly List<Result> results;
+
+			public WorkerState( WorkerData data, int index )
+			{
+				this.data = data;
+				this.index = index;
+				this.results = new List<Result>();
+			}
+		}
+
 		public static void GetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, List<Result> results )
 		{
-			for( int i = 0; i < providedItems.Count; i++ )
+			var workerCount = System.Environment.ProcessorCount;
+			if( workerCount <= 1 )
+			{
+				GetMatchesPartial(
+					config,
+					providedItems,
+					0,
+					providedItems.Count,
+					pattern,
+					results
+				);
+
+				return;
+			}
+
+			var data = new WorkerData( config, providedItems, pattern, workerCount );
+
+			for( var i = 0; i < workerCount; i++ )
+			{
+				ThreadPool.QueueUserWorkItem( s =>
+				{
+					var state = s as WorkerState;
+					var startIndex = state.index * state.data.step;
+					var endIndex = Mathf.Min( startIndex + state.data.step, state.data.items.Count );
+
+					GetMatchesPartial(
+						state.data.config,
+						state.data.items,
+						startIndex,
+						endIndex,
+						state.data.pattern,
+						state.results
+					);
+
+					if( Interlocked.Decrement( ref state.data.pendingWorkerCount ) == 0 )
+						state.data.manualResetEvent.Set();
+				}, data.states[i] );
+			}
+
+			data.manualResetEvent.WaitOne();
+
+			for( var i = 0; i < workerCount; i++ )
+				results.AddRange( data.states[i].results );
+		}
+
+		private static void GetMatchesPartial( BitPickerConfig config, List<BitPickerItem> providedItems, int startIndex, int endIndex, string pattern, List<Result> results )
+		{
+			for( int i = startIndex; i < endIndex; i++ )
 			{
 				var item = providedItems[i];
 
