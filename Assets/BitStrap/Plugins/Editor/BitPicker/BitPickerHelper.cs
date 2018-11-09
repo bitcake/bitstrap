@@ -6,6 +6,60 @@ namespace BitStrap
 {
 	public static class BitPickerHelper
 	{
+		public struct Result
+		{
+			readonly public int score;
+			readonly public int itemIndex;
+			readonly public List<int> nameMatches;
+			readonly public List<int> fullNameMatches;
+
+			public Result( int score, int itemIndex, List<int> nameMatches, List<int> fullNameMatches )
+			{
+				this.score = score;
+				this.itemIndex = itemIndex;
+				this.nameMatches = nameMatches;
+				this.fullNameMatches = fullNameMatches;
+			}
+		}
+
+		public static void GetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, List<Result> results )
+		{
+			for( int i = 0; i < providedItems.Count; i++ )
+			{
+				var item = providedItems[i];
+
+				int nameScore;
+				var nameMatches = new List<int>();
+				var nameMatched = FuzzyFinder.Match(
+					config.fuzzyFinderConfig,
+					item.name,
+					pattern,
+					out nameScore,
+					nameMatches
+				);
+
+				int fullNameScore;
+				var fullNameMatches = new List<int>();
+				var fullNameMatched = FuzzyFinder.Match(
+					config.fuzzyFinderConfig,
+					item.fullName,
+					pattern,
+					out fullNameScore,
+					fullNameMatches
+				);
+
+				if( nameMatched || fullNameMatched )
+				{
+					var score = Mathf.Max(
+						nameScore + config.scoreConfig.nameMatchBonus,
+						fullNameScore
+					);
+
+					results.Add( new Result( score, i, nameMatches, fullNameMatches ) );
+				}
+			}
+		}
+
 		public static string RemoveArgs( string pattern )
 		{
 			var index = pattern.LastIndexOf( ':' );
@@ -24,7 +78,7 @@ namespace BitStrap
 			return pattern.Substring( index + 1 );
 		}
 
-		public static void HighlightMatches( string text, List<byte> matches, StringBuilder stringBuilder )
+		public static void HighlightMatches( string text, List<int> matches, StringBuilder stringBuilder )
 		{
 			var beforeMarkup = "<b>";
 			var afterMarkup = "</b>";

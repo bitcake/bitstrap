@@ -42,29 +42,13 @@ namespace BitStrap
 			public static readonly Color InterleavedBackgroundColor = new Color( 0.0f, 0.0f, 0.0f, 0.1f );
 		}
 
-		private struct Result
-		{
-			readonly public int score;
-			readonly public int itemIndex;
-			readonly public List<byte> nameMatches;
-			readonly public List<byte> fullNameMatches;
-
-			public Result( int score, int itemIndex, List<byte> nameMatches, List<byte> fullNameMatches )
-			{
-				this.score = score;
-				this.itemIndex = itemIndex;
-				this.nameMatches = nameMatches;
-				this.fullNameMatches = fullNameMatches;
-			}
-		}
-
 		private static bool editorReloaded = true;
 
 		private BitPickerConfig config;
 		private bool initialized = false;
 		private string pattern = "";
 		private List<BitPickerItem> providedItems = new List<BitPickerItem>( 2048 );
-		private List<Result> results = new List<Result>( 1024 );
+		private List<BitPickerHelper.Result> results = new List<BitPickerHelper.Result>( 1024 );
 		private int selectedResultIndex = 0;
 		private int viewResultIndex = 0;
 
@@ -216,42 +200,7 @@ namespace BitStrap
 					if( pattern.Length > 0 )
 					{
 						var patternWithoutArgs = BitPickerHelper.RemoveArgs( pattern );
-
-						for( int i = 0; i < providedItems.Count; i++ )
-						{
-							var item = providedItems[i];
-
-							int nameScore;
-							var nameMatches = new List<byte>();
-							var nameMatched = FuzzyFinder.Match(
-								config.fuzzyFinderConfig,
-								patternWithoutArgs,
-								item.name,
-								out nameScore,
-								nameMatches
-							);
-
-							int fullNameScore;
-							var fullNameMatches = new List<byte>();
-							var fullNameMatched = FuzzyFinder.Match(
-								config.fuzzyFinderConfig,
-								patternWithoutArgs,
-								item.fullName,
-								out fullNameScore,
-								fullNameMatches
-							);
-
-							if( nameMatched || fullNameMatched )
-							{
-								var score = Mathf.Max(
-									nameScore + config.scoreConfig.nameMatchBonus,
-									fullNameScore
-								);
-
-								results.Add( new Result( score, i, nameMatches, fullNameMatches ) );
-							}
-						}
-
+						BitPickerHelper.GetMatches( config, providedItems, patternWithoutArgs, results );
 						results.Sort( ( a, b ) => b.score - a.score );
 					}
 				}
