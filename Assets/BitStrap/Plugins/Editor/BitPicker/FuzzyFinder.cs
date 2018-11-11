@@ -16,6 +16,8 @@ namespace BitStrap
 			if( tempMatches.array == null )
 				tempMatches = new Slice<int>( new int[config.recursionLimit * MeanMaxMatchesPerItem], 0 );
 
+			tempMatches.Count = 0;
+
 			var recursionCount = 0;
 			score = MatchRecursive( config, text, 0, pattern, 0, ref matches, 0, ref recursionCount );
 
