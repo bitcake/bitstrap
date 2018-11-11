@@ -33,9 +33,9 @@ namespace BitStrap
 		[Button]
 		public void Test()
 		{
-			var matches = new System.Collections.Generic.List<int>();
+			var matches = new Slice<int>( new int[16], 14 );
 			int score;
-			var matched = FuzzyFinder.Match( fuzzyFinderConfig, debugText, debugPattern, out score, matches );
+			var matched = FuzzyFinder.Match( fuzzyFinderConfig, debugText, debugPattern, out score, ref matches );
 			if( matched )
 			{
 				var sb = new System.Text.StringBuilder();
