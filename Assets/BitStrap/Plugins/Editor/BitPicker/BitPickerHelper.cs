@@ -195,11 +195,11 @@ namespace BitStrap
 			return pattern.Substring( index + 1 );
 		}
 
-		public static void HighlightMatches( string text, Slice<int> matches, StringBuilder stringBuilder )
+		public static void HighlightMatches( BitPickerConfig config, string text, Slice<int> matches, StringBuilder stringBuilder )
 		{
-			var beforeMarkup = "<b>";
-			var afterMarkup = "</b>";
-			var markupLength = beforeMarkup.Length + afterMarkup.Length;
+			var markupLength =
+				config.stylingConfig.beforeMatchMarkup.Length +
+				config.stylingConfig.afterMatchMarkup.Length;
 
 			var offset = stringBuilder.Length;
 			stringBuilder.Append( text );
@@ -208,8 +208,16 @@ namespace BitStrap
 			{
 				var match = matches.array[i];
 				var index = i - matches.startIndex;
-				stringBuilder.Insert( offset + match + index * markupLength + 1, afterMarkup );
-				stringBuilder.Insert( offset + match + index * markupLength, beforeMarkup );
+
+				stringBuilder.Insert(
+					offset + match + index * markupLength + 1,
+					config.stylingConfig.afterMatchMarkup
+				);
+
+				stringBuilder.Insert(
+					offset + match + index * markupLength,
+					config.stylingConfig.beforeMatchMarkup
+				);
 			}
 		}
 

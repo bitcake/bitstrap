@@ -230,11 +230,11 @@ namespace BitStrap
 						contentCache.Append( " - " );
 					}
 
-					BitPickerHelper.HighlightMatches( item.name, result.nameMatches, contentCache );
+					BitPickerHelper.HighlightMatches( config, item.name, result.nameMatches, contentCache );
 					var nameContent = new GUIContent( contentCache.ToString() );
 
 					contentCache.Length = 0;
-					BitPickerHelper.HighlightMatches( item.fullName, result.fullNameMatches, contentCache );
+					BitPickerHelper.HighlightMatches( config, item.fullName, result.fullNameMatches, contentCache );
 					var fullNameContent = new GUIContent( contentCache.ToString() );
 
 					var nameSize = BitPickerHelper.GetStyleLayoutSize( nameStyle, nameContent );
