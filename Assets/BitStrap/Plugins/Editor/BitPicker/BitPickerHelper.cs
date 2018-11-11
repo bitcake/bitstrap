@@ -84,11 +84,11 @@ namespace BitStrap
 				results.Clear();
 				matchMemoryLength = 0;
 
-				var matchMemoryCapacity = data.items.Count * FuzzyFinder.MeanMaxMatchesPerItem;
-				if( matchMemory == null || matchMemoryCapacity > matchMemory.Length )
-					matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryCapacity + 1 )];
+				var matchMemoryExpectedCapacity = data.items.Count * FuzzyFinder.ExpectedMaxMatchesPerItem;
+				if( matchMemory == null || matchMemoryExpectedCapacity > matchMemory.Length )
+					matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryExpectedCapacity + 1 )];
 			}
-
+	
 			public void Finish()
 			{
 				if( Interlocked.Decrement( ref data.pendingWorkerCount ) == 0 )

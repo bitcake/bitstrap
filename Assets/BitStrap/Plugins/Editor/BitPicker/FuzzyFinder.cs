@@ -6,7 +6,7 @@ namespace BitStrap
 	// Based on https://github.com/forrestthewoods/lib_fts/blob/master/code/fts_fuzzy_match.h
 	public static class FuzzyFinder
 	{
-		public const int MeanMaxMatchesPerItem = 16;
+		public const int ExpectedMaxMatchesPerItem = 16;
 
 		[System.ThreadStatic]
 		private static Slice<int> tempMatches;
@@ -14,7 +14,7 @@ namespace BitStrap
 		public static bool Match( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches )
 		{
 			if( tempMatches.array == null )
-				tempMatches = new Slice<int>( new int[config.recursionLimit * MeanMaxMatchesPerItem], 0 );
+				tempMatches = new Slice<int>( new int[config.recursionLimit * ExpectedMaxMatchesPerItem], 0 );
 
 			tempMatches.Count = 0;
 
