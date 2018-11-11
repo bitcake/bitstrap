@@ -204,20 +204,27 @@ namespace BitStrap
 			var offset = stringBuilder.Length;
 			stringBuilder.Append( text );
 
-			for( int i = matches.startIndex; i < matches.endIndex; i++ )
+			var matchGroupCount = 0;
+			for( var i = matches.startIndex; i < matches.endIndex; )
 			{
 				var match = matches.array[i];
-				var index = i - matches.startIndex;
+
+				var startIndex = i;
+				i++;
+				for( ; i < matches.endIndex && matches.array[i] == matches.array[i - 1] + 1; i++ )
+					continue;
 
 				stringBuilder.Insert(
-					offset + match + index * markupLength + 1,
+					offset + match + matchGroupCount * markupLength + ( i - startIndex ),
 					config.stylingConfig.afterMatchMarkup
 				);
 
 				stringBuilder.Insert(
-					offset + match + index * markupLength,
+					offset + match + matchGroupCount * markupLength,
 					config.stylingConfig.beforeMatchMarkup
 				);
+
+				matchGroupCount++;
 			}
 		}
 
