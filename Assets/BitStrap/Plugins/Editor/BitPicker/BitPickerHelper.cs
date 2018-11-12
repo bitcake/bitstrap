@@ -120,7 +120,6 @@ namespace BitStrap
 
 		public static void GetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, List<Result> results )
 		{
-			UnityEngine.Profiling.Profiler.BeginSample( "bitpicker" );
 			workerData.Setup( config, providedItems, pattern );
 
 			foreach( var workerState in workerData.states )
@@ -146,7 +145,6 @@ namespace BitStrap
 				results.AddRange( workerState.results );
 				workerState.EnsureMatchCapacity();
 			}
-			UnityEngine.Profiling.Profiler.EndSample();
 		}
 
 		private static void GetMatchesPartial( WorkerState state, int startIndex, int endIndex )
