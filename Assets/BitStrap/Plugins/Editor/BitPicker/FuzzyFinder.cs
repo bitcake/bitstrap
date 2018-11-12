@@ -74,7 +74,7 @@ namespace BitStrap
 
 			if( patternIndex == patternLength )
 			{
-				var calculatedScore = CalculateScoreEx( config, text, ref tempMatches );
+				var calculatedScore = CalculateScore( config, text, ref tempMatches );
 				if( calculatedScore > score )
 				{
 					score = calculatedScore;
@@ -87,7 +87,7 @@ namespace BitStrap
 			return score;
 		}
 
-		private static int CalculateScoreEx( FuzzyFinderConfig config, string text, ref Slice<int> tempMatches )
+		private static int CalculateScore( FuzzyFinderConfig config, string text, ref Slice<int> tempMatches )
 		{
 			var score = 100;
 
