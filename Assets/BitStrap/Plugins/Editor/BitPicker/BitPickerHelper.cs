@@ -73,6 +73,7 @@ namespace BitStrap
 			public readonly List<Result> results;
 			public int[] matchMemory;
 			public int matchMemoryLength;
+			public Slice<int> tempMaches;
 
 			public WorkerState( WorkerData data, int index )
 			{
@@ -82,6 +83,8 @@ namespace BitStrap
 
 				matchMemoryLength = 0;
 				matchMemory = null;
+
+				tempMaches = new Slice<int>( new int[FuzzyFinder.ExpectedMaxMatchesPerItem * 10], 0 );
 			}
 
 			public void Setup()
@@ -152,29 +155,27 @@ namespace BitStrap
 			{
 				var item = state.data.items[i];
 
-				int nameScore;
 				var nameMatches = new Slice<int>( state.matchMemory, state.matchMemoryLength );
-				var nameMatched = FuzzyFinder.Match(
+				var nameScore = FuzzyFinder.GetMatches(
 					state.data.config.fuzzyFinderConfig,
 					item.name,
 					state.data.pattern,
-					out nameScore,
-					ref nameMatches
+					ref nameMatches,
+					ref state.tempMaches
 				);
 				state.matchMemoryLength = nameMatches.endIndex;
 
-				int fullNameScore;
 				var fullNameMatches = new Slice<int>( state.matchMemory, state.matchMemoryLength );
-				var fullNameMatched = FuzzyFinder.Match(
+				var fullNameScore = FuzzyFinder.GetMatches(
 					state.data.config.fuzzyFinderConfig,
 					item.fullName,
 					state.data.pattern,
-					out fullNameScore,
-					ref fullNameMatches
+					ref fullNameMatches,
+					ref state.tempMaches
 				);
 				state.matchMemoryLength = fullNameMatches.endIndex;
 
-				if( nameMatched || fullNameMatched )
+				if( nameScore > FuzzyFinder.MinScore || fullNameScore > FuzzyFinder.MinScore )
 				{
 					var score = Mathf.Max(
 						nameScore + state.data.config.scoreConfig.nameMatchBonus,

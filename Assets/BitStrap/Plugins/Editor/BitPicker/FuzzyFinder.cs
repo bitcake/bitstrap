@@ -6,6 +6,7 @@ namespace BitStrap
 	// Based on https://github.com/forrestthewoods/lib_fts/blob/master/code/fts_fuzzy_match.h
 	public static class FuzzyFinder
 	{
+		public const int MinScore = int.MinValue;
 		public const int ExpectedMaxMatchesPerItem = 16;
 
 		public static bool IsMatch( string text, string pattern )
@@ -20,122 +21,36 @@ namespace BitStrap
 			return patternIndex == pattern.Length;
 		}
 
-		public static bool Match( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches )
+		public static int GetMatches( FuzzyFinderConfig config, string text, string pattern, ref Slice<int> matches, ref Slice<int> tempMatches )
 		{
-			score = 100;
+			if( !IsMatch( text, pattern ) )
+				return MinScore;
 
-			if( pattern.Length == 0 || text.Length == 0 )
-				return false;
-
-			var lastMatch = 0;
-			for( ; lastMatch < text.Length && char.ToLower( text[lastMatch] ) != char.ToLower( pattern[0] ); lastMatch++ )
-				continue;
-
-			// First letter scoring
-			if( lastMatch == 0 )
-				score += config.firstLetterBonus;
-			else
-				score += Mathf.Max( config.leadingLetterPenalty * lastMatch, config.maxLeadingLetterPenalty );
-
-			matches.Add( lastMatch );
-
-			var patternIndex = 1;
-			for( var i = lastMatch + 1; i < text.Length && patternIndex < pattern.Length; i++ )
-			{
-				var patternChar = pattern[patternIndex];
-
-				// Search ahead for camel case or separator
-				var betterIndex = i;
-				for( ; betterIndex < text.Length; betterIndex++ )
-				{
-					if( char.ToLower( text[betterIndex] ) == char.ToLower( patternChar ) )
-					{
-						if( char.IsLower( text[betterIndex - 1] ) && char.IsUpper( text[betterIndex] ) ) // Camel Case
-						{
-							score += config.camelBonus;
-
-							lastMatch = betterIndex;
-							matches.Add( betterIndex );
-							patternIndex++;
-
-							break;
-						}
-						else if( config.separators.IndexOf( text[betterIndex - 1] ) >= 0 ) // After Separator
-						{
-							score += config.separatorBonus;
-
-							lastMatch = betterIndex;
-							matches.Add( betterIndex );
-							patternIndex++;
-
-							break;
-						}
-					}
-				}
-				// Found camel case or separator
-				if( betterIndex < text.Length )
-				{
-					score += ( betterIndex - i ) * config.unmatchedLetterPenalty;
-					i = betterIndex;
-					continue;
-				}
-
-				if( char.ToLower( text[i] ) == char.ToLower( patternChar ) )
-				{
-					if( i == lastMatch + 1 ) // Consecutive
-					{
-						score += config.consecutiveBonus;
-
-						lastMatch = i;
-						matches.Add( i );
-						patternIndex++;
-					}
-				}
-				else
-				{
-					score += config.unmatchedLetterPenalty;
-				}
-			}
-
-			if( patternIndex < pattern.Length )
-			{
-				score = int.MinValue;
-				matches.Count = 0;
-				return false;
-			}
-
-			return true;
-		}
-
-		public static bool MatchEx( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches, ref Slice<int> tempMatches )
-		{
 			tempMatches.Count = 0;
 
 			var recursionCount = 0;
-			score = MatchExRecursive( config, text, 0, pattern, 0, ref matches, ref tempMatches, 0, ref recursionCount );
-
-			return score > int.MinValue;
+			return MatchRecursive( config, text, 0, pattern, 0, ref matches, ref tempMatches, 0, ref recursionCount );
 		}
 
-		public static int MatchExRecursive( FuzzyFinderConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
+		public static int MatchRecursive( FuzzyFinderConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
 		{
 			if( recursionCount >= config.recursionLimit )
-				return int.MinValue;
+				return MinScore;
 			recursionCount++;
 
 			var patternLength = pattern.Length;
 			var textLength = text.Length;
 
 			if( patternIndex == patternLength || textIndex == textLength )
-				return int.MinValue;
+				return MinScore;
 
-			var score = int.MinValue;
+			var score = MinScore;
 
 			while( patternIndex != patternLength && textIndex != textLength )
 			{
 				if( char.ToLower( pattern[patternIndex] ) == char.ToLower( text[textIndex] ) )
 				{
-					var recursiveScore = MatchExRecursive(
+					var recursiveScore = MatchRecursive(
 						config,
 						text,
 						textIndex + 1,

@@ -35,25 +35,5 @@ namespace BitStrap
 
 		[InlineScriptableObject]
 		public BitPickerProvider[] providers;
-
-		public string debugText;
-		public string debugPattern;
-		[Button]
-		public void Test()
-		{
-			var matches = new Slice<int>( new int[16], 0 );
-			int score;
-			var matched = FuzzyFinder.Match( fuzzyFinderConfig, debugText, debugPattern, out score, ref matches );
-			if( matched )
-			{
-				var sb = new System.Text.StringBuilder();
-				BitPickerHelper.HighlightMatches( this, debugText, matches, sb );
-				Debug.LogFormat( "MATCHED: {0} => [{1}] {2}", matches.ToStringFull(), score, sb.ToString() );
-			}
-			else
-			{
-				Debug.Log( "NO MATCH" );
-			}
-		}
 	}
 }
