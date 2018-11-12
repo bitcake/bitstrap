@@ -73,7 +73,6 @@ namespace BitStrap
 			public readonly List<Result> results;
 			public int[] matchMemory;
 			public int matchMemoryLength;
-			public Slice<int> tempMatches;
 
 			public WorkerState( WorkerData data, int index )
 			{
@@ -83,9 +82,6 @@ namespace BitStrap
 
 				matchMemoryLength = 0;
 				matchMemory = null;
-
-				var tempMatchesMemory = new int[10 * FuzzyFinder.ExpectedMaxMatchesPerItem];
-				tempMatches = new Slice<int>( tempMatchesMemory, 0 );
 			}
 
 			public void Setup()
@@ -163,8 +159,7 @@ namespace BitStrap
 					item.name,
 					state.data.pattern,
 					out nameScore,
-					ref nameMatches,
-					ref state.tempMatches
+					ref nameMatches
 				);
 				state.matchMemoryLength = nameMatches.endIndex;
 
@@ -175,8 +170,7 @@ namespace BitStrap
 					item.fullName,
 					state.data.pattern,
 					out fullNameScore,
-					ref fullNameMatches,
-					ref state.tempMatches
+					ref fullNameMatches
 				);
 				state.matchMemoryLength = fullNameMatches.endIndex;
 

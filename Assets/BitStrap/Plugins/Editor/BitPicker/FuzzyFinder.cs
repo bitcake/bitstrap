@@ -8,7 +8,19 @@ namespace BitStrap
 	{
 		public const int ExpectedMaxMatchesPerItem = 16;
 
-		public static bool Match2( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches )
+		public static bool IsMatch( string text, string pattern )
+		{
+			var patternIndex = 0;
+			for( var i = 0; i < text.Length && patternIndex < pattern.Length; i++ )
+			{
+				if( char.ToLower( text[i] ) == char.ToLower( pattern[patternIndex] ) )
+					patternIndex++;
+			}
+
+			return patternIndex == pattern.Length;
+		}
+
+		public static bool Match( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches )
 		{
 			score = 100;
 
@@ -19,6 +31,7 @@ namespace BitStrap
 			for( ; lastMatch < text.Length && char.ToLower( text[lastMatch] ) != char.ToLower( pattern[0] ); lastMatch++ )
 				continue;
 
+			// First letter scoring
 			if( lastMatch == 0 )
 				score += config.firstLetterBonus;
 			else
@@ -29,30 +42,49 @@ namespace BitStrap
 			var patternIndex = 1;
 			for( var i = lastMatch + 1; i < text.Length && patternIndex < pattern.Length; i++ )
 			{
-				var textChar = text[i];
 				var patternChar = pattern[patternIndex];
 
-				if( char.ToLower( textChar ) == char.ToLower( patternChar ) )
+				// Search ahead for camel case or separator
+				var betterIndex = i;
+				for( ; betterIndex < text.Length; betterIndex++ )
+				{
+					if( char.ToLower( text[betterIndex] ) == char.ToLower( patternChar ) )
+					{
+						if( char.IsLower( text[betterIndex - 1] ) && char.IsUpper( text[betterIndex] ) ) // Camel Case
+						{
+							score += config.camelBonus;
+
+							lastMatch = betterIndex;
+							matches.Add( betterIndex );
+							patternIndex++;
+
+							break;
+						}
+						else if( config.separators.IndexOf( text[betterIndex - 1] ) >= 0 ) // After Separator
+						{
+							score += config.separatorBonus;
+
+							lastMatch = betterIndex;
+							matches.Add( betterIndex );
+							patternIndex++;
+
+							break;
+						}
+					}
+				}
+				// Found camel case or separator
+				if( betterIndex < text.Length )
+				{
+					score += ( betterIndex - i ) * config.unmatchedLetterPenalty;
+					i = betterIndex;
+					continue;
+				}
+
+				if( char.ToLower( text[i] ) == char.ToLower( patternChar ) )
 				{
 					if( i == lastMatch + 1 ) // Consecutive
 					{
 						score += config.consecutiveBonus;
-
-						lastMatch = i;
-						matches.Add( i );
-						patternIndex++;
-					}
-					else if( char.IsLower( text[i - 1] ) && char.IsUpper( textChar ) ) // Camel Case
-					{
-						score += config.camelBonus;
-
-						lastMatch = i;
-						matches.Add( i );
-						patternIndex++;
-					}
-					else if( config.separators.IndexOf( text[i - 1] ) >= 0 ) // After Separator
-					{
-						score += config.separatorBonus;
 
 						lastMatch = i;
 						matches.Add( i );
@@ -75,17 +107,17 @@ namespace BitStrap
 			return true;
 		}
 
-		public static bool Match( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches, ref Slice<int> tempMatches )
+		public static bool MatchEx( FuzzyFinderConfig config, string text, string pattern, out int score, ref Slice<int> matches, ref Slice<int> tempMatches )
 		{
 			tempMatches.Count = 0;
 
 			var recursionCount = 0;
-			score = MatchRecursive( config, text, 0, pattern, 0, ref matches, ref tempMatches, 0, ref recursionCount );
+			score = MatchExRecursive( config, text, 0, pattern, 0, ref matches, ref tempMatches, 0, ref recursionCount );
 
 			return score > int.MinValue;
 		}
 
-		public static int MatchRecursive( FuzzyFinderConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
+		public static int MatchExRecursive( FuzzyFinderConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
 		{
 			if( recursionCount >= config.recursionLimit )
 				return int.MinValue;
@@ -103,7 +135,7 @@ namespace BitStrap
 			{
 				if( char.ToLower( pattern[patternIndex] ) == char.ToLower( text[textIndex] ) )
 				{
-					var recursiveScore = MatchRecursive(
+					var recursiveScore = MatchExRecursive(
 						config,
 						text,
 						textIndex + 1,
@@ -127,7 +159,7 @@ namespace BitStrap
 
 			if( patternIndex == patternLength )
 			{
-				var calculatedScore = CalculateScore( config, text, ref tempMatches );
+				var calculatedScore = CalculateScoreEx( config, text, ref tempMatches );
 				if( calculatedScore > score )
 				{
 					score = calculatedScore;
@@ -140,7 +172,7 @@ namespace BitStrap
 			return score;
 		}
 
-		private static int CalculateScore( FuzzyFinderConfig config, string text, ref Slice<int> tempMatches )
+		private static int CalculateScoreEx( FuzzyFinderConfig config, string text, ref Slice<int> tempMatches )
 		{
 			var score = 100;
 
