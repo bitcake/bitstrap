@@ -59,6 +59,11 @@ namespace BitStrap
 				step = ( items.Count + workerCount - 1 ) / workerCount;
 				pendingWorkerCount = workerCount;
 			}
+
+			public void Join()
+			{
+				allWorkersFinishedSync.WaitOne();
+			}
 		}
 
 		private sealed class WorkerState
@@ -68,6 +73,7 @@ namespace BitStrap
 			public readonly List<Result> results;
 			public int[] matchMemory;
 			public int matchMemoryLength;
+			public Slice<int> tempMatches;
 
 			public WorkerState( WorkerData data, int index )
 			{
@@ -77,6 +83,9 @@ namespace BitStrap
 
 				matchMemoryLength = 0;
 				matchMemory = null;
+
+				var tempMatchesMemory = new int[10 * FuzzyFinder.ExpectedMaxMatchesPerItem];
+				tempMatches = new Slice<int>( tempMatchesMemory, 0 );
 			}
 
 			public void Setup()
@@ -88,7 +97,7 @@ namespace BitStrap
 				if( matchMemory == null || matchMemoryExpectedCapacity > matchMemory.Length )
 					matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryExpectedCapacity + 1 )];
 			}
-	
+
 			public void Finish()
 			{
 				if( Interlocked.Decrement( ref data.pendingWorkerCount ) == 0 )
@@ -106,12 +115,13 @@ namespace BitStrap
 
 		static BitPickerHelper()
 		{
-			var workerCount = Mathf.Min( System.Environment.ProcessorCount, 1 );
+			var workerCount = Mathf.Max( System.Environment.ProcessorCount, 1 );
 			workerData = new WorkerData( workerCount );
 		}
 
 		public static void GetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, List<Result> results )
 		{
+			UnityEngine.Profiling.Profiler.BeginSample( "bitpicker" );
 			workerData.Setup( config, providedItems, pattern );
 
 			foreach( var workerState in workerData.states )
@@ -119,22 +129,25 @@ namespace BitStrap
 				ThreadPool.QueueUserWorkItem( s =>
 				{
 					var state = s as WorkerState;
+					UnityEngine.Profiling.Profiler.BeginThreadProfiling( "bitpickergroup", "bitpickergroup_" + state.index );
 					var startIndex = state.index * state.data.step;
 					var endIndex = Mathf.Min( startIndex + state.data.step, state.data.items.Count );
 
 					GetMatchesPartial( state, startIndex, endIndex );
 
 					state.Finish();
+					UnityEngine.Profiling.Profiler.EndThreadProfiling();
 				}, workerState );
 			}
 
-			workerData.allWorkersFinishedSync.WaitOne();
+			workerData.Join();
 
 			foreach( var workerState in workerData.states )
 			{
 				results.AddRange( workerState.results );
 				workerState.EnsureMatchCapacity();
 			}
+			UnityEngine.Profiling.Profiler.EndSample();
 		}
 
 		private static void GetMatchesPartial( WorkerState state, int startIndex, int endIndex )
@@ -150,7 +163,8 @@ namespace BitStrap
 					item.name,
 					state.data.pattern,
 					out nameScore,
-					ref nameMatches
+					ref nameMatches,
+					ref state.tempMatches
 				);
 				state.matchMemoryLength = nameMatches.endIndex;
 
@@ -161,7 +175,8 @@ namespace BitStrap
 					item.fullName,
 					state.data.pattern,
 					out fullNameScore,
-					ref fullNameMatches
+					ref fullNameMatches,
+					ref state.tempMatches
 				);
 				state.matchMemoryLength = fullNameMatches.endIndex;
 

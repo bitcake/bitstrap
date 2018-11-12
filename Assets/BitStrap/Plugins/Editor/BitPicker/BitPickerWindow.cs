@@ -189,10 +189,11 @@ namespace BitStrap
 
 				GUI.SetNextControlName( Consts.SearchControlName );
 				var patternRect = GUILayoutUtility.GetRect( GUIContent.none, patternStyle );
-				pattern = EditorGUI.TextField( patternRect, pattern, patternStyle );
+				var newPattern = EditorGUI.TextField( patternRect, pattern, patternStyle );
 
-				if( EditorGUI.EndChangeCheck() )
+				if( EditorGUI.EndChangeCheck() && newPattern != pattern )
 				{
+					pattern = newPattern;
 					selectedResultIndex = 0;
 					viewResultIndex = 0;
 					results.Clear();

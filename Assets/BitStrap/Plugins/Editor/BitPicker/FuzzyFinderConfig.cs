@@ -11,7 +11,7 @@ namespace BitStrap
 		public int recursionLimit = 8;
 
 		public string separators = " /\\_-";
-		public int sequentialBonus = 30; // bonus for adjacent matches
+		public int consecutiveBonus = 30; // bonus for adjacent matches
 		public int separatorBonus = 30; // bonus if match occurs after a separator
 		public int camelBonus = 30; // bonus if match is uppercase and prev is lower
 		public int firstLetterBonus = 15; // bonus if the first letter is matched

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: BitPickerConfig
   m_EditorClassIdentifier: 
   fuzzyFinderConfig:
-    recursionLimit: 8
+    recursionLimit: 9
     separators: ' /\_-'
     sequentialBonus: 15
     separatorBonus: 30
@@ -24,8 +24,11 @@ MonoBehaviour:
   scoreConfig:
     showScores: 0
     nameMatchBonus: 15
+  stylingConfig:
+    beforeMatchMarkup: <b><color=orange>
+    afterMatchMarkup: </color></b>
   providers:
   - {fileID: 11400000, guid: a51ffabea8e66c34fb28f30a70a8bc91, type: 2}
   - {fileID: 11400000, guid: e3e3807cd6c82964296342e43ec95818, type: 2}
-  debugText: TheBlackKnight
-  debugPattern: tbkkht
+  debugText: BitPickerConfig
+  debugPattern: bipiconfi

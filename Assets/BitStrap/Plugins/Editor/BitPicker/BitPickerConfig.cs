@@ -43,7 +43,7 @@ namespace BitStrap
 		{
 			var matches = new Slice<int>( new int[16], 0 );
 			int score;
-			var matched = FuzzyFinder.Match( fuzzyFinderConfig, debugText, debugPattern, out score, ref matches );
+			var matched = FuzzyFinder.Match2( fuzzyFinderConfig, debugText, debugPattern, out score, ref matches );
 			if( matched )
 			{
 				var sb = new System.Text.StringBuilder();
