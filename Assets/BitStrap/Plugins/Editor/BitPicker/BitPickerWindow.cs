@@ -194,6 +194,8 @@ namespace BitStrap
 				if( EditorGUI.EndChangeCheck() && newPattern != pattern )
 				{
 					pattern = newPattern;
+					selectedResultIndex = 0;
+					viewResultIndex = 0;
 					results.Clear();
 
 					if( pattern.Length > 0 )

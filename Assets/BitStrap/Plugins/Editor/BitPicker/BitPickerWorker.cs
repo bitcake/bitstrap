@@ -8,7 +8,7 @@ namespace BitStrap
 	public sealed class BitPickerWorkerGroup
 	{
 		public readonly ManualResetEvent allWorkersFinishedSync;
-		public readonly BitPickerWorker[] worker;
+		public readonly BitPickerWorker[] workers;
 
 		public BitPickerConfig config;
 		public List<BitPickerItem> items;
@@ -16,39 +16,63 @@ namespace BitStrap
 		public int step;
 		public int pendingWorkerCount;
 
-		public bool isIncomplete;
+		private bool hasWorkLeft;
 
 		public BitPickerWorkerGroup( int workerCount )
 		{
 			allWorkersFinishedSync = new ManualResetEvent( false );
 
-			worker = new BitPickerWorker[workerCount];
+			workers = new BitPickerWorker[workerCount];
 			for( var i = 0; i < workerCount; i++ )
-				worker[i] = new BitPickerWorker( this, i );
+				workers[i] = new BitPickerWorker( this, i );
 
-			isIncomplete = false;
+			hasWorkLeft = false;
 		}
 
-		public void Setup( BitPickerConfig config, List<BitPickerItem> items, string pattern )
+		public void SetupForItems( BitPickerConfig config, List<BitPickerItem> items, string pattern )
 		{
-			isIncomplete = true;
-			allWorkersFinishedSync.Reset();
+			hasWorkLeft = true;
 
 			this.config = config;
 			this.items = items;
 			this.pattern = pattern;
 
-			var workerCount = worker.Length;
+			var workerCount = workers.Length;
 			step = ( items.Count + workerCount - 1 ) / workerCount;
-			pendingWorkerCount = workerCount;
 
-			foreach( var state in this.worker )
+			foreach( var state in this.workers )
 				state.Setup();
 		}
 
-		public void JoinAll()
+		public bool GetMatchesPartialSync( List<BitPickerHelper.Result> results )
 		{
+			if( !hasWorkLeft )
+				return false;
+
+			pendingWorkerCount = workers.Length;
+			allWorkersFinishedSync.Reset();
+
+			foreach( var worker in workers )
+			{
+				ThreadPool.QueueUserWorkItem(
+					w => ( w as BitPickerWorker ).GetMatchesPartial(),
+					worker
+				);
+			}
+
 			allWorkersFinishedSync.WaitOne();
+
+			hasWorkLeft = false;
+			foreach( var worker in workers )
+			{
+				results.AddRange( worker.results );
+				worker.EnsureMatchCapacity();
+
+				if( worker.IsIncomplete() )
+					hasWorkLeft = true;
+			}
+
+			return hasWorkLeft;
 		}
 	}
 
@@ -86,7 +110,6 @@ namespace BitStrap
 
 		public void Setup()
 		{
-			results.Clear();
 			matchMemoryLength = 0;
 
 			var matchMemoryExpectedCapacity = data.items.Count * FuzzyMatcher.ExpectedMaxMatchesPerItem;
@@ -99,6 +122,8 @@ namespace BitStrap
 
 		public void GetMatchesPartial()
 		{
+			results.Clear();
+
 			stopwatch.Reset();
 			stopwatch.Start();
 

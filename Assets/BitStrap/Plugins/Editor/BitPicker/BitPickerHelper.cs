@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using UnityEngine;
 
 namespace BitStrap
@@ -34,35 +33,12 @@ namespace BitStrap
 
 		public static void PrepareToGetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern )
 		{
-			workerGroup.Setup( config, providedItems, pattern );
+			workerGroup.SetupForItems( config, providedItems, pattern );
 		}
 
 		public static bool GetMatchesPartial( List<Result> results )
 		{
-			if( !workerGroup.isIncomplete )
-				return false;
-
-			foreach( var worker in workerGroup.worker )
-			{
-				ThreadPool.QueueUserWorkItem(
-					w => ( w as BitPickerWorker ).GetMatchesPartial(),
-					worker
-				);
-			}
-
-			workerGroup.JoinAll();
-
-			workerGroup.isIncomplete = false;
-			foreach( var worker in workerGroup.worker )
-			{
-				results.AddRange( worker.results );
-				worker.EnsureMatchCapacity();
-
-				if( worker.IsIncomplete() )
-					workerGroup.isIncomplete = true;
-			}
-
-			return workerGroup.isIncomplete;
+			return workerGroup.GetMatchesPartialSync( results );
 		}
 
 		public static string RemoveArgs( string pattern )
