@@ -76,7 +76,7 @@ namespace BitStrap
 			matchMemoryLength = 0;
 			matchMemory = null;
 
-			tempMaches = new Slice<int>( new int[FuzzyFinder.ExpectedMaxMatchesPerItem * 10], 0 );
+			tempMaches = new Slice<int>( new int[FuzzyMatcher.ExpectedMaxMatchesPerItem * 10], 0 );
 		}
 
 		public bool IsIncomplete()
@@ -89,7 +89,7 @@ namespace BitStrap
 			results.Clear();
 			matchMemoryLength = 0;
 
-			var matchMemoryExpectedCapacity = data.items.Count * FuzzyFinder.ExpectedMaxMatchesPerItem;
+			var matchMemoryExpectedCapacity = data.items.Count * FuzzyMatcher.ExpectedMaxMatchesPerItem;
 			if( matchMemory == null || matchMemoryExpectedCapacity > matchMemory.Length )
 				matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryExpectedCapacity + 1 )];
 
@@ -107,7 +107,7 @@ namespace BitStrap
 				var item = data.items[currentIndex];
 
 				var nameMatches = new Slice<int>( matchMemory, matchMemoryLength );
-				var nameScore = FuzzyFinder.GetMatches(
+				var nameScore = FuzzyMatcher.GetMatches(
 					data.config.fuzzyFinderConfig,
 					item.name,
 					data.pattern,
@@ -117,7 +117,7 @@ namespace BitStrap
 				matchMemoryLength = nameMatches.endIndex;
 
 				var fullNameMatches = new Slice<int>( matchMemory, matchMemoryLength );
-				var fullNameScore = FuzzyFinder.GetMatches(
+				var fullNameScore = FuzzyMatcher.GetMatches(
 					data.config.fuzzyFinderConfig,
 					item.fullName,
 					data.pattern,
@@ -126,7 +126,7 @@ namespace BitStrap
 				);
 				matchMemoryLength = fullNameMatches.endIndex;
 
-				if( nameScore > FuzzyFinder.MinScore || fullNameScore > FuzzyFinder.MinScore )
+				if( nameScore > FuzzyMatcher.MinScore || fullNameScore > FuzzyMatcher.MinScore )
 				{
 					var score = Mathf.Max(
 						nameScore + data.config.scoreConfig.nameMatchBonus,

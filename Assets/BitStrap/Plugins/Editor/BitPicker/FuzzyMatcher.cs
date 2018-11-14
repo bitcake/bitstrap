@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace BitStrap
 {
 	// Based on https://github.com/forrestthewoods/lib_fts/blob/master/code/fts_fuzzy_match.h
-	public static class FuzzyFinder
+	public static class FuzzyMatcher
 	{
 		public const int MinScore = int.MinValue;
 		public const int ExpectedMaxMatchesPerItem = 16;
@@ -21,7 +21,7 @@ namespace BitStrap
 			return patternIndex == pattern.Length;
 		}
 
-		public static int GetMatches( FuzzyFinderConfig config, string text, string pattern, ref Slice<int> matches, ref Slice<int> tempMatches )
+		public static int GetMatches( FuzzyMatcherConfig config, string text, string pattern, ref Slice<int> matches, ref Slice<int> tempMatches )
 		{
 			if( !IsMatch( text, pattern ) )
 				return MinScore;
@@ -32,7 +32,7 @@ namespace BitStrap
 			return MatchRecursive( config, text, 0, pattern, 0, ref matches, ref tempMatches, 0, ref recursionCount );
 		}
 
-		public static int MatchRecursive( FuzzyFinderConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
+		public static int MatchRecursive( FuzzyMatcherConfig config, string text, int textIndex, string pattern, int patternIndex, ref Slice<int> matches, ref Slice<int> tempMatches, int tempMatchesStartIndex, ref int recursionCount )
 		{
 			if( recursionCount >= config.recursionLimit )
 				return MinScore;
@@ -87,7 +87,7 @@ namespace BitStrap
 			return score;
 		}
 
-		private static int CalculateScore( FuzzyFinderConfig config, string text, ref Slice<int> tempMatches )
+		private static int CalculateScore( FuzzyMatcherConfig config, string text, ref Slice<int> tempMatches )
 		{
 			var score = 100;
 

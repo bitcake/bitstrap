@@ -3,10 +3,8 @@ using UnityEngine;
 namespace BitStrap
 {
 	[System.Serializable]
-	public sealed class FuzzyFinderConfig
+	public sealed class FuzzyMatcherConfig
 	{
-		public static readonly FuzzyFinderConfig Default = new FuzzyFinderConfig();
-
 		[Range( 1, 10 )]
 		public int recursionLimit = 8;
 
