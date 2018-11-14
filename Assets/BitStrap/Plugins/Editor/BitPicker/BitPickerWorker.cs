@@ -108,7 +108,7 @@ namespace BitStrap
 
 				var nameMatches = new Slice<int>( matchMemory, matchMemoryLength );
 				var nameScore = FuzzyMatcher.GetMatches(
-					data.config.fuzzyFinderConfig,
+					data.config.fuzzyMatcherConfig,
 					item.name,
 					data.pattern,
 					ref nameMatches,
@@ -118,7 +118,7 @@ namespace BitStrap
 
 				var fullNameMatches = new Slice<int>( matchMemory, matchMemoryLength );
 				var fullNameScore = FuzzyMatcher.GetMatches(
-					data.config.fuzzyFinderConfig,
+					data.config.fuzzyMatcherConfig,
 					item.fullName,
 					data.pattern,
 					ref fullNameMatches,

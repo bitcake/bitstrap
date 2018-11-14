@@ -29,7 +29,7 @@ namespace BitStrap
 			}
 		}
 
-		public FuzzyMatcherConfig fuzzyFinderConfig;
+		public FuzzyMatcherConfig fuzzyMatcherConfig;
 		public ScoreConfig scoreConfig;
 		public Styling stylingConfig;
 
