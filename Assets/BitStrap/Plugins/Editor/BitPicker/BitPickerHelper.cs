@@ -24,165 +24,45 @@ namespace BitStrap
 			}
 		}
 
-		private sealed class WorkerData
-		{
-			public readonly ManualResetEvent allWorkersFinishedSync;
-			public readonly WorkerState[] states;
-
-			public BitPickerConfig config;
-			public List<BitPickerItem> items;
-			public string pattern;
-			public int step;
-			public int pendingWorkerCount;
-
-			public WorkerData( int workerCount )
-			{
-				allWorkersFinishedSync = new ManualResetEvent( false );
-
-				states = new WorkerState[workerCount];
-				for( var i = 0; i < workerCount; i++ )
-					states[i] = new WorkerState( this, i );
-			}
-
-			public void Setup( BitPickerConfig config, List<BitPickerItem> items, string pattern )
-			{
-				allWorkersFinishedSync.Reset();
-
-				this.config = config;
-				this.items = items;
-				this.pattern = pattern;
-
-				foreach( var state in this.states )
-					state.Setup();
-
-				var workerCount = states.Length;
-				step = ( items.Count + workerCount - 1 ) / workerCount;
-				pendingWorkerCount = workerCount;
-			}
-
-			public void Join()
-			{
-				allWorkersFinishedSync.WaitOne();
-			}
-		}
-
-		private sealed class WorkerState
-		{
-			public readonly WorkerData data;
-			public readonly int index;
-			public readonly List<Result> results;
-			public int[] matchMemory;
-			public int matchMemoryLength;
-			public Slice<int> tempMaches;
-
-			public WorkerState( WorkerData data, int index )
-			{
-				this.data = data;
-				this.index = index;
-				this.results = new List<Result>();
-
-				matchMemoryLength = 0;
-				matchMemory = null;
-
-				tempMaches = new Slice<int>( new int[FuzzyFinder.ExpectedMaxMatchesPerItem * 10], 0 );
-			}
-
-			public void Setup()
-			{
-				results.Clear();
-				matchMemoryLength = 0;
-
-				var matchMemoryExpectedCapacity = data.items.Count * FuzzyFinder.ExpectedMaxMatchesPerItem;
-				if( matchMemory == null || matchMemoryExpectedCapacity > matchMemory.Length )
-					matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryExpectedCapacity + 1 )];
-			}
-
-			public void Finish()
-			{
-				if( Interlocked.Decrement( ref data.pendingWorkerCount ) == 0 )
-					data.allWorkersFinishedSync.Set();
-			}
-
-			public void EnsureMatchCapacity()
-			{
-				if( matchMemoryLength >= matchMemory.Length )
-					matchMemory = new int[Mathf.NextPowerOfTwo( matchMemoryLength + 1 )];
-			}
-		}
-
-		private static readonly WorkerData workerData;
+		private static readonly BitPickerWorkerGroup workerGroup;
 
 		static BitPickerHelper()
 		{
 			var workerCount = Mathf.Max( System.Environment.ProcessorCount, 1 );
-			workerData = new WorkerData( workerCount );
+			workerGroup = new BitPickerWorkerGroup( workerCount );
 		}
 
-		public static void GetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern, List<Result> results )
+		public static void PrepareToGetMatches( BitPickerConfig config, List<BitPickerItem> providedItems, string pattern )
 		{
-			workerData.Setup( config, providedItems, pattern );
-
-			foreach( var workerState in workerData.states )
-			{
-				ThreadPool.QueueUserWorkItem( s =>
-				{
-					var state = s as WorkerState;
-					UnityEngine.Profiling.Profiler.BeginThreadProfiling( "bitpickergroup", "bitpickergroup_" + state.index );
-					var startIndex = state.index * state.data.step;
-					var endIndex = Mathf.Min( startIndex + state.data.step, state.data.items.Count );
-
-					GetMatchesPartial( state, startIndex, endIndex );
-
-					state.Finish();
-					UnityEngine.Profiling.Profiler.EndThreadProfiling();
-				}, workerState );
-			}
-
-			workerData.Join();
-
-			foreach( var workerState in workerData.states )
-			{
-				results.AddRange( workerState.results );
-				workerState.EnsureMatchCapacity();
-			}
+			workerGroup.Setup( config, providedItems, pattern );
 		}
 
-		private static void GetMatchesPartial( WorkerState state, int startIndex, int endIndex )
+		public static bool GetMatchesPartial( List<Result> results )
 		{
-			for( int i = startIndex; i < endIndex; i++ )
+			if( !workerGroup.isIncomplete )
+				return false;
+
+			foreach( var worker in workerGroup.worker )
 			{
-				var item = state.data.items[i];
-
-				var nameMatches = new Slice<int>( state.matchMemory, state.matchMemoryLength );
-				var nameScore = FuzzyFinder.GetMatches(
-					state.data.config.fuzzyFinderConfig,
-					item.name,
-					state.data.pattern,
-					ref nameMatches,
-					ref state.tempMaches
+				ThreadPool.QueueUserWorkItem(
+					w => ( w as BitPickerWorker ).GetMatchesPartial(),
+					worker
 				);
-				state.matchMemoryLength = nameMatches.endIndex;
-
-				var fullNameMatches = new Slice<int>( state.matchMemory, state.matchMemoryLength );
-				var fullNameScore = FuzzyFinder.GetMatches(
-					state.data.config.fuzzyFinderConfig,
-					item.fullName,
-					state.data.pattern,
-					ref fullNameMatches,
-					ref state.tempMaches
-				);
-				state.matchMemoryLength = fullNameMatches.endIndex;
-
-				if( nameScore > FuzzyFinder.MinScore || fullNameScore > FuzzyFinder.MinScore )
-				{
-					var score = Mathf.Max(
-						nameScore + state.data.config.scoreConfig.nameMatchBonus,
-						fullNameScore
-					);
-
-					state.results.Add( new Result( score, i, nameMatches, fullNameMatches ) );
-				}
 			}
+
+			workerGroup.JoinAll();
+
+			workerGroup.isIncomplete = false;
+			foreach( var worker in workerGroup.worker )
+			{
+				results.AddRange( worker.results );
+				worker.EnsureMatchCapacity();
+
+				if( worker.IsIncomplete() )
+					workerGroup.isIncomplete = true;
+			}
+
+			return workerGroup.isIncomplete;
 		}
 
 		public static string RemoveArgs( string pattern )

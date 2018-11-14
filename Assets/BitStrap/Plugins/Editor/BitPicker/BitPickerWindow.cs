@@ -201,9 +201,14 @@ namespace BitStrap
 					if( pattern.Length > 0 )
 					{
 						var patternWithoutArgs = BitPickerHelper.RemoveArgs( pattern );
-						BitPickerHelper.GetMatches( config, providedItems, patternWithoutArgs, results );
-						results.Sort( ( a, b ) => b.score - a.score );
+						BitPickerHelper.PrepareToGetMatches( config, providedItems, patternWithoutArgs );
 					}
+				}
+
+				if( BitPickerHelper.GetMatchesPartial( results ) )
+				{
+					results.Sort( ( a, b ) => b.score - a.score );
+					Repaint();
 				}
 			}
 
