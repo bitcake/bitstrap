@@ -204,14 +204,6 @@ namespace BitStrap
 						BitPickerHelper.PrepareToGetMatches( config, providedItems, patternWithoutArgs );
 					}
 				}
-
-				if( BitPickerHelper.GetMatchesPartial( results ) )
-				{
-					selectedResultIndex = 0;
-					viewResultIndex = 0;
-					results.Sort( ( a, b ) => b.score - a.score );
-					Repaint();
-				}
 			}
 
 			// Show Results
@@ -222,7 +214,7 @@ namespace BitStrap
 				var windowRect = position;
 				windowRect.height = patternStyleHeightCache + resultsViewCount * nameStyleHeightCache;
 				position = windowRect;
-				minSize = position.size;
+				minSize = windowRect.size;
 
 				for( var i = viewResultIndex; i < viewResultIndex + resultsViewCount; i++ )
 				{
@@ -292,6 +284,15 @@ namespace BitStrap
 					if( GUI.Button( nameRect, nameContent, nameStyle ) )
 						SelectItem( item );
 				}
+			}
+
+			// Check if there are more matches and get them
+			if( BitPickerHelper.GetMatchesPartial( results ) )
+			{
+				selectedResultIndex = 0;
+				viewResultIndex = 0;
+				results.Sort( ( a, b ) => b.score - a.score );
+				Repaint();
 			}
 
 			EditorGUI.FocusTextInControl( Consts.SearchControlName );

@@ -72,7 +72,7 @@ namespace BitStrap
 					hasWorkLeft = true;
 			}
 
-			return hasWorkLeft;
+			return true;
 		}
 	}
 
