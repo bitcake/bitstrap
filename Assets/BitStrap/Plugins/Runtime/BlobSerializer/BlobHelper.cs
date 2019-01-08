@@ -1,7 +1,6 @@
-using System.Collections;
-using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace BitStrap
 {
@@ -59,7 +58,7 @@ namespace BitStrap
 		{
 			if( IsValueType( type ) )
 			{
-				stringValue = WWW.UnEscapeURL( stringValue );
+				stringValue = UnityWebRequest.UnEscapeURL( stringValue );
 				return System.Convert.ChangeType( stringValue, type );
 			}
 			else
@@ -117,7 +116,7 @@ namespace BitStrap
 			}
 			else if( IsValueType( value.GetType() ) )
 			{
-				string stringValue = WWW.EscapeURL( value.ToString() );
+				string stringValue = UnityWebRequest.EscapeURL( value.ToString() );
 				return new BlobField( name, stringValue );
 			}
 			else
