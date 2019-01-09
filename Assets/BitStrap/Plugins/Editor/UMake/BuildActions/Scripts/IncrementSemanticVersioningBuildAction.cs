@@ -42,11 +42,10 @@ namespace BitStrap
 				version += 1;
 			}
 
-			//remove dev version if is not dev
-			if (increaseVersionType != SemanticVersionType.Dev && parts.Length == 4)
-			{
-				ArrayUtility.RemoveAt(ref parts, 3);
-			}
+            for(int i = index +1; i < parts.Length;)
+            {
+                ArrayUtility.RemoveAt(ref parts, i);
+            }
 
 			parts[index] = version.ToString();
 			umake.version = string.Join(separator.ToString(), parts);
