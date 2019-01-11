@@ -35,7 +35,7 @@ namespace BitStrap
 				if( string.IsNullOrEmpty( action.ParamNames[i] ) )
 					continue;
 
-				string encodedValue = WWW.EscapeURL( System.Convert.ToString( values[i] ) );
+				string encodedValue = UnityWebRequest.EscapeURL( System.Convert.ToString( values[i] ) );
 
 				if( !string.IsNullOrEmpty( encodedValue ) )
 				{
@@ -56,9 +56,9 @@ namespace BitStrap
 
 					for( int i = 0; i < values.Length; i++ )
 					{
-						uriBuilder.Append( WWW.EscapeURL( action.ParamNames[i] ) );
+						uriBuilder.Append(UnityWebRequest.EscapeURL( action.ParamNames[i] ) );
 						uriBuilder.Append( '=' );
-						uriBuilder.Append( WWW.EscapeURL( System.Convert.ToString( values[i] ) ) );
+						uriBuilder.Append(UnityWebRequest.EscapeURL( System.Convert.ToString( values[i] ) ) );
 						uriBuilder.Append( '&' );
 					}
 

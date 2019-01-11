@@ -5,13 +5,15 @@ namespace BitStrap
 {
 	public static class MaterialContextMenu
 	{
+#if !UNITY_2018_3_OR_NEWER // in 2018.3 TextMeshPro became default and it has this same functionality
 		[MenuItem( "CONTEXT/Material/Select Material" )]
 		public static void SelectMaterial( MenuCommand command )
 		{
 			Selection.activeObject = command.context;
 		}
+#endif
 
-		[MenuItem( "CONTEXT/Material/Find Materials with Shader" )]
+        [MenuItem( "CONTEXT/Material/Find Materials with Shader" )]
 		public static void FindMaterialsWithMaterialShader( MenuCommand command )
 		{
 			var targetMaterial = command.context as Material;
