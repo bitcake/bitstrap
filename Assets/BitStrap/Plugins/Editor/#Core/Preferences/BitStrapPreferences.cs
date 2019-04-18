@@ -20,6 +20,30 @@ namespace BitStrap
 			}
 		}
 
+#if UNITY_2019_1_OR_NEWER
+		[SettingsProvider()]
+		private static SettingsProvider OnPreferencesGUI()
+		{
+			return new SettingsProvider("Settings/BitStrap", SettingsScope.User)
+			{
+				label = "BitStrap",
+				guiHandler = (searchContext) =>
+				{
+					if (GUILayout.Button("Open Web Documentation"))
+						BitStrapDocs.OpenDocs();
+
+					foreach (var pair in drawPreferencesCallback)
+					{
+						if (pair.Value != null)
+							pair.Value();
+					}
+
+					GUILayout.FlexibleSpace();
+				}
+			};
+		}
+
+#else
 		[PreferenceItem( "BitStrap" )]
 		private static void OnPreferencesGUI()
 		{
@@ -34,5 +58,6 @@ namespace BitStrap
 
 			GUILayout.FlexibleSpace();
 		}
+#endif
 	}
 }
