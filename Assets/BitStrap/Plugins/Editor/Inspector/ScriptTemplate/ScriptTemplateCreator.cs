@@ -44,6 +44,7 @@ namespace BitStrap
 			string className = Path.GetFileNameWithoutExtension( path );
 			string defaultBehaviourSource = defaultBehaviourTemplate.Replace( "#SCRIPTNAME#", className );
 			defaultBehaviourSource = defaultBehaviourSource.Replace( "#NOTRIM#", "" );
+			defaultBehaviourSource = defaultBehaviourSource.Replace("\n", "\r\n");
 
 			if( string.Equals( defaultBehaviourSource, File.ReadAllText( path ) ) )
 				ScriptTemplateCreator.WriteScript( path, ScriptTemplatePreferences.CSharpScriptDefaultCode, false );

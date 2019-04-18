@@ -12,7 +12,7 @@ namespace BitStrap
 		private Transform attachTo;
 
 		[SerializeField]
-		private GameObject[] prefabs;
+		private GameObject[] prefabs = null;
 
 		private void Awake()
 		{
