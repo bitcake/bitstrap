@@ -1,9 +1,0 @@
-using UnityEngine;
-
-namespace BitStrap
-{
-	public sealed class #SCRIPTNAME# : MonoBehaviour
-	{
-		
-	}
-}
