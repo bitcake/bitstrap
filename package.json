@@ -1,84 +1,84 @@
 {
-  "name": "com.bitcake.bitstrap",
-  "version": "1.18.0",
-  "displayName": "BitStrap",
-  "description": "This is BitCake's set of useful tools and scripts that will let you quickly bootstrap a new Unity project.\r\nWe use it in our projects and hope it will be of help for yours too! :)",
-  "unity": "2019.1",
-    "samples": [
-        {
-            "displayName": "Animation",
-            "description": "Animation workflow enhancements BitStrap brings to you.",
-            "path": "Assets/BitStrap/Examples/Animation"
-        },
-        {
-            "displayName": "BlobSerializer",
-            "description": "Description of blob serializer",
-            "path": "Assets/BitStrap/Examples/BlobSerializer"
-        },
-        {
-            "displayName": "EditorGraph",
-            "description": "Description of editor graph",
-            "path": "Assets/BitStrap/Examples/EditorGraph"
-        },
-        {
-            "displayName": "Extensions",
-            "description": "Description of extensions",
-            "path": "Assets/BitStrap/Examples/Extensions"
-        },
-        {
-            "displayName": "Functional",
-            "description": "Description of functional",
-            "path": "Assets/BitStrap/Examples/Functional"
-        },
-        {
-            "displayName": "Graphic",
-            "description": "Description of graphic",
-            "path": "Assets/BitStrap/Examples/Graphic"
-        },
-        {
-            "displayName": "Helpers",
-            "description": "Description of helpers",
-            "path": "Assets/BitStrap/Examples/Helpers"
-        },
-        {
-            "displayName": "Inspector",
-            "description": "Description of inspector",
-            "path": "Assets/BitStrap/Examples/Inspector"
-        },
-        {
-            "displayName": "Math",
-            "description": "Description of math",
-            "path": "Assets/BitStrap/Examples/Math"
-        },
-        {
-            "displayName": "Physics",
-            "description": "Description of physics",
-            "path": "Assets/BitStrap/Examples/Physics"
-        },
-        {
-            "displayName": "References",
-            "description": "Description of references",
-            "path": "Assets/BitStrap/Examples/References"
-        },
-        {
-            "displayName": "Shaders",
-            "description": "Description of shaders",
-            "path": "Assets/BitStrap/Examples/Shaders"
-        },
-        {
-            "displayName": "Tween",
-            "description": "Interpolate shader properties over time.",
-            "path": "Assets/BitStrap/Examples/Tween"
-        },
-        {
-            "displayName": "Util",
-            "description": "Description of util",
-            "path": "Assets/BitStrap/Examples/Util"
-        },
-        {
-            "displayName": "WebApi",
-            "description": "Description of web api",
-            "path": "Assets/BitStrap/Examples/WebApi"
-        }
-    ]
+	"name": "com.bitcake.bitstrap",
+	"version": "1.19.0",
+	"displayName": "BitStrap",
+	"description": "This is BitCake's set of useful tools and scripts that will let you quickly bootstrap a new Unity project.\r\nWe use it in our projects and hope it will be of help for yours too! :)",
+	"unity": "2019.1",
+	"samples": [
+		{
+			"displayName": "Animation",
+			"description": "Animation workflow enhancements BitStrap brings to you.",
+			"path": "Examples/Animation"
+		},
+		{
+			"displayName": "BlobSerializer",
+			"description": "Description of blob serializer",
+			"path": "Examples/BlobSerializer"
+		},
+		{
+			"displayName": "EditorGraph",
+			"description": "Description of editor graph",
+			"path": "Examples/EditorGraph"
+		},
+		{
+			"displayName": "Extensions",
+			"description": "Description of extensions",
+			"path": "Examples/Extensions"
+		},
+		{
+			"displayName": "Functional",
+			"description": "Description of functional",
+			"path": "Examples/Functional"
+		},
+		{
+			"displayName": "Graphic",
+			"description": "Description of graphic",
+			"path": "Examples/Graphic"
+		},
+		{
+			"displayName": "Helpers",
+			"description": "Description of helpers",
+			"path": "Examples/Helpers"
+		},
+		{
+			"displayName": "Inspector",
+			"description": "Description of inspector",
+			"path": "Examples/Inspector"
+		},
+		{
+			"displayName": "Math",
+			"description": "Description of math",
+			"path": "Examples/Math"
+		},
+		{
+			"displayName": "Physics",
+			"description": "Description of physics",
+			"path": "Examples/Physics"
+		},
+		{
+			"displayName": "References",
+			"description": "Description of references",
+			"path": "Examples/References"
+		},
+		{
+			"displayName": "Shaders",
+			"description": "Description of shaders",
+			"path": "Examples/Shaders"
+		},
+		{
+			"displayName": "Tween",
+			"description": "Interpolate shader properties over time.",
+			"path": "Examples/Tween"
+		},
+		{
+			"displayName": "Util",
+			"description": "Description of util",
+			"path": "Examples/Util"
+		},
+		{
+			"displayName": "WebApi",
+			"description": "Description of web api",
+			"path": "Examples/WebApi"
+		}
+	]
 }
