@@ -1,0 +1,15 @@
+{
+    "name": "Unity.BitStrap.Example.Inspector",
+    "references": [
+        "GUID:9801596f6c4c367469a841aa6a178293"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,0 +1,19 @@
+{
+    "name": "Unity.BitStrap.Example.Math.Editor",
+    "references": [
+        "GUID:9801596f6c4c367469a841aa6a178293",
+        "GUID:3c80be0690b714d4a8ff334164743944",
+        "GUID:ab414d257c5332a4b85534a98f88d22a"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,0 +1,19 @@
+{
+    "name": "Unity.BitStrap.Example.Extensions.Editor",
+    "references": [
+        "GUID:9801596f6c4c367469a841aa6a178293",
+        "GUID:3c80be0690b714d4a8ff334164743944",
+        "GUID:08a6e08f12d793f458a420920dab40ba"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
