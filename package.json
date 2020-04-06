@@ -1,6 +1,6 @@
 {
 	"name": "com.bitcake.bitstrap",
-	"version": "1.19.0",
+	"version": "1.20.0",
 	"displayName": "BitStrap",
 	"description": "This is BitCake's set of useful tools and scripts that will let you quickly bootstrap a new Unity project.\r\nWe use it in our projects and hope it will be of help for yours too! :)",
 	"unity": "2019.1",
