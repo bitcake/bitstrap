@@ -7,5 +7,5 @@ obj/
 .vscode/
 *.sln
 *.csproj
+*.unitypackage
 omnisharp.json
-BitStrap.unitypackage
