@@ -1,16 +1,18 @@
 # Changelog
 
+### 1.21.0
+Fix the repository + UPM export
+
+Now one needs to use the branch `upm` when importing in Unity's Package Manager
+
 ### 1.19.0
 Migrating to Unity Package Manager
-
 
 ### 1.18.0
 - added: InlineScriptableObjectAttribute: show ScriptableObject editors inline as property
 
-
 ### 1.17.1
 - changed: AnimationParameterDrawer: fix warning when GameObject is disabled or when there's no AnimatorController
-
 
 ### 1.17.0
 - changed: TweenShader: now it's possible to edit textures tiling and offset
@@ -19,10 +21,8 @@ Migrating to Unity Package Manager
 - changed: Timer.OnUpdate(): renamed to Timer.Update(), also it enables you to check if the timer completed inside an if
 - changed: Timer.IsRunning: renamed to Timer.isRunning
 
-
 ### 1.16.0
 - changed: Changed folder structure to better accommodate AssemblyDefinition files
-
 
 ### 1.15.1
 - added: FieldWidth: a scoped change to field width that will behave like EditorGUIUtility.fieldWidth
@@ -38,7 +38,6 @@ Migrating to Unity Package Manager
 - changed: Moved EditorUtil folder into the "#Core" folder
 - changed: SteamUploadBuildAction: added skipSteamContentCopy to skip the steam content copy phase before upload. Useful when you build directly to the content folder. Also, it is now possible to override some values when invoking UMake from the cli.
 - changed: Proeprty: renamed from PropertyGUI
-
 
 ### 1.15.0
 - added: ResultExamples: Added some Result examples
@@ -57,14 +56,11 @@ Migrating to Unity Package Manager
 - changed: RuntimeConsole: now has a keyCombination property
 - removed: WebRequest: a Promise is used in its place now
 
-
 ### 1.14.1
 - changed: Fix compatibility issues with both Unity 2017.1 and Unity 2017.3
 
-
 ### 1.14.0
 - added: Promise: a Future/Promise monad implementation
-
 
 ### 1.13.0
 - added: Result: a monad that contains either a value or an error. Behaves like the Result monad in Rust
@@ -73,25 +69,21 @@ Migrating to Unity Package Manager
 - changed: UMakeCli.BuildAndPostBuild(): will build and immediately execute post build actions
 - removed: Callback: was removed because we do not encourage the use of null references
 
-
 ### 1.12.0
 - added: Timer.Start( timeOffset ): start the timer with a time offset (in the future)
 - added: Timer.onTimerPrecise: same as 'onTimer' but takes the callback latency as a parameter
 - changed: NumberRange: renamed from NumberBounds
 - changed: Fix TweenShader Editor: it was not saving changes to the animation curve
 
-
 ### 1.11.2
 - added: Documentation links "Windows/BitStrap/ Open Web Documentation" and "Preferences/BitStrap"
 - added: "Assets/BitStrap/Documentation/Documentation.html" that points to the web docs
 - changed: Changelog is a .txt again
 
-
 ### 1.11.1
 - added: Unity 5.6.2 support
 - added: Unity 2017.2 support
 - added: More UMakeBuildTarget examples
-
 
 ### 1.11.0
 - added: BlobSerializer: simple text serializer that handles circular references
@@ -100,14 +92,12 @@ Migrating to Unity Package Manager
 - changed: Collections.Iter(): renamed from Collections.Each() (includes List<T>, Dictionary<K,V> and HashSet<T>)
 - changed: CircularBuffer.Enumerator: enumerator is now GC free
 
-
 ### 1.10.0
 New extensible build system: UMake!
 - added: UMake: make builds by setting up presets and pre/post build actions
 - added: References: a handy way to get references to assets in a folder
 - added: NonNullableDrawer: draws a warning in inspector if a field is left null
 - changed: Improvements to WebApi
-
 
 ### 1.9.3
 Windows Store App (WSA) support!
@@ -117,11 +107,9 @@ Windows Store App (WSA) support!
 - changed: Type.GetCustomAttribute: renamed to GetAttribute
 - changed: MemberInfo.GetCustomAttribute: renamed to GetAttribute
 
-
 ### 1.9.2
 - added: BitStream: serialize bools, ints and floats with bit precision. Good for critical network data compressing.
 - changed: Some editor scripts were outside the Editor folder causing build compilation issues.
-
 
 ### 1.9.1
 - added: Option: option (maybe) monad that represents the possibility of no value (better than passing null around)
@@ -131,7 +119,6 @@ Windows Store App (WSA) support!
 - changed: Fixed the script creator template error on Unity 5.6
 - changed: Some general code cleanup
 
-
 ### 1.9
 - added: RequireInterfaceAttribute: use it on a UnityEngine.Object reference to restricting its assignment
 - added: ShowImplementedInterfacesAttribute: show in inspector all the interfaces a component implements
@@ -140,7 +127,6 @@ Windows Store App (WSA) support!
 - added: RectExtensions.Center: given a Rect, it returns a center anchored copy with a width of "width"
 - changed: TweenShader: super overhaul. Now you can even test the tween from the editor (no play required).
 - changed: TweenPath: adding methods to play through the end and also backward
-
 
 ### 1.8
 - added: HashSetExtensions: similar to DictionaryExtensions but for HashSet
@@ -152,23 +138,19 @@ Windows Store App (WSA) support!
 - removed: ParticleSystemHelper: its functionality was not compliant with Unity's new way of handling ParticleSystems
 - removed: "Sort Components", "Move to Top", "Move to Bottom": this feature was a "hack". Since 5.5, it's broken because of some Unity internal refactorings.
 
-
 ### 1.7
 Shout out to Johannes
 - added: TweenPath: Interpolates a transform through a Bezier or linear path of control points
 - added: Fix small bug on Modifiable
 - added: Some other fixes and code improvements
 
-
 ### 1.6
 - added: Fix WebPlayer not compiling error.
-
 
 ### 1.5
 - added: BitStrap.Examples namespace: all examples are now inside of this namespace.
 - added: CircularBuffer: An insert optimized queue.
 - changed: Lots of small improvements
-
 
 ### 1.4
 - added: PropertyDrawerHelper: Methods that help to code a PropertyDrawer editor.
@@ -176,7 +158,6 @@ Shout out to Johannes
 - changed: Timer: Added Progress property. 0.0 when the timer just started to 1.0 when the timer finished and stopped.
 - changed: TimerDrawer: Enhanced the editor.
 - changed: RectExtensions: Left() and Right() behaviours were swapped when "width" was negative. This is more intuitive.
-
 
 ### 1.3
 - added: StaticReflectionHelper: Bunch of static reflection helper methods.
@@ -186,7 +167,6 @@ Shout out to Johannes
 - added: EditorPrefsProperties: Makes it easy to work with EditorPrefs treating them as properties.
 
 - added: ScriptCreator: Create C# Script and C# Editor Script through the "Assets > Create" menu.
-
 
 ### 1.2
 - added: ScriptableObjectCreator: create ScriptableObject instances by right-clicking its scripts;
@@ -202,7 +182,6 @@ Shout out to Johannes
 - changed: DictionaryExtensions: Added methods Count(), Any(), All() and ToStringFull();
 - changed: StringHelper: Get() is now Format();
 - changed: Modifiable<T>: Changed to Math folder; and created a nice Inspector editor;
-
 
 ### 1.1
 First public version.
