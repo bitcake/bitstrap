@@ -19,10 +19,10 @@ If you're unsure of how can BitStrap help you, here's a list of common use cases
 
 ## Getting started
 
-Easy! Since this is a Unity project, just download it and then continue from there.
-Alternatively, you can add all assets inside `Assets/BitStrap` to an already existing Unity project.
-
-It is also possible to import it directly from the [AssetStore](https://www.assetstore.unity3d.com/en/#!/content/51416).
+Use Unity's Package Manager and add from a git url:
+```
+https://github.com/bitcake/bitstrap.git#upm
+```
 
 ## Documentation
 
