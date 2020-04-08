@@ -60,7 +60,7 @@ of it as a "table of contents".
 
 ### [How to contribute](CONTRIBUTING.md)
 
-### [Changelog](Assets/BitStrap/Documentation/Changelog.txt)
+### [Changelog](Assets/CHANGELOG.md)
 
 ## Screenshots
 
