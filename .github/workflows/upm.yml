@@ -15,8 +15,6 @@ jobs:
       run: |
         git branch -d upm &> /dev/null || echo upm branch not found
         git subtree split -P "Assets" -b upm
-        cp LICENSE.md Assets/LICENSE.md
-        cp CHANGELOG.md Assets/CHANGELOG.md
         git checkout upm
         if [[ -d "Samples" ]]; then
           git mv Samples Samples~
