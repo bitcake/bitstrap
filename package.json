@@ -1,6 +1,6 @@
 {
 	"name": "com.bitcake.bitstrap",
-	"version": "1.20.0",
+	"version": "1.20.1",
 	"displayName": "BitStrap",
 	"description": "This is BitCake's set of useful tools and scripts that will let you quickly bootstrap a new Unity project.\r\nWe use it in our projects and hope it will be of help for yours too! :)",
 	"unity": "2019.1",
@@ -8,77 +8,77 @@
 		{
 			"displayName": "Animation",
 			"description": "Animation workflow enhancements BitStrap brings to you.",
-			"path": "Examples/Animation"
+			"path": "Samples~/Animation"
 		},
 		{
 			"displayName": "BlobSerializer",
 			"description": "Description of blob serializer",
-			"path": "Examples/BlobSerializer"
+			"path": "Samples~/BlobSerializer"
 		},
 		{
 			"displayName": "EditorGraph",
 			"description": "Description of editor graph",
-			"path": "Examples/EditorGraph"
+			"path": "Samples~/EditorGraph"
 		},
 		{
 			"displayName": "Extensions",
 			"description": "Description of extensions",
-			"path": "Examples/Extensions"
+			"path": "Samples~/Extensions"
 		},
 		{
 			"displayName": "Functional",
 			"description": "Description of functional",
-			"path": "Examples/Functional"
+			"path": "Samples~/Functional"
 		},
 		{
 			"displayName": "Graphic",
 			"description": "Description of graphic",
-			"path": "Examples/Graphic"
+			"path": "Samples~/Graphic"
 		},
 		{
 			"displayName": "Helpers",
 			"description": "Description of helpers",
-			"path": "Examples/Helpers"
+			"path": "Samples~/Helpers"
 		},
 		{
 			"displayName": "Inspector",
 			"description": "Description of inspector",
-			"path": "Examples/Inspector"
+			"path": "Samples~/Inspector"
 		},
 		{
 			"displayName": "Math",
 			"description": "Description of math",
-			"path": "Examples/Math"
+			"path": "Samples~/Math"
 		},
 		{
 			"displayName": "Physics",
 			"description": "Description of physics",
-			"path": "Examples/Physics"
+			"path": "Samples~/Physics"
 		},
 		{
 			"displayName": "References",
 			"description": "Description of references",
-			"path": "Examples/References"
+			"path": "Samples~/References"
 		},
 		{
 			"displayName": "Shaders",
 			"description": "Description of shaders",
-			"path": "Examples/Shaders"
+			"path": "Samples~/Shaders"
 		},
 		{
 			"displayName": "Tween",
 			"description": "Interpolate shader properties over time.",
-			"path": "Examples/Tween"
+			"path": "Samples~/Tween"
 		},
 		{
 			"displayName": "Util",
 			"description": "Description of util",
-			"path": "Examples/Util"
+			"path": "Samples~/Util"
 		},
 		{
 			"displayName": "WebApi",
 			"description": "Description of web api",
-			"path": "Examples/WebApi"
+			"path": "Samples~/WebApi"
 		}
 	]
 }
