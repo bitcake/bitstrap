@@ -1,9 +1,11 @@
 # Changelog
 
-### 1.21.0
-Fix the repository + UPM export
+### 1.21.1
+- fixed: shader editor prevented build
 
+### 1.21.0
 Now one needs to use the branch `upm` when importing in Unity's Package Manager
+- fixed: repository + UPM package export
 
 ### 1.19.0
 Migrating to Unity Package Manager
