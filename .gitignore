@@ -9,3 +9,5 @@ obj/
 *.csproj
 *.unitypackage
 omnisharp.json
+Logs/
+UserSettings/
