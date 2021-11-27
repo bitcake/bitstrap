@@ -9,7 +9,7 @@ public sealed class ColliderImporter : AssetPostprocessor
 {
     private void OnPostprocessModel(GameObject g)
     {
-        foreach (Transform child in g.transform)
+        foreach (Transform child in g.GetComponentsInChildren<Transform>())
         {
             String[] objectNameSplit = child.name.Split('_');
             switch (objectNameSplit[0])
