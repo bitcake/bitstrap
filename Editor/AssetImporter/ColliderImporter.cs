@@ -16,37 +16,33 @@ public sealed class ColliderImporter : AssetPostprocessor
             {
                 case "UBX":
                     child.gameObject.AddComponent<BoxCollider>();
-                    var boxMeshRenderer = child.gameObject.GetComponent<MeshRenderer>();
-                    var boxMeshFilter = child.gameObject.GetComponent<MeshFilter>();
-                    Object.DestroyImmediate(boxMeshRenderer);
-                    Object.DestroyImmediate(boxMeshFilter);
+                    RemoveMesh(child);
                     break;
                 
                 case "UCX":
                     MeshCollider meshCollider = child.gameObject.AddComponent<MeshCollider>();
                     meshCollider.convex = true;
-                    var convexMeshRenderer = child.gameObject.GetComponent<MeshRenderer>();
-                    var convexMeshFilter = child.gameObject.GetComponent<MeshFilter>();
-                    Object.DestroyImmediate(convexMeshRenderer);
-                    Object.DestroyImmediate(convexMeshFilter);
+                    RemoveMesh(child);
                     break;
                 
                 case "UCP":
                     child.gameObject.AddComponent<CapsuleCollider>();
-                    var capsuleMeshRenderer = child.gameObject.GetComponent<MeshRenderer>();
-                    var capsuleMeshFilter = child.gameObject.GetComponent<MeshFilter>();
-                    Object.DestroyImmediate(capsuleMeshRenderer);
-                    Object.DestroyImmediate(capsuleMeshFilter);
+                    RemoveMesh(child);
                     break;
                 
                 case "USP":
                     child.gameObject.AddComponent<SphereCollider>();
-                    var sphereMeshRenderer = child.gameObject.GetComponent<MeshRenderer>();
-                    var sphereMeshFilter = child.gameObject.GetComponent<MeshFilter>();
-                    Object.DestroyImmediate(sphereMeshRenderer);
-                    Object.DestroyImmediate(sphereMeshFilter);
+                    RemoveMesh(child);
                     break;
             }
         }
+    }
+
+    private static void RemoveMesh(Transform child)
+    {
+        var meshRenderer = child.gameObject.GetComponent<MeshRenderer>();
+        var meshFilter = child.gameObject.GetComponent<MeshFilter>();
+        Object.DestroyImmediate(meshRenderer);
+        Object.DestroyImmediate(meshFilter);
     }
 }
