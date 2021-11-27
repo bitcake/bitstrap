@@ -11,3 +11,6 @@ obj/
 omnisharp.json
 Logs/
 UserSettings/
+.idea/
+Assets/DoNotVersionControlThis/
+Assets/DoNotVersionControlThis.meta
