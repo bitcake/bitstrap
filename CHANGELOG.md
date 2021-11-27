@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.22
+- added: ColliderImporter: Follows Unreal Engine's Collision Meshes setup rules to automagically add Colliders to models. (https://docs.unrealengine.com/4.27/en-US/WorkingWithContent/Importing/FBX/StaticMeshes/)
+
 ### 1.21.1
 - fixed: shader editor prevented build
 
