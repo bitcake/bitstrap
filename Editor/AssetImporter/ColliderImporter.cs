@@ -25,7 +25,7 @@ public sealed class ColliderImporter : AssetPostprocessor
                     RemoveMesh(child);
                     break;
                 
-                case "UMX":
+                case "UME":
                     child.gameObject.AddComponent<MeshCollider>();
                     RemoveMesh(child);
                     break;
