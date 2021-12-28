@@ -49,6 +49,10 @@ Preset:
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: m_RemoveConstantScaleCurves
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: m_MotionNodeName
     value: 
     objectReference: {fileID: 0}
@@ -154,10 +158,14 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ImportCameras
-    value: 1
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ImportLights
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_NodeNameCollisionStrategy
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
@@ -182,7 +190,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: bakeAxisConversion
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_PreserveHierarchy
@@ -199,6 +207,10 @@ Preset:
   - target: {fileID: 0}
     propertyPath: minBoneWeight
     value: 0.001
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: optimizeBones
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: meshOptimizationFlags
