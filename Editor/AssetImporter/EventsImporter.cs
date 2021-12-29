@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using BitStrap;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public sealed class EventsImporter : AssetPostprocessor
 {
@@ -17,6 +13,9 @@ public sealed class EventsImporter : AssetPostprocessor
 	private void OnPostprocessAnimation(GameObject root, AnimationClip clip)
 	{
 		var eventsData = GetEventsJson();
+		if (eventsData == null)
+			return;
+		
 		foreach (var action in eventsData.ActionsMarkers)
 		{
 			var clipName = clip.name.Split('|');
@@ -40,6 +39,8 @@ public sealed class EventsImporter : AssetPostprocessor
 	{
 		var extension = Path.GetExtension(assetPath);
 		var jsonPath = assetPath.Replace(extension, "_events.json");
+		if (!File.Exists(jsonPath))
+			return null;
 		var jsonText = File.ReadAllText(jsonPath);
 		var animationData = JsonUtility.FromJson<AnimationEventsData>(jsonText);
 		

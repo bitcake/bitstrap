@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using BitStrap;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
