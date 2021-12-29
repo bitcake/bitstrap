@@ -7,6 +7,10 @@ using Object = UnityEngine.Object;
 
 public sealed class ColliderImporter : AssetPostprocessor
 {
+	public override int GetPostprocessOrder()
+	{
+		return 10;
+	}
     private void OnPostprocessModel(GameObject g)
     {
         foreach (Transform child in g.GetComponentsInChildren<Transform>())
