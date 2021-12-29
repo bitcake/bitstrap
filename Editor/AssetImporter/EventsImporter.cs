@@ -45,12 +45,4 @@ public sealed class EventsImporter : AssetPostprocessor
 		
 		return animationData;
 	}
-
-	private static void RemoveMesh(Transform child)
-    {
-        var meshRenderer = child.gameObject.GetComponent<MeshRenderer>();
-        var meshFilter = child.gameObject.GetComponent<MeshFilter>();
-        Object.DestroyImmediate(meshRenderer);
-        Object.DestroyImmediate(meshFilter);
-    }
 }
