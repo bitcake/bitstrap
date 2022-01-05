@@ -18,8 +18,8 @@ public sealed class EventsImporter : AssetPostprocessor
 		
 		foreach (var action in eventsData.ActionsMarkers)
 		{
-			var clipName = clip.name.Split('|');
-			if (clipName[1] == action.Name)
+			var clipName = clip.name.Split('|', 2);
+			if (clipName.Length == 2 && clipName[1] == action.Name)
 			{
 				List<AnimationEvent> allAnimationEvents = new List<AnimationEvent>();
 				foreach (var marker in action.Markers)

@@ -42,3 +42,7 @@ PresetManager:
         type: 2}
       m_Filter: glob:"SK_*.fbx"
       m_Disabled: 0
+    - m_Preset: {fileID: 2655988077585873504, guid: 5610357c12c40f44b87b8e29d22acb1d,
+        type: 2}
+      m_Filter: 
+      m_Disabled: 0

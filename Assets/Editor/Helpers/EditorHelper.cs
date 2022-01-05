@@ -81,6 +81,8 @@ namespace BitStrap
 			}
 		}
 
+		public static float singleLineHeight = EditorGUIUtility.singleLineHeight + 2.0f;
+		
 		private static string searchField = "";
 		private static Vector2 scroll = Vector2.zero;
 		private static Texture[] unityIcons = null;
@@ -203,7 +205,7 @@ namespace BitStrap
 		{
 			return GUILayoutUtility.GetRect( 0.0f, height, GUILayout.ExpandWidth( true ) );
 		}
-
+		
 		/// <summary>
 		/// Returns a GUIContent containing a label and the tooltip defined in GUI.tooltip.
 		/// </summary>
