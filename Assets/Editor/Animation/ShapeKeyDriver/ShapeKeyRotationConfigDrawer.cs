@@ -32,6 +32,7 @@ namespace BitStrap
             if (!property.isExpanded)
                 return;
 
+            // Draw Rotation Config
             var indentLevel = EditorGUI.indentLevel;
             using (IndentLevel.Do(indentLevel + 1))
             using (LabelWidth.Do(128.0f))
@@ -53,16 +54,47 @@ namespace BitStrap
                 if (rotationTypeProperty.enumValueIndex == (int)ShapeKeyRotationConfig.RotationType.SingleAxis)
                 {
                     var rotationAxisProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.rotationAxis);
-                    var startRotationProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.singleAxisStartRotation);
-                    var endRotationProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.singleAxisEndRotation);
+                    var startValueProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.singleAxisStartRotation);
+                    var endValueProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.singleAxisEndRotation);
                     
+                    // Draw Property
                     EditorGUI.PropertyField(row3, rotationAxisProperty);
                     
-                    EditorGUI.PropertyField(outLeftRect, startRotationProperty, startRotationLabel);
-                    if ( GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon"))) {}
+                    EditorGUI.PropertyField(outLeftRect, startValueProperty, startRotationLabel);
+                    if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                    {
+                        switch ((ShapeKeyRotationConfig.RotationAxis)rotationAxisProperty.enumValueIndex)
+                        {
+                            case ShapeKeyRotationConfig.RotationAxis.X:
+                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).x;
+                                break;
+                            case ShapeKeyRotationConfig.RotationAxis.Y:
+                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).y;
+                                break;
+                            case ShapeKeyRotationConfig.RotationAxis.Z:
+                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).z;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
                     
-                    EditorGUI.PropertyField(outRightRect, endRotationProperty, endRotationLabel);
-                    if ( GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon"))) {}
+                    EditorGUI.PropertyField(outRightRect, endValueProperty, endRotationLabel);
+                    if (GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                    {
+                        switch (rotationAxisProperty.enumValueIndex)
+                        {
+                            case 0:
+                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).x;
+                                break;
+                            case 1:
+                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).y;
+                                break;
+                            case 2:
+                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).z;
+                                break;
+                        }
+                    }
                 }
                 else
                 {
@@ -70,10 +102,16 @@ namespace BitStrap
                     var endRotationProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.multiAxisEndRotation);
                     
                     EditorGUI.PropertyField(outLeftRect, startRotationProperty, startRotationLabel);
-                    if ( GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon"))) {}
+                    if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                    {
+                        startRotationProperty.vector3Value = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform);
+                    }
                     
                     EditorGUI.PropertyField(outRightRect, endRotationProperty, endRotationLabel);
-                    if ( GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon"))) {}
+                    if (GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                    {
+                        endRotationProperty.vector3Value = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform);
+                    }
                 }
 
                 var curveLabel = new GUIContent("Curve");
@@ -82,6 +120,11 @@ namespace BitStrap
                 EditorGUI.PropertyField(row5, interpolationCurve, curveLabel);
                 
             }
+        }
+
+        private Vector3 GetDriverRotation(Transform transform)
+        {
+            return transform.localEulerAngles;
         }
     }
 }
