@@ -43,12 +43,10 @@ namespace BitStrap
                     var shapeKeyPositionProperty = property.GetMemberProperty<ShapeKeyRecipe>( k => k.shapeKeyPositionConfig);
                     EditorGUI.PropertyField(row2, shapeKeyPositionProperty);
                     break;
-                case ShapeKeyRecipe.DriverType.MecanimParameter:
-                    break;
-                case ShapeKeyRecipe.DriverType.Callback:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                // case ShapeKeyRecipe.DriverType.MecanimParameter:
+                //     break;
+                // case ShapeKeyRecipe.DriverType.Callback:
+                //     break;
             }
 
         }

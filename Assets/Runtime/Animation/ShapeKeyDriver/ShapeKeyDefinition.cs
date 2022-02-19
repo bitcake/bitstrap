@@ -57,7 +57,6 @@ public struct ShapeKeyPositionConfig
         OneAxis,
         TwoAxis,
         ThreeAxis,
-        DistanceFromTarget
     }
     
     public enum PositionOneAxis
@@ -136,8 +135,8 @@ public struct ShapeKeyRecipe
     {
         Rotation,
         Position,
-        MecanimParameter,
-        Callback,
+        // MecanimParameter,
+        // Callback,
     }
 
     public DriverType driverType;

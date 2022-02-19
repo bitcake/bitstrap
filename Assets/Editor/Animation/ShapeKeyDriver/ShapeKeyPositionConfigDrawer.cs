@@ -83,32 +83,51 @@ namespace BitStrap
                         EditorGUI.PropertyField(row3, axisProperty, positionAxisLabel);
 
                         row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                        leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
+                        rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
                         
                         var startValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.twoAxisStartPosition);
-                        EditorGUI.PropertyField(leftRect, startValueProperty, startPropertyLabel);
+                        EditorGUI.PropertyField(outLeftRect, startValueProperty, startPropertyLabel);
+                        
+                        if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                        {
+                            SetTwoAxis(axisProperty, startValueProperty, driverTransformProperty);
+                        }
                         
                         var endValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.twoAxisEndPosition);
-                        EditorGUI.PropertyField(rightRect, endValueProperty, endPropertyLabel);
+                        EditorGUI.PropertyField(outRightRect, endValueProperty, endPropertyLabel);
+                        
+                        if (GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                        {
+                            SetTwoAxis(axisProperty, endValueProperty, driverTransformProperty);
+                        }
                         
                         break;
                     }
                     case ShapeKeyPositionConfig.PositionType.ThreeAxis:
                     {
                         row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                        leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
+                        rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
 
                         var startValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>(k => k.threeAxisStartPosition);
-                        EditorGUI.PropertyField(leftRect, startValueProperty, startPropertyLabel);
+                        EditorGUI.PropertyField(outLeftRect, startValueProperty, startPropertyLabel);
+                        
+                        if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                        {
+                            SetThreeAxis(startValueProperty, driverTransformProperty);
+                        }
 
                         var endValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>(k => k.threeAxisEndPosition);
-                        EditorGUI.PropertyField(rightRect, endValueProperty, endPropertyLabel);
+                        EditorGUI.PropertyField(outRightRect, endValueProperty, endPropertyLabel);
+                        
+                        if (GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
+                        {
+                            SetThreeAxis(endValueProperty, driverTransformProperty);
+                        }
 
                         break;
                     }
-                    case ShapeKeyPositionConfig.PositionType.DistanceFromTarget:
-                        var targetTransformProperty = property.GetMemberProperty<ShapeKeyPositionConfig>(k => k.targetTransform);
-                        EditorGUI.PropertyField(row4, targetTransformProperty);
-                        
-                        break;
                 }
                 var interpolationCurve = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.interpolationCurve);
                 var curveLabel = new GUIContent("Curve");
@@ -121,22 +140,57 @@ namespace BitStrap
         private void SetOneAxis(SerializedProperty axisProperty, SerializedProperty propertyToSet,
             SerializedProperty driverTransformProperty)
         {
+            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
+            
             switch ((ShapeKeyPositionConfig.PositionOneAxis)axisProperty.enumValueIndex)
             {
                 case ShapeKeyPositionConfig.PositionOneAxis.X:
-                    propertyToSet.floatValue =
-                        GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform).x;
+                    propertyToSet.floatValue = driverPos.x;
                     break;
                 case ShapeKeyPositionConfig.PositionOneAxis.Y:
-                    propertyToSet.floatValue =
-                        GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform).y;
+                    propertyToSet.floatValue = driverPos.y;
                     break;
                 case ShapeKeyPositionConfig.PositionOneAxis.Z:
-                    propertyToSet.floatValue =
-                        GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform).z;
+                    propertyToSet.floatValue = driverPos.z;
                     break;
             }
         }
+        
+        private void SetTwoAxis(SerializedProperty axisProperty, SerializedProperty propertyToSet,
+            SerializedProperty driverTransformProperty)
+        {
+            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
+                
+            switch ((ShapeKeyPositionConfig.PositionTwoAxis)axisProperty.enumValueIndex)
+            {
+                case ShapeKeyPositionConfig.PositionTwoAxis.XY:
+                    propertyToSet.vector2Value = new Vector2(driverPos.x, driverPos.y);
+                    break;
+                case ShapeKeyPositionConfig.PositionTwoAxis.XZ:
+                    propertyToSet.vector2Value = new Vector2(driverPos.x, driverPos.z);
+                    break;
+                case ShapeKeyPositionConfig.PositionTwoAxis.YX:
+                    propertyToSet.vector2Value = new Vector2(driverPos.y, driverPos.x);
+                    break;
+                case ShapeKeyPositionConfig.PositionTwoAxis.YZ:
+                    propertyToSet.vector2Value = new Vector2(driverPos.y, driverPos.z);
+                    break;
+                case ShapeKeyPositionConfig.PositionTwoAxis.ZY:
+                    propertyToSet.vector2Value = new Vector2(driverPos.z, driverPos.y);
+                    break;
+                case ShapeKeyPositionConfig.PositionTwoAxis.ZX:
+                    propertyToSet.vector2Value = new Vector2(driverPos.z, driverPos.x);
+                    break;
+            }
+        }
+        
+        private void SetThreeAxis(SerializedProperty propertyToSet, SerializedProperty driverTransformProperty)
+        {
+            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
+               
+            propertyToSet.vector3Value = driverPos;
+        }
+        
 
         private Vector3 GetDriverPosition(Transform transform)
         {
