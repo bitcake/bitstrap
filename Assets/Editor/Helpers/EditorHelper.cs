@@ -81,7 +81,7 @@ namespace BitStrap
 			}
 		}
 
-		public static float singleLineHeight = EditorGUIUtility.singleLineHeight + 2.0f;
+		public static float SingleLineHeight = EditorGUIUtility.singleLineHeight + 2.0f;
 		
 		private static string searchField = "";
 		private static Vector2 scroll = Vector2.zero;

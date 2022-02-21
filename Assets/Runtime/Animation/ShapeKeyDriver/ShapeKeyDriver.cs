@@ -1,21 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using BitStrap;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 
 [ExecuteInEditMode]
-public class ShapeKeyDriver : MonoBehaviour
+public sealed class ShapeKeyDriver : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] private ShapeKeyRecipe shapeKeyRecipe;
     
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (shapeKeyRecipe.shapeKeyRotationConfig.driverTransform == null &&
             shapeKeyRecipe.shapeKeyPositionConfig.driverTransform == null)
@@ -144,9 +136,9 @@ public class ShapeKeyDriver : MonoBehaviour
                 var percentageZ = Mathf.InverseLerp(posConf.threeAxisStartPosition.z,
                     posConf.threeAxisEndPosition.z, currentPosition.z);
 
-                var percentageMedian = (percentageX + percentageY + percentageZ) / 3;
+                var percentageMean = (percentageX + percentageY + percentageZ) / 3;
                 
-                var interpolation = Mathf.Lerp(0, 100, posConf.interpolationCurve.Evaluate(percentageMedian));
+                var interpolation = Mathf.Lerp(0, 100, posConf.interpolationCurve.Evaluate(percentageMean));
                 skinnedMeshRenderer.SetBlendShapeWeight(shapeKeyRecipe.shapeKeyDefinition.index, interpolation);
                 
                 break;

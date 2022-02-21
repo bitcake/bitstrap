@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -135,6 +134,8 @@ public struct ShapeKeyRecipe
     {
         Rotation,
         Position,
+        
+        // TODO: implement
         // MecanimParameter,
         // Callback,
     }

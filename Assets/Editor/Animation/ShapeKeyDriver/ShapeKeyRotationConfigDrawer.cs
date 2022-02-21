@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,31 +6,32 @@ namespace BitStrap
     [CustomPropertyDrawer(typeof(ShapeKeyRotationConfig))]
     public class ShapeKeyRotationConfigDrawer : PropertyDrawer
     {
+        static readonly GUIContent CurveLabel = new GUIContent("Curve");
+
         public override float GetPropertyHeight( SerializedProperty property, GUIContent label )
         {
             if (property.isExpanded)
-                return EditorHelper.singleLineHeight * 8;
+                return EditorHelper.SingleLineHeight * 8;
             
-            return EditorHelper.singleLineHeight;
+            return EditorHelper.SingleLineHeight;
         }
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             PropertyDrawerHelper.LoadAttributeTooltip( this, label );
-            var row0 = position.Row(0);
-            var row1 = position.Row(1);
-            var row2 = position.Row(2);
-            var row3 = position.Row(3);
-            var row4 = position.Row(4);
-            var row5 = position.Row(5);
-
-            property.isExpanded = EditorGUI.Foldout(row0, property.isExpanded, label);
+            var rowFoldout = position.Row(0);
+            var rowDriverTransform = position.Row(1);
+            var rowRotationType = position.Row(2);
+            var rowAxis = position.Row(3);
+            var rowValues = position.Row(4);
+            var rowCurve = position.Row(5);
+            
+            property.isExpanded = EditorGUI.Foldout(rowFoldout, property.isExpanded, label);
 
             if (!property.isExpanded)
                 return;
 
             // Draw Rotation Config
-            var indentLevel = EditorGUI.indentLevel;
-            using (IndentLevel.Do(indentLevel + 1))
+            using (IndentLevel.Do(EditorGUI.indentLevel + 1))
             using (LabelWidth.Do(128.0f))
             {
                 var driverTransformProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.driverTransform);
@@ -44,12 +41,17 @@ namespace BitStrap
                 var startRotationLabel = new GUIContent("Start Rotation");
                 var endRotationLabel = new GUIContent("End Rotation");
                 
-                EditorGUI.PropertyField(row1, driverTransformProperty);
-                EditorGUI.PropertyField(row2, rotationTypeProperty);
+                EditorGUI.PropertyField(rowDriverTransform, driverTransformProperty);
+                EditorGUI.PropertyField(rowRotationType, rotationTypeProperty);
                 
-                row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
-                leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
-                rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
+                rowValues.Left(rowValues.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                leftRect.Right(26.0f, out var leftButtonRect).Left(-2.0f).Expand(out var outLeftRect);
+                rightRect.Right(26.0f, out var rightButtonRect).Left(-2.0f).Expand(out var outRightRect);
+
+                if (driverTransformProperty.objectReferenceValue == null)
+                    return;
+                
+                var driverTransformEulerAngles = ((Transform)driverTransformProperty.objectReferenceValue).localEulerAngles;
                 
                 if (rotationTypeProperty.enumValueIndex == (int)ShapeKeyRotationConfig.RotationType.SingleAxis)
                 {
@@ -58,7 +60,7 @@ namespace BitStrap
                     var endValueProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.singleAxisEndRotation);
                     
                     // Draw Property
-                    EditorGUI.PropertyField(row3, rotationAxisProperty);
+                    EditorGUI.PropertyField(rowAxis, rotationAxisProperty);
                     
                     EditorGUI.PropertyField(outLeftRect, startValueProperty, startRotationLabel);
                     if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
@@ -66,16 +68,14 @@ namespace BitStrap
                         switch ((ShapeKeyRotationConfig.RotationAxis)rotationAxisProperty.enumValueIndex)
                         {
                             case ShapeKeyRotationConfig.RotationAxis.X:
-                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).x;
+                                startValueProperty.floatValue = driverTransformEulerAngles.x;
                                 break;
                             case ShapeKeyRotationConfig.RotationAxis.Y:
-                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).y;
+                                startValueProperty.floatValue = driverTransformEulerAngles.y;
                                 break;
                             case ShapeKeyRotationConfig.RotationAxis.Z:
-                                startValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).z;
+                                startValueProperty.floatValue = driverTransformEulerAngles.z;
                                 break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
                         }
                     }
                     
@@ -85,13 +85,13 @@ namespace BitStrap
                         switch (rotationAxisProperty.enumValueIndex)
                         {
                             case 0:
-                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).x;
+                                endValueProperty.floatValue = driverTransformEulerAngles.x;
                                 break;
                             case 1:
-                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).y;
+                                endValueProperty.floatValue = driverTransformEulerAngles.y;
                                 break;
                             case 2:
-                                endValueProperty.floatValue = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform).z;
+                                endValueProperty.floatValue = driverTransformEulerAngles.z;
                                 break;
                         }
                     }
@@ -104,27 +104,21 @@ namespace BitStrap
                     EditorGUI.PropertyField(outLeftRect, startRotationProperty, startRotationLabel);
                     if (GUI.Button(leftButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
                     {
-                        startRotationProperty.vector3Value = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform);
+                        startRotationProperty.vector3Value = driverTransformEulerAngles;
                     }
                     
                     EditorGUI.PropertyField(outRightRect, endRotationProperty, endRotationLabel);
                     if (GUI.Button(rightButtonRect, EditorGUIUtility.IconContent("d_Transform Icon")))
                     {
-                        endRotationProperty.vector3Value = GetDriverRotation(driverTransformProperty.objectReferenceValue as Transform);
+                        endRotationProperty.vector3Value = driverTransformEulerAngles;
                     }
                 }
 
-                var curveLabel = new GUIContent("Curve");
                 
-                row5.height = EditorHelper.singleLineHeight * 3;
-                EditorGUI.PropertyField(row5, interpolationCurve, curveLabel);
+                rowCurve.height = EditorHelper.SingleLineHeight * 3;
+                EditorGUI.PropertyField(rowCurve, interpolationCurve, CurveLabel);
                 
             }
-        }
-
-        private Vector3 GetDriverRotation(Transform transform)
-        {
-            return transform.localEulerAngles;
         }
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,9 +9,9 @@ namespace BitStrap
         public override float GetPropertyHeight( SerializedProperty property, GUIContent label )
         {
             if (property.isExpanded)
-                return EditorHelper.singleLineHeight * 8;
+                return EditorHelper.SingleLineHeight * 8;
             
-            return EditorHelper.singleLineHeight;
+            return EditorHelper.SingleLineHeight;
         }
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -130,7 +126,7 @@ namespace BitStrap
                 var interpolationCurve = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.interpolationCurve);
                 var curveLabel = new GUIContent("Curve");
                 
-                rowCurve.height = EditorHelper.singleLineHeight * 3;
+                rowCurve.height = EditorHelper.SingleLineHeight * 3;
                 EditorGUI.PropertyField(rowCurve, interpolationCurve, curveLabel);
             }
         }
@@ -138,18 +134,18 @@ namespace BitStrap
         private void SetOneAxis(SerializedProperty axisProperty, SerializedProperty propertyToSet,
             SerializedProperty driverTransformProperty)
         {
-            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
+            var driverTransformPosition = ((Transform)driverTransformProperty.objectReferenceValue).position;
             
             switch ((ShapeKeyPositionConfig.PositionOneAxis)axisProperty.enumValueIndex)
             {
                 case ShapeKeyPositionConfig.PositionOneAxis.X:
-                    propertyToSet.floatValue = driverPos.x;
+                    propertyToSet.floatValue = driverTransformPosition.x;
                     break;
                 case ShapeKeyPositionConfig.PositionOneAxis.Y:
-                    propertyToSet.floatValue = driverPos.y;
+                    propertyToSet.floatValue = driverTransformPosition.y;
                     break;
                 case ShapeKeyPositionConfig.PositionOneAxis.Z:
-                    propertyToSet.floatValue = driverPos.z;
+                    propertyToSet.floatValue = driverTransformPosition.z;
                     break;
             }
         }
@@ -157,7 +153,9 @@ namespace BitStrap
         private void SetTwoAxis(SerializedProperty axisProperty, SerializedProperty propertyToSet,
             SerializedProperty driverTransformProperty)
         {
-            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
+            var driverTransformPosition = ((Transform)driverTransformProperty.objectReferenceValue).position;
+            
+            var driverPos = driverTransformPosition;
                 
             switch ((ShapeKeyPositionConfig.PositionTwoAxis)axisProperty.enumValueIndex)
             {
@@ -184,15 +182,9 @@ namespace BitStrap
         
         private void SetThreeAxis(SerializedProperty propertyToSet, SerializedProperty driverTransformProperty)
         {
-            var driverPos = GetDriverPosition(driverTransformProperty.objectReferenceValue as Transform);
-               
-            propertyToSet.vector3Value = driverPos;
-        }
-        
+            var driverTransformPosition = ((Transform)driverTransformProperty.objectReferenceValue).position;
 
-        private Vector3 GetDriverPosition(Transform transform)
-        {
-            return transform.position;
+            propertyToSet.vector3Value = driverTransformPosition;
         }
     }
 }

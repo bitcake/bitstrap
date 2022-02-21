@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -38,7 +34,7 @@ namespace BitStrap
                     }
                 }
                 
-                int currentIndex = Array.IndexOf(blendShapeNames, nameProperty.stringValue);
+                int currentIndex = System.Array.IndexOf(blendShapeNames, nameProperty.stringValue);
 
                 EditorGUI.BeginChangeCheck();
                 currentIndex = EditorGUI.Popup( position, label.text, currentIndex, blendShapeNames );
