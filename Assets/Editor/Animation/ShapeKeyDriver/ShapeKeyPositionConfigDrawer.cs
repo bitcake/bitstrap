@@ -20,28 +20,26 @@ namespace BitStrap
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             PropertyDrawerHelper.LoadAttributeTooltip( this, label );
-            var row0 = position.Row(0);
-            var row1 = position.Row(1);
-            var row2 = position.Row(2);
-            var row3 = position.Row(3);
-            var row4 = position.Row(4);
-            var row5 = position.Row(5);
+            var rowFoldout = position.Row(0);
+            var rowDriverTransform = position.Row(1);
+            var rowPositionType = position.Row(2);
+            var rowAxis = position.Row(3);
+            var rowValues = position.Row(4);
+            var rowCurve = position.Row(5);
 
-            property.isExpanded = EditorGUI.Foldout(row0, property.isExpanded, label);
-            
+            property.isExpanded = EditorGUI.Foldout(rowFoldout, property.isExpanded, label);
 
             if (!property.isExpanded)
                 return;
 
-            var indentLevel = EditorGUI.indentLevel;
-            using (IndentLevel.Do(indentLevel + 1))
+            using (IndentLevel.Do(EditorGUI.indentLevel + 1))
             using (LabelWidth.Do(128.0f))
             {
                 var driverTransformProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.driverTransform);
-                EditorGUI.PropertyField(row1, driverTransformProperty);
+                EditorGUI.PropertyField(rowDriverTransform, driverTransformProperty);
                 
                 var positionTypeProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.positionType);
-                EditorGUI.PropertyField(row2, positionTypeProperty);
+                EditorGUI.PropertyField(rowPositionType, positionTypeProperty);
                 
                 var startPropertyLabel = new GUIContent("Start Position");
                 var endPropertyLabel = new GUIContent("End Position");
@@ -52,11 +50,11 @@ namespace BitStrap
                     {
                         var axisProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.positionOneAxis);
                         var positionAxisLabel = new GUIContent("Axis");
-                        EditorGUI.PropertyField(row3, axisProperty, positionAxisLabel);
+                        EditorGUI.PropertyField(rowAxis, axisProperty, positionAxisLabel);
 
-                        row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
-                        leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
-                        rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
+                        rowValues.Left(rowValues.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                        leftRect.Right(26.0f, out var leftButtonRect).Left(-2.0f).Expand(out var outLeftRect);
+                        rightRect.Right(26.0f, out var rightButtonRect).Left(-2.0f).Expand(out var outRightRect);
 
                         var startValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.oneAxisStartPosition);
                         EditorGUI.PropertyField(outLeftRect, startValueProperty, startPropertyLabel);
@@ -80,11 +78,11 @@ namespace BitStrap
                     {
                         var axisProperty = property.GetMemberProperty<ShapeKeyPositionConfig>(k => k.positionTwoAxis);
                         var positionAxisLabel = new GUIContent("Axis");
-                        EditorGUI.PropertyField(row3, axisProperty, positionAxisLabel);
+                        EditorGUI.PropertyField(rowAxis, axisProperty, positionAxisLabel);
 
-                        row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
-                        leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
-                        rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
+                        rowValues.Left(rowValues.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                        leftRect.Right(26.0f, out var leftButtonRect).Left(-2.0f).Expand(out var outLeftRect);
+                        rightRect.Right(26.0f, out var rightButtonRect).Left(-2.0f).Expand(out var outRightRect);
                         
                         var startValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>( k => k.twoAxisStartPosition);
                         EditorGUI.PropertyField(outLeftRect, startValueProperty, startPropertyLabel);
@@ -106,9 +104,9 @@ namespace BitStrap
                     }
                     case ShapeKeyPositionConfig.PositionType.ThreeAxis:
                     {
-                        row4.Left(row4.width * 0.5f, out var leftRect).Expand(out var rightRect);
-                        leftRect.Right(26.0f, out var leftButtonRect).Left(-10.0f).Expand(out var outLeftRect);
-                        rightRect.Right(26.0f, out var rightButtonRect).Left(-10.0f).Expand(out var outRightRect);
+                        rowValues.Left(rowValues.width * 0.5f, out var leftRect).Expand(out var rightRect);
+                        leftRect.Right(26.0f, out var leftButtonRect).Left(-2.0f).Expand(out var outLeftRect);
+                        rightRect.Right(26.0f, out var rightButtonRect).Left(-2.0f).Expand(out var outRightRect);
 
                         var startValueProperty = property.GetMemberProperty<ShapeKeyPositionConfig>(k => k.threeAxisStartPosition);
                         EditorGUI.PropertyField(outLeftRect, startValueProperty, startPropertyLabel);
@@ -132,8 +130,8 @@ namespace BitStrap
                 var interpolationCurve = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.interpolationCurve);
                 var curveLabel = new GUIContent("Curve");
                 
-                row5.height = EditorHelper.singleLineHeight * 3;
-                EditorGUI.PropertyField(row5, interpolationCurve, curveLabel);
+                rowCurve.height = EditorHelper.singleLineHeight * 3;
+                EditorGUI.PropertyField(rowCurve, interpolationCurve, curveLabel);
             }
         }
 

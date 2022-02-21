@@ -10,6 +10,8 @@ namespace BitStrap
     [CustomPropertyDrawer(typeof(ShapeKeyDefinition))]
     public class ShapeKeyDrawer : PropertyDrawer
     {
+        string[] blendShapeNames = null;
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {   
             PropertyDrawerHelper.LoadAttributeTooltip( this, label );
@@ -26,18 +28,20 @@ namespace BitStrap
 
             if (skinnedMeshRenderer != null)
             {
-                var blendShapeCount = skinnedMeshRenderer.sharedMesh.blendShapeCount;
-                var blendShapeNames = new List<string>();
-                for (int i = 0; i < blendShapeCount; i++)
+                if (blendShapeNames == null)
                 {
-                    blendShapeNames.Add(skinnedMeshRenderer.sharedMesh.GetBlendShapeName(i));
+                    var blendShapeCount = skinnedMeshRenderer.sharedMesh.blendShapeCount;
+                    blendShapeNames = new string[blendShapeCount];
+                    for (int i = 0; i < blendShapeCount; i++)
+                    {
+                        blendShapeNames[i] = skinnedMeshRenderer.sharedMesh.GetBlendShapeName(i);
+                    }
                 }
                 
-                var popupOptions = blendShapeNames.Select( x => new GUIContent( x ) ).ToArray();
-                int currentIndex = blendShapeNames.IndexOf(nameProperty.stringValue);
+                int currentIndex = Array.IndexOf(blendShapeNames, nameProperty.stringValue);
 
                 EditorGUI.BeginChangeCheck();
-                currentIndex = EditorGUI.Popup( position, label, currentIndex, popupOptions );
+                currentIndex = EditorGUI.Popup( position, label.text, currentIndex, blendShapeNames );
 
                 if( EditorGUI.EndChangeCheck() )
                 {
