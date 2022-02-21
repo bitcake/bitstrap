@@ -4,21 +4,25 @@ using UnityEngine;
 [ExecuteInEditMode]
 public sealed class ShapeKeyDriver : MonoBehaviour
 {
-    [SerializeField] private SkinnedMeshRenderer skinnedMeshRenderer;
+    [SerializeField] public SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] private ShapeKeyRecipe shapeKeyRecipe;
     
     private void Update()
     {
-        if (shapeKeyRecipe.shapeKeyRotationConfig.driverTransform == null &&
-            shapeKeyRecipe.shapeKeyPositionConfig.driverTransform == null)
+        if (skinnedMeshRenderer == null)
             return;
         
         switch(shapeKeyRecipe.driverType)
         {
             case ShapeKeyRecipe.DriverType.Rotation:
+                Debug.Log("Cheguei");
+                if (shapeKeyRecipe.shapeKeyRotationConfig.driverTransform == null)
+                    return;
                 SwitchRotationConfig();
                 break;
             case ShapeKeyRecipe.DriverType.Position:
+                if (shapeKeyRecipe.shapeKeyPositionConfig.driverTransform == null)
+                    return;
                 SwitchPositionConfig();
                 break;
         }

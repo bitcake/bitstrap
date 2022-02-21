@@ -7,6 +7,7 @@ namespace BitStrap
     public class ShapeKeyRotationConfigDrawer : PropertyDrawer
     {
         static readonly GUIContent CurveLabel = new GUIContent("Curve");
+        private Vector3 driverTransformEulerAngles;
 
         public override float GetPropertyHeight( SerializedProperty property, GUIContent label )
         {
@@ -48,11 +49,9 @@ namespace BitStrap
                 leftRect.Right(26.0f, out var leftButtonRect).Left(-2.0f).Expand(out var outLeftRect);
                 rightRect.Right(26.0f, out var rightButtonRect).Left(-2.0f).Expand(out var outRightRect);
 
-                if (driverTransformProperty.objectReferenceValue == null)
-                    return;
-                
-                var driverTransformEulerAngles = ((Transform)driverTransformProperty.objectReferenceValue).localEulerAngles;
-                
+                if (driverTransformProperty.objectReferenceValue != null)
+                    driverTransformEulerAngles = ((Transform)driverTransformProperty.objectReferenceValue).localEulerAngles;
+
                 if (rotationTypeProperty.enumValueIndex == (int)ShapeKeyRotationConfig.RotationType.SingleAxis)
                 {
                     var rotationAxisProperty = property.GetMemberProperty<ShapeKeyRotationConfig>( k => k.rotationAxis);

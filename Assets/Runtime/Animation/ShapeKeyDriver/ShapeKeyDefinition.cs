@@ -7,6 +7,20 @@ public struct ShapeKeyDefinition
     public int index;
 }
 
+/// <summary>
+/// Lets you use ShapeKeyDefinition even when its MonoBehaviour does not have a sibling SkinnedMeshRenderer component.
+/// </summary>
+[System.AttributeUsage( System.AttributeTargets.Field, AllowMultiple = false, Inherited = true )]
+public sealed class SkinnedMeshRendererFieldAttribute : System.Attribute
+{
+    public string skinnedMeshRendererFieldName;
+
+    public SkinnedMeshRendererFieldAttribute( string skinnedMeshRendererFieldName )
+    {
+        this.skinnedMeshRendererFieldName = skinnedMeshRendererFieldName;
+    }
+}
+
 [System.Serializable]
 public struct ShapeKeyRotationConfig
 {

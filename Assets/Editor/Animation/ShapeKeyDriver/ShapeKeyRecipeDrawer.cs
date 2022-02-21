@@ -8,10 +8,7 @@ namespace BitStrap
     {
         public override float GetPropertyHeight( SerializedProperty property, GUIContent label )
         {
-            if (property.isExpanded)
-                return EditorHelper.SingleLineHeight * 10;
-            
-            return EditorHelper.SingleLineHeight;
+            return EditorHelper.SingleLineHeight * 10;
         }
         
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
