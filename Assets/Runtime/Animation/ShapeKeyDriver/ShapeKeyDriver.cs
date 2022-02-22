@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public sealed class ShapeKeyDriver : MonoBehaviour
 {
     [SerializeField] public SkinnedMeshRenderer skinnedMeshRenderer;
