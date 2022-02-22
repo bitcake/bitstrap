@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BitStrap
 {
@@ -20,8 +21,8 @@ namespace BitStrap
 		/// <returns></returns>
 		public static Rect Row( this Rect position, int rowNumber )
 		{
-			position.y += EditorGUIUtility.singleLineHeight * rowNumber;
-			position.height = EditorGUIUtility.singleLineHeight;
+			position.y += EditorHelper.SingleLineHeight * rowNumber;
+			position.height = EditorHelper.SingleLineHeight;
 
 			return position;
 		}
@@ -149,5 +150,6 @@ namespace BitStrap
 		{
 			target = position;
 		}
+		
 	}
 }
