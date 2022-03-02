@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.WSA;
 using Application = UnityEngine.Application;
 
 [System.Serializable]
@@ -19,13 +16,11 @@ public class BitFolder
 
 public class FolderStructure : EditorWindow
 {
-
     private const string jsonPath = "Editor/BitPipe/project_structure.json";
     public BitFolder bitFolder;
     private TextAsset jsonAsset;
 
     private SerializedObject so;
-    private SerializedProperty propBitFolder;
 
     [MenuItem( "Window/BitStrap/BitPipe" )]
     public static void OpenFolderStructure() => GetWindow<FolderStructure>();
@@ -34,7 +29,6 @@ public class FolderStructure : EditorWindow
     {
         so = new SerializedObject( this );
         bitFolder = new BitFolder();
-        propBitFolder = so.FindProperty( nameof( bitFolder ) );
         jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( "Assets/" + jsonPath );
         if( jsonAsset == null )
         {
@@ -49,13 +43,17 @@ public class FolderStructure : EditorWindow
     private void DrawBitFolder( BitFolder bitFolder )
     {
         EditorGUILayout.BeginHorizontal();
-        bitFolder.isExpanded = EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
-        bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName );
-        if( GUILayout.Button( "+", GUILayout.Width( 32 ) ) )
+        bitFolder.isExpanded =
+            EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
+        
+        // TextField for typing the name of the folders, delete any added WhiteSpaces
+        bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName ).Replace( " ", "" );
+        if( GUILayout.Button( "+", GUILayout.Width( 25 ) ) )
         {
             bitFolder.childFolders.Add( new BitFolder() );
         }
-        if( GUILayout.Button( "-", GUILayout.Width( 32 ) ) )
+
+        if( GUILayout.Button( "-", GUILayout.Width( 25 ) ) )
         {
             if( EditorUtility.DisplayDialog( "Are you sure?", $"Do you REALLY want to delete {bitFolder.folderName}?",
                 "Yes", "No" ) )
@@ -64,8 +62,8 @@ public class FolderStructure : EditorWindow
 
         EditorGUILayout.EndHorizontal();
         EditorGUI.indentLevel++;
-        
-        if(bitFolder.isExpanded)
+
+        if( bitFolder.isExpanded )
         {
             foreach( var folder in bitFolder.childFolders )
             {
@@ -78,7 +76,6 @@ public class FolderStructure : EditorWindow
             var folder = bitFolder.childFolders[index];
             if( folder.markedForDeletion )
                 bitFolder.childFolders.Remove( folder );
-                
         }
 
         EditorGUI.indentLevel--;
@@ -94,7 +91,29 @@ public class FolderStructure : EditorWindow
         {
             UpdateJson();
         }
+
+        GUILayout.Space( 20 );
+        if( GUILayout.Button( "Generate Folders", GUILayout.Height( 35 ) ) )
+        {
+            // if( EditorUtility.DisplayDialog( "Are you sure?", $"This will generate empty folders in your project.",
+            //     "Yes", "No" ) )
+            GenerateFolders( bitFolder, Application.dataPath );
+        }
+
         so.ApplyModifiedProperties();
+    }
+
+    private void GenerateFolders( BitFolder folder, string parentPath )
+    {
+        var path = parentPath + "/" + folder.folderName;
+        // Debug.Log( "Generated Path: " + path );
+        if( !Directory.Exists( path ) )
+            Directory.CreateDirectory( path );
+
+        foreach( var childFolder in folder.childFolders )
+        {
+            GenerateFolders( childFolder, path );
+        }
     }
 
     private void UpdateJson()
