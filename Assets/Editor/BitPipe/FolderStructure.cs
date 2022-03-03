@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -9,8 +10,8 @@ using Application = UnityEngine.Application;
 public class BitFolder
 {
     public string folderName;
-    public bool isExpanded = true;
-    public bool markedForDeletion;
+    [NonSerialized] public bool isExpanded = true;
+    [NonSerialized] public bool markedForDeletion;
     public List<BitFolder> childFolders = new();
 }
 
@@ -45,9 +46,12 @@ public class FolderStructure : EditorWindow
         EditorGUILayout.BeginHorizontal();
         bitFolder.isExpanded =
             EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
-        
+
         // TextField for typing the name of the folders, delete any added WhiteSpaces
-        bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName ).Replace( " ", "" );
+        bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName );
+        if( !string.IsNullOrEmpty( bitFolder.folderName ) )
+            bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
+        
         if( GUILayout.Button( "+", GUILayout.Width( 25 ) ) )
         {
             bitFolder.childFolders.Add( new BitFolder() );
@@ -98,6 +102,7 @@ public class FolderStructure : EditorWindow
             // if( EditorUtility.DisplayDialog( "Are you sure?", $"This will generate empty folders in your project.",
             //     "Yes", "No" ) )
             GenerateFolders( bitFolder, Application.dataPath );
+            AssetDatabase.Refresh();
         }
 
         so.ApplyModifiedProperties();
