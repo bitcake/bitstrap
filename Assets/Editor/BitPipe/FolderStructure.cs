@@ -20,14 +20,15 @@ namespace BitStrap
     {
         private const string jsonPath = "Editor/BitPipe/project_structure.json";
         private const string jsonRelativePath = "Assets/" + jsonPath;
-        public BitFolder bitFolder;
-        private TextAsset jsonAsset;
+        [NonSerialized] public BitFolder bitFolder;
+        [NonSerialized] private TextAsset jsonAsset;
 
+        
         private SerializedObject so;
 
         [MenuItem( "Window/BitStrap/BitPipe" )]
         public static void OpenFolderStructure() => GetWindow<FolderStructure>();
-
+        
         private void OnEnable()
         {
             so = new SerializedObject( this );
