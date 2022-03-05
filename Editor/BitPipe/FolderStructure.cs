@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.WSA;
+using Application = UnityEngine.Application;
 
 
 namespace BitStrap
@@ -12,6 +16,7 @@ namespace BitStrap
     {
         public string folderName;
         [NonSerialized] public bool isExpanded = true;
+        [NonSerialized] public bool locked = true;
         [NonSerialized] public bool markedForDeletion;
         public List<BitFolder> childFolders = new();
     }
@@ -23,12 +28,13 @@ namespace BitStrap
         [NonSerialized] public BitFolder bitFolder;
         [NonSerialized] private TextAsset jsonAsset;
 
-        
+        public static bool isRenamingWithBitPipe;
+
         private SerializedObject so;
 
         [MenuItem( "Window/BitStrap/BitPipe" )]
         public static void OpenFolderStructure() => GetWindow<FolderStructure>();
-        
+
         private void OnEnable()
         {
             so = new SerializedObject( this );
@@ -43,28 +49,68 @@ namespace BitStrap
             bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
         }
 
-        private void DrawBitFolder( BitFolder bitFolder )
+        private void DrawBitFolder( BitFolder bitFolder, string path )
         {
             EditorGUILayout.BeginHorizontal();
             bitFolder.isExpanded =
                 EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
 
-            // TextField for typing the name of the folders, delete any added WhiteSpaces
-            bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName );
-            if( !string.IsNullOrEmpty( bitFolder.folderName ) )
-                bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
+            if( bitFolder.folderName == null )
+                bitFolder.folderName = "";
+            var constructedPath = Path.Combine( path, bitFolder.folderName );
+            bool directoryExists = Directory.Exists( Path.Combine( constructedPath ) );
+            bool disabled = directoryExists && bitFolder.folderName != "" && bitFolder.locked;
 
-            if( GUILayout.Button( "+", GUILayout.Width( 25 ) ) )
+            if( directoryExists )
+            {
+                if( GUILayout.Button( new GUIContent( "R", "Rename this Pipeline Folder" ), GUILayout.Width( 25 ) ) )
+                {
+                    bitFolder.locked = !bitFolder.locked;
+                }
+            }
+
+            // TextField for typing the name of the folders
+            using( DisabledGroup.Do( disabled ) )
+            {
+                EditorGUI.BeginChangeCheck();
+                bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName );
+                // If player has renamed an existing directory here in BitPipe, rename the folder as well
+                if( EditorGUI.EndChangeCheck() && directoryExists )
+                {
+                    // Remove Whitespaces in case a smart guy tries to do it
+                    if( !string.IsNullOrEmpty( bitFolder.folderName ) )
+                        bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
+                    isRenamingWithBitPipe = true;
+                    FileUtil.MoveFileOrDirectory( constructedPath, Path.Combine(path, bitFolder.folderName) );
+                    FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
+                    FileUtil.DeleteFileOrDirectory( constructedPath );
+                    AssetDatabase.Refresh();
+                    bitFolder.locked = true;
+                }
+            }
+
+
+            
+            if( GUILayout.Button( new GUIContent( "+", "Create new Pipeline Folder" ), GUILayout.Width( 25 ) ) )
             {
                 bitFolder.childFolders.Add( new BitFolder() );
             }
 
-            if( GUILayout.Button( "-", GUILayout.Width( 25 ) ) )
+            if( GUILayout.Button( new GUIContent( "-", "Delete this Pipeline Folder" ), GUILayout.Width( 25 ) ) )
             {
-                if( EditorUtility.DisplayDialog( "Are you sure?",
+                if( EditorUtility.DisplayDialog( 
+                    "Are you sure?",
                     $"Do you REALLY want to delete {bitFolder.folderName}?",
                     "Yes", "No" ) )
+                {
                     bitFolder.markedForDeletion = true;
+                    if( directoryExists )
+                    {
+                        FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
+                        FileUtil.DeleteFileOrDirectory( constructedPath );
+                        AssetDatabase.Refresh();
+                    }
+                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -74,7 +120,7 @@ namespace BitStrap
             {
                 foreach( var folder in bitFolder.childFolders )
                 {
-                    DrawBitFolder( folder );
+                    DrawBitFolder( folder, constructedPath );
                 }
             }
 
@@ -93,7 +139,7 @@ namespace BitStrap
             so.Update();
             EditorGUILayout.LabelField( "BitPipe", EditorStyles.largeLabel );
             EditorGUI.BeginChangeCheck();
-            DrawBitFolder( bitFolder );
+            DrawBitFolder( bitFolder, "Assets/" );
             if( EditorGUI.EndChangeCheck() )
             {
                 UpdateJson();
@@ -102,8 +148,6 @@ namespace BitStrap
             GUILayout.Space( 20 );
             if( GUILayout.Button( "Generate Folders", GUILayout.Height( 35 ) ) )
             {
-                // if( EditorUtility.DisplayDialog( "Are you sure?", $"This will generate empty folders in your project.",
-                //     "Yes", "No" ) )
                 GenerateFolders( bitFolder, Application.dataPath );
                 AssetDatabase.Refresh();
             }
@@ -111,14 +155,14 @@ namespace BitStrap
             so.ApplyModifiedProperties();
         }
 
-        private void GenerateFolders( BitFolder folder, string parentPath )
+        private void GenerateFolders( BitFolder bitFolder, string parentPath )
         {
-            var path = parentPath + "/" + folder.folderName;
+            var path = Path.Combine( parentPath, bitFolder.folderName );
             // Debug.Log( "Generated Path: " + path );
             if( !Directory.Exists( path ) )
                 Directory.CreateDirectory( path );
 
-            foreach( var childFolder in folder.childFolders )
+            foreach( var childFolder in bitFolder.childFolders )
             {
                 GenerateFolders( childFolder, path );
             }
@@ -126,10 +170,23 @@ namespace BitStrap
 
         private void UpdateJson()
         {
+            SortBitFolders( bitFolder );
+
             File.WriteAllText( AssetDatabase.GetAssetPath( jsonAsset ), JsonUtility.ToJson( bitFolder, true ) );
             EditorUtility.SetDirty( jsonAsset );
             AssetDatabase.SaveAssets();
-            AssetDatabase.ImportAsset( "Assets/" + jsonPath );
+            AssetDatabase.ImportAsset( jsonRelativePath );
+        }
+
+        private void SortBitFolders( BitFolder bitFolder )
+        {
+            List<BitFolder> sortedFolders = bitFolder.childFolders.OrderBy( o => o.folderName ).ToList();
+            bitFolder.childFolders = sortedFolders;
+
+            foreach( var childFolder in bitFolder.childFolders )
+            {
+                SortBitFolders( childFolder );
+            }
         }
     }
 }
