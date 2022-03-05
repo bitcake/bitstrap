@@ -1,52 +1,33 @@
 {
     "folderName": "_project",
-    "isExpanded": true,
-    "markedForDeletion": false,
     "childFolders": [
         {
-            "folderName": "Test",
-            "isExpanded": true,
-            "markedForDeletion": false,
-            "childFolders": [
-                {
-                    "folderName": "Nois",
-                    "isExpanded": true,
-                    "markedForDeletion": false,
-                    "childFolders": []
-                },
-                {
-                    "folderName": "AgoraVai",
-                    "isExpanded": true,
-                    "markedForDeletion": false,
-                    "childFolders": []
-                }
-            ]
+            "folderName": "Art",
+            "childFolders": []
         },
         {
-            "folderName": "PenisGrande",
-            "isExpanded": true,
-            "markedForDeletion": false,
-            "childFolders": [
-                {
-                    "folderName": "Porran",
-                    "isExpanded": true,
-                    "markedForDeletion": false,
-                    "childFolders": []
-                },
-                {
-                    "folderName": "NaoFoi",
-                    "isExpanded": true,
-                    "markedForDeletion": false,
-                    "childFolders": [
-                        {
-                            "folderName": "Jeffersão",
-                            "isExpanded": true,
-                            "markedForDeletion": false,
-                            "childFolders": []
-                        }
-                    ]
-                }
-            ]
+            "folderName": "MaterialLibrary",
+            "childFolders": []
+        },
+        {
+            "folderName": "Prefabs",
+            "childFolders": []
+        },
+        {
+            "folderName": "Scenes",
+            "childFolders": []
+        },
+        {
+            "folderName": "Scripts",
+            "childFolders": []
+        },
+        {
+            "folderName": "Shaders",
+            "childFolders": []
+        },
+        {
+            "folderName": "VFX",
+            "childFolders": []
         }
     ]
 }

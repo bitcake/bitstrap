@@ -29,6 +29,11 @@ namespace BitStrap
 
             if( !Directory.Exists( folderPath ) )
             {
+                if( FolderStructure.isRenamingWithBitPipe )
+                {
+                    FolderStructure.isRenamingWithBitPipe = false;
+                    return;
+                }
                 Undo.PerformUndo();
                 Debug.LogError( "This folder is part of this Project's Pipeline, you cannot rename it! Please use BitPipe if you REALLY want to do it." );
                 return;
