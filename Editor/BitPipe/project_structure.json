@@ -26,6 +26,15 @@
             "childFolders": []
         },
         {
+            "folderName": "Tools",
+            "childFolders": [
+                {
+                    "folderName": "Editor",
+                    "childFolders": []
+                }
+            ]
+        },
+        {
             "folderName": "VFX",
             "childFolders": []
         }

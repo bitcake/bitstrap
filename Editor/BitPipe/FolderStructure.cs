@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.WSA;
 using Application = UnityEngine.Application;
 
@@ -51,69 +53,81 @@ namespace BitStrap
 
         private void DrawBitFolder( BitFolder bitFolder, string path )
         {
-            EditorGUILayout.BeginHorizontal();
-            bitFolder.isExpanded =
-                EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
+            string bitFolderFolderName = bitFolder.folderName;
+            if( bitFolderFolderName == null )
+                bitFolderFolderName = "";
 
-            if( bitFolder.folderName == null )
-                bitFolder.folderName = "";
-            var constructedPath = Path.Combine( path, bitFolder.folderName );
-            bool directoryExists = Directory.Exists( Path.Combine( constructedPath ) );
-            bool disabled = directoryExists && bitFolder.folderName != "" && bitFolder.locked;
+            var constructedPath = Path.Combine( path, bitFolderFolderName );
 
-            if( directoryExists )
+            using( Horizontal.Do() )
             {
-                if( GUILayout.Button( new GUIContent( "R", "Rename this Pipeline Folder" ), GUILayout.Width( 25 ) ) )
+                bitFolder.isExpanded =
+                    EditorGUILayout.Toggle( bitFolder.isExpanded, EditorStyles.foldoutHeader, GUILayout.Width( 16 ) );
+
+
+                bool directoryExists = Directory.Exists( Path.Combine( constructedPath ) );
+                bool disabled = directoryExists && bitFolderFolderName != "" && bitFolder.locked;
+
+                if( directoryExists )
                 {
-                    bitFolder.locked = !bitFolder.locked;
-                }
-            }
-
-            // TextField for typing the name of the folders
-            using( DisabledGroup.Do( disabled ) )
-            {
-                EditorGUI.BeginChangeCheck();
-                bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolder.folderName );
-                // If player has renamed an existing directory here in BitPipe, rename the folder as well
-                if( EditorGUI.EndChangeCheck() && directoryExists )
-                {
-                    // Remove Whitespaces in case a smart guy tries to do it
-                    if( !string.IsNullOrEmpty( bitFolder.folderName ) )
-                        bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
-                    isRenamingWithBitPipe = true;
-                    FileUtil.MoveFileOrDirectory( constructedPath, Path.Combine(path, bitFolder.folderName) );
-                    FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
-                    FileUtil.DeleteFileOrDirectory( constructedPath );
-                    AssetDatabase.Refresh();
-                    bitFolder.locked = true;
-                }
-            }
-
-
-            
-            if( GUILayout.Button( new GUIContent( "+", "Create new Pipeline Folder" ), GUILayout.Width( 25 ) ) )
-            {
-                bitFolder.childFolders.Add( new BitFolder() );
-            }
-
-            if( GUILayout.Button( new GUIContent( "-", "Delete this Pipeline Folder" ), GUILayout.Width( 25 ) ) )
-            {
-                if( EditorUtility.DisplayDialog( 
-                    "Are you sure?",
-                    $"Do you REALLY want to delete {bitFolder.folderName}?",
-                    "Yes", "No" ) )
-                {
-                    bitFolder.markedForDeletion = true;
-                    if( directoryExists )
+                    if( GUILayout.Button( new GUIContent( "R", "Rename this Pipeline Folder" ),
+                        GUILayout.Width( 25 ) ) )
                     {
+                        bitFolder.locked = !bitFolder.locked;
+                    }
+                }
+
+                // TextField for typing the name of the folders
+                using( DisabledGroup.Do( disabled ) )
+                {
+                    EditorGUI.BeginChangeCheck();
+
+                    bitFolder.folderName = EditorGUILayout.DelayedTextField( bitFolderFolderName );
+
+                    // If player has renamed an existing directory here in BitPipe, rename the folder as well
+                    if( EditorGUI.EndChangeCheck() && directoryExists )
+                    {
+                        isRenamingWithBitPipe = true;
+
+                        // Remove Whitespaces in case a smart guy tries to do it
+                        if( !string.IsNullOrEmpty( bitFolder.folderName ) )
+                            bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
+
+                        var destPath = Path.Combine( path, bitFolder.folderName );
+                        if( !Directory.Exists( destPath ) )
+                            return;
+
+                        FileUtil.MoveFileOrDirectory( constructedPath, destPath );
                         FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
                         FileUtil.DeleteFileOrDirectory( constructedPath );
                         AssetDatabase.Refresh();
+                        bitFolder.locked = true;
+                    }
+                }
+
+
+                if( GUILayout.Button( new GUIContent( "+", "Create new Pipeline Folder" ), GUILayout.Width( 25 ) ) )
+                {
+                    bitFolder.childFolders.Add( new BitFolder() );
+                }
+
+                if( GUILayout.Button( new GUIContent( "-", "Delete this Pipeline Folder" ), GUILayout.Width( 25 ) ) )
+                {
+                    if( EditorUtility.DisplayDialog(
+                        "Are you sure?",
+                        $"Do you REALLY want to delete {bitFolderFolderName}?",
+                        "Yes", "No" ) )
+                    {
+                        bitFolder.markedForDeletion = true;
+                        if( directoryExists )
+                        {
+                            FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
+                            FileUtil.DeleteFileOrDirectory( constructedPath );
+                            AssetDatabase.Refresh();
+                        }
                     }
                 }
             }
-
-            EditorGUILayout.EndHorizontal();
             EditorGUI.indentLevel++;
 
             if( bitFolder.isExpanded )
@@ -123,6 +137,7 @@ namespace BitStrap
                     DrawBitFolder( folder, constructedPath );
                 }
             }
+
 
             for( var index = bitFolder.childFolders.Count - 1; index >= 0; index-- )
             {
