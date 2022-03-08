@@ -11,6 +11,7 @@ namespace BitStrap
         
         private void OnPreprocessAsset()
         {
+            Debug.Log( assetPath );
             // Checks if asset is a file or directory
             FileAttributes attr = File.GetAttributes( assetPath );
             
