@@ -6,12 +6,11 @@ namespace BitStrap
 {
     public class FolderStructureMaintainer : AssetPostprocessor
     {
-        private const string jsonPath = "Assets/Editor/BitPipe/project_structure.json";
+        private const string jsonPath = "Assets/project_structure.json";
 
         
         private void OnPreprocessAsset()
         {
-            Debug.Log( assetPath );
             // Checks if asset is a file or directory
             FileAttributes attr = File.GetAttributes( assetPath );
             
