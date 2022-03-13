@@ -25,7 +25,7 @@ namespace BitStrap
 
     public class FolderStructure : EditorWindow
     {
-        private const string jsonPath = "Editor/BitPipe/project_structure.json";
+        private const string jsonPath = "project_structure.json";
         private const string jsonRelativePath = "Assets/" + jsonPath;
         [NonSerialized] public BitFolder bitFolder;
         [NonSerialized] private TextAsset jsonAsset;
@@ -88,16 +88,25 @@ namespace BitStrap
                     if( EditorGUI.EndChangeCheck() && directoryExists )
                     {
                         isRenamingWithBitPipe = true;
-
+                        
                         // Remove Whitespaces in case a smart guy tries to do it
                         if( !string.IsNullOrEmpty( bitFolder.folderName ) )
                             bitFolder.folderName = bitFolder.folderName.Replace( " ", "" );
 
                         var destPath = Path.Combine( path, bitFolder.folderName );
-                        if( !Directory.Exists( destPath ) )
-                            return;
+                        if( Directory.Exists( destPath ) )
+                            if( EditorUtility.DisplayDialog(
+                                "Are you sure?",
+                                $"This will replace\n{constructedPath} with {destPath}!\nYou will DESTROY all files inside {destPath}, proceed?",
+                                "Yes", "No" ) )
+                            {
+                                FileUtil.ReplaceDirectory( constructedPath, destPath );
+                            }
+                            else
+                                return;
+                        else
+                            FileUtil.MoveFileOrDirectory( constructedPath, destPath );
 
-                        FileUtil.MoveFileOrDirectory( constructedPath, destPath );
                         FileUtil.DeleteFileOrDirectory( constructedPath + ".meta" );
                         FileUtil.DeleteFileOrDirectory( constructedPath );
                         AssetDatabase.Refresh();
