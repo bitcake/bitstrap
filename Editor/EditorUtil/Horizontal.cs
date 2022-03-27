@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BitStrap
 {
-	public sealed class Horizontal : System.IDisposable
+	public struct Horizontal : System.IDisposable
 	{
 		public readonly Rect rect;
 
