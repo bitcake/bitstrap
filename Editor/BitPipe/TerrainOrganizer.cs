@@ -48,6 +48,7 @@ namespace BitStrap
                     var resourcesFolder = BitPipeHelper.CreateResourcesFolder( activeScenePath );
                         
                     var terrainNewPath = Path.Join( resourcesFolder, terrainTargetName );
+                    terrainNewPath = AssetDatabase.GenerateUniqueAssetPath( terrainNewPath );
                     
                     // Debug.Log( $"Initial Path {terrainOriginalPath}, New Terrain Path {terrainNewPath}" );
                     
