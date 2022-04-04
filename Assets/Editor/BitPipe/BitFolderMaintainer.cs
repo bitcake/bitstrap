@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BitStrap
 {
-    public class FolderStructureMaintainer : AssetPostprocessor
+    public class BitFolderMaintainer : AssetPostprocessor
     {
         private const string jsonPath = "Assets/project_structure.json";
 
@@ -29,9 +29,9 @@ namespace BitStrap
 
             if( !Directory.Exists( folderPath ) )
             {
-                if( FolderStructure.isRenamingWithBitPipe )
+                if( BitPipeWindow.isRenamingWithBitPipe )
                 {
-                    FolderStructure.isRenamingWithBitPipe = false;
+                    BitPipeWindow.isRenamingWithBitPipe = false;
                     return;
                 }
                 Undo.PerformUndo();

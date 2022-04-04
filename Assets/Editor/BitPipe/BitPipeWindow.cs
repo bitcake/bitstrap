@@ -2,31 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
 using UnityEditor;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
-using UnityEngine.WSA;
 using Application = UnityEngine.Application;
 
 
 namespace BitStrap
 {
-    [System.Serializable]
-    public class BitFolder
+    public class BitPipeWindow : EditorWindow
     {
-        public string folderName;
-        [NonSerialized] public bool isExpanded = true;
-        [NonSerialized] public bool locked = true;
-        [NonSerialized] public bool markedForDeletion;
-        public List<BitFolder> childFolders = new();
-    }
-
-    public class FolderStructure : EditorWindow
-    {
-        private const string jsonPath = "project_structure.json";
-        private const string jsonRelativePath = "Assets/" + jsonPath;
+        private const string JsonRelativePath = "Assets/project_structure.json";
         [NonSerialized] public BitFolder bitFolder;
         [NonSerialized] private TextAsset jsonAsset;
 
@@ -35,20 +20,12 @@ namespace BitStrap
         private SerializedObject so;
 
         [MenuItem( "Window/BitStrap/BitPipe" )]
-        public static void OpenFolderStructure() => GetWindow<FolderStructure>();
+        public static void OpenFolderStructure() => GetWindow<BitPipeWindow>();
 
         private void OnEnable()
         {
             so = new SerializedObject( this );
-            jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( jsonRelativePath );
-            if( jsonAsset == null )
-            {
-                File.WriteAllText( Path.Combine( Application.dataPath, jsonPath ), "{}" );
-                AssetDatabase.ImportAsset( jsonRelativePath );
-                jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( jsonRelativePath );
-            }
-
-            bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
+            bitFolder = BitFolderManager.LoadBitFolderFromJson();
         }
 
         private void DrawBitFolder( BitFolder bitFolder, string path )
@@ -169,6 +146,13 @@ namespace BitStrap
                 UpdateJson();
             }
 
+            if(!BitFolderManager.CheckFolderExists( bitFolder, "Scenes" ))
+            {
+                GUILayout.Space( 20 );
+                EditorGUILayout.HelpBox( "You need a Folder with the name \'Scenes\' for BitPipe to work correctly!",
+                    MessageType.Warning, true );
+            }
+            
             GUILayout.Space( 20 );
             if( GUILayout.Button( "Generate Folders", GUILayout.Height( 35 ) ) )
             {
@@ -199,7 +183,7 @@ namespace BitStrap
             File.WriteAllText( AssetDatabase.GetAssetPath( jsonAsset ), JsonUtility.ToJson( bitFolder, true ) );
             EditorUtility.SetDirty( jsonAsset );
             AssetDatabase.SaveAssets();
-            AssetDatabase.ImportAsset( jsonRelativePath );
+            AssetDatabase.ImportAsset( JsonRelativePath );
         }
 
         private void SortBitFolders( BitFolder bitFolder )
