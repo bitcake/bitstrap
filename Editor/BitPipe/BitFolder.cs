@@ -19,7 +19,7 @@ namespace BitStrap
     public class BitFolderManager
     {
         public const string BitFolderJsonPath = "Assets/project_structure.json";
-        
+
         public static BitFolder LoadBitFolderFromJson()
         {
             string jsonFileName = "project_structure.json";
@@ -35,13 +35,14 @@ namespace BitStrap
             var bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
             return bitFolder;
         }
-        
-        public static string GetBitPipeFolderPath( BitFolder bitFolder, string folderToGetPath, string initialRelativePath="Assets/" )
+
+        public static string GetBitPipeFolderPath( BitFolder bitFolder, string folderToGetPath,
+            string initialRelativePath = "Assets/" )
         {
             var folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
             if( bitFolder.folderName == folderToGetPath )
                 return folderPath;
-        
+
             foreach( var childFolder in bitFolder.childFolders )
             {
                 var childFolderPath = GetBitPipeFolderPath( childFolder, folderToGetPath, folderPath );
@@ -51,13 +52,14 @@ namespace BitStrap
 
             return "";
         }
-        
+
         public static bool CheckFolderNameExists( BitFolder bitFolder, string folderNameToCheck )
         {
             if( bitFolder.folderName == folderNameToCheck )
             {
                 return true;
-            }        
+            }
+
             foreach( var childFolder in bitFolder.childFolders )
             {
                 CheckFolderNameExists( childFolder, folderNameToCheck );
@@ -69,14 +71,15 @@ namespace BitStrap
 
             return false;
         }
-        
-        public static bool CheckFolderPathExists( BitFolder bitFolder, string pathToCheck, string initialRelativePath="Assets/" )
+
+        public static bool CheckFolderPathExists( BitFolder bitFolder, string pathToCheck,
+            string initialRelativePath = "Assets/" )
         {
             var folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
             folderPath = folderPath.Replace( "\\", "/" );
             if( pathToCheck == folderPath )
                 return true;
-        
+
             foreach( var childFolder in bitFolder.childFolders )
             {
                 var childFolderPath = CheckFolderPathExists( childFolder, pathToCheck, folderPath );
