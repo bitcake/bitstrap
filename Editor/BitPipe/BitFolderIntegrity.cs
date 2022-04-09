@@ -15,9 +15,11 @@ public class CustomAssetModificationProcessor : AssetModificationProcessor
         if( isFile )
             return AssetMoveResult.DidNotMove;
 
+        if (!File.Exists( BitFolderManager.BitFolderJsonPath ))
+            return AssetMoveResult.DidNotMove;
+        
         var dirName = Path.GetFileName( sourcePath );
-        var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderManager.BitFolderJsonPath );
-        var bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
+        var bitFolder = BitFolderManager.LoadBitFolderFromJson();
         var folderNameExists = BitFolderManager.CheckFolderNameExists( bitFolder, dirName );
 
         if( folderNameExists )
@@ -33,13 +35,13 @@ public class CustomAssetModificationProcessor : AssetModificationProcessor
     {
         var isFile = File.Exists( assetPath );
         if( isFile )
-        {
             return AssetDeleteResult.DidNotDelete;
-        }
+        
+        if (!File.Exists( BitFolderManager.BitFolderJsonPath ))
+            return AssetDeleteResult.DidDelete;
 
         var dirName = Path.GetFileName( assetPath );
-        var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderManager.BitFolderJsonPath );
-        var bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
+        var bitFolder = BitFolderManager.LoadBitFolderFromJson();
         var folderNameExists = BitFolderManager.CheckFolderNameExists( bitFolder, dirName );
 
         if( folderNameExists )
