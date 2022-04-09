@@ -18,19 +18,20 @@ namespace BitStrap
 
     public class BitFolderManager
     {
+        public const string BitFolderJsonPath = "Assets/project_structure.json";
+        
         public static BitFolder LoadBitFolderFromJson()
         {
-            string jsonPath = "project_structure.json";
-            string jsonRelativePath = "Assets/" + jsonPath;
+            string jsonFileName = "project_structure.json";
             TextAsset jsonAsset;
             BitFolder bitFolder;
 
-            jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( jsonRelativePath );
+            jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             if( jsonAsset == null )
             {
-                File.WriteAllText( Path.Combine( Application.dataPath, jsonPath ), "{}" );
-                AssetDatabase.ImportAsset( jsonRelativePath );
-                jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( jsonRelativePath );
+                File.WriteAllText( Path.Combine( Application.dataPath, jsonFileName ), "{}" );
+                AssetDatabase.ImportAsset( BitFolderJsonPath );
+                jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             }
 
             bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
@@ -53,21 +54,36 @@ namespace BitStrap
             return "";
         }
         
-        public static bool CheckFolderExists( BitFolder bitFolder, string folderToCheck )
+        public static bool CheckFolderNameExists( BitFolder bitFolder, string folderNameToCheck )
         {
-            if( bitFolder.folderName == folderToCheck )
+            if( bitFolder.folderName == folderNameToCheck )
             {
-                Debug.Log( "ACHOOOOOOOOU" );
                 return true;
             }        
             foreach( var childFolder in bitFolder.childFolders )
             {
-                CheckFolderExists( childFolder, folderToCheck );
-                if( childFolder.folderName == folderToCheck )
+                CheckFolderNameExists( childFolder, folderNameToCheck );
+                if( childFolder.folderName == folderNameToCheck )
                 {
-                    Debug.Log( "ACHOOOOOOOOU NOS FILHO" );
                     return true;
                 }
+            }
+
+            return false;
+        }
+        
+        public static bool CheckFolderPathExists( BitFolder bitFolder, string pathToCheck, string initialRelativePath="Assets/" )
+        {
+            var folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
+            folderPath = folderPath.Replace( "\\", "/" );
+            if( pathToCheck == folderPath )
+                return true;
+        
+            foreach( var childFolder in bitFolder.childFolders )
+            {
+                var childFolderPath = CheckFolderPathExists( childFolder, pathToCheck, folderPath );
+                if( childFolderPath )
+                    return true;
             }
 
             return false;
