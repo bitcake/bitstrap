@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BitStrap
@@ -17,6 +18,12 @@ namespace BitStrap
 
         static void CheckForPersistentScene( Scene scene, OpenSceneMode mode )
         {
+            if( !File.Exists( BitFolderManager.BitFolderJsonPath ) )
+            {
+                Debug.LogWarning( "Please use BitPipe to create your Folder Structure and organize Scene files" );
+                return;
+            }
+            
             var activeScene = SceneManager.GetActiveScene();
             var parentDirName = Directory.GetParent( scene.path )?.Name;
             var scenePathDir = Directory.GetParent( scene.path )?.FullName;

@@ -38,7 +38,7 @@ public class CustomAssetModificationProcessor : AssetModificationProcessor
             return AssetDeleteResult.DidNotDelete;
 
         if( !File.Exists( BitFolderManager.BitFolderJsonPath ) )
-            return AssetDeleteResult.DidDelete;
+            return AssetDeleteResult.DidNotDelete;
 
         var dirName = Path.GetFileName( assetPath );
         var bitFolder = BitFolderManager.LoadBitFolderFromJson();

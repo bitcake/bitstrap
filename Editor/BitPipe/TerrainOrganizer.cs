@@ -50,8 +50,6 @@ namespace BitStrap
                     var terrainNewPath = Path.Join( resourcesFolder, terrainTargetName );
                     terrainNewPath = AssetDatabase.GenerateUniqueAssetPath( terrainNewPath );
                     
-                    // Debug.Log( $"Initial Path {terrainOriginalPath}, New Terrain Path {terrainNewPath}" );
-                    
                     AssetDatabase.MoveAsset( terrainOriginalPath, terrainNewPath );
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
