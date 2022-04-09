@@ -23,10 +23,8 @@ namespace BitStrap
         public static BitFolder LoadBitFolderFromJson()
         {
             string jsonFileName = "project_structure.json";
-            TextAsset jsonAsset;
-            BitFolder bitFolder;
 
-            jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             if( jsonAsset == null )
             {
                 File.WriteAllText( Path.Combine( Application.dataPath, jsonFileName ), "{}" );
@@ -34,7 +32,7 @@ namespace BitStrap
                 jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             }
 
-            bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
+            var bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
             return bitFolder;
         }
         
