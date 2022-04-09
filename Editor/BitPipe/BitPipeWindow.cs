@@ -146,7 +146,7 @@ namespace BitStrap
                 UpdateJson();
             }
 
-            if(!BitFolderManager.CheckFolderExists( bitFolder, "Scenes" ))
+            if(!BitFolderManager.CheckFolderNameExists( bitFolder, "Scenes" ))
             {
                 GUILayout.Space( 20 );
                 EditorGUILayout.HelpBox( "You need a Folder with the name \'Scenes\' for BitPipe to work correctly!",
