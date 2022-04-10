@@ -14,6 +14,18 @@ namespace BitStrap
         [NonSerialized] public bool locked = true;
         [NonSerialized] public bool markedForDeletion;
         public List<BitFolder> childFolders = new();
+        public BitFolder parentFolder;
+
+        public BitFolder GetChildBitFolderOfName( string childFolderName )
+        {
+            foreach( var childFolder in childFolders )
+            {
+                if( childFolder.folderName == childFolderName )
+                    return childFolder;
+            }
+
+            return null;
+        }
     }
 
     public class BitFolderManager
@@ -33,40 +45,47 @@ namespace BitStrap
             }
 
             var bitFolder = JsonUtility.FromJson<BitFolder>( jsonAsset.text );
+            SetUpParentReferences( bitFolder );
             return bitFolder;
         }
 
-        public static string GetBitPipeFolderPath( BitFolder bitFolder, string folderToGetPath,
-            string initialRelativePath = "Assets/" )
+        private static void SetUpParentReferences( BitFolder bitFolder )
         {
-            var folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
+            foreach( var childFolder in bitFolder.childFolders )
+            {
+                childFolder.parentFolder = bitFolder;
+                SetUpParentReferences( childFolder );
+            }
+        }
+        
+        public static bool GetBitPipeFolderPath( BitFolder bitFolder, string folderToGetPath,
+            out string folderPath, string initialRelativePath = "Assets/" )
+        {
+            folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
             if( bitFolder.folderName == folderToGetPath )
-                return folderPath;
+                return true;
 
             foreach( var childFolder in bitFolder.childFolders )
             {
-                var childFolderPath = GetBitPipeFolderPath( childFolder, folderToGetPath, folderPath );
-                if( childFolder.folderName == folderToGetPath )
-                    return childFolderPath;
+                if( GetBitPipeFolderPath( childFolder, folderToGetPath, out var outFolderPath, folderPath ) )
+                {
+                    folderPath = outFolderPath;
+                    return true;
+                }
             }
 
-            return "";
+            return false;
         }
 
         public static bool CheckFolderNameExists( BitFolder bitFolder, string folderNameToCheck )
         {
             if( bitFolder.folderName == folderNameToCheck )
-            {
                 return true;
-            }
 
             foreach( var childFolder in bitFolder.childFolders )
             {
-                CheckFolderNameExists( childFolder, folderNameToCheck );
-                if( childFolder.folderName == folderNameToCheck )
-                {
+                if( CheckFolderNameExists( childFolder, folderNameToCheck ) )
                     return true;
-                }
             }
 
             return false;
