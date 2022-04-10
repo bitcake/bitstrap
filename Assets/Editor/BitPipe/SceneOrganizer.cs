@@ -39,12 +39,12 @@ namespace BitStrap
             if( pureSceneName != parentDirName )
             {
                 var bitFolder = BitFolderManager.LoadBitFolderFromJson();
-                var folderPath = BitFolderManager.GetBitPipeFolderPath( bitFolder, "Scenes" );
+                BitFolderManager.GetBitPipeFolderPath( bitFolder, "Scenes", out var outFolderPath );
 
-                if( !AssetDatabase.IsValidFolder( Path.Join( folderPath, pureSceneName ) ) )
-                    AssetDatabase.CreateFolder( folderPath, pureSceneName );
+                if( !AssetDatabase.IsValidFolder( Path.Join( outFolderPath, pureSceneName ) ) )
+                    AssetDatabase.CreateFolder( outFolderPath, pureSceneName );
 
-                AssetDatabase.MoveAsset( scene.path, Path.Join( folderPath, pureSceneName, scene.name + ".unity" ) );
+                AssetDatabase.MoveAsset( scene.path, Path.Join( outFolderPath, pureSceneName, scene.name + ".unity" ) );
                 scenePathDir = Directory.GetParent( scene.path )?.FullName;
                 scenePathDir = StringHelper.AbsoluteToRelativePath( scenePathDir );
             }
