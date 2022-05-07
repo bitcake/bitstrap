@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace BitStrap
 {
@@ -47,6 +50,25 @@ namespace BitStrap
             {
                 return string.Format( format, number );
             }
+        }
+        
+        public static string AbsoluteToRelativePath (string absolutePath)
+        {
+            var alteredPath = absolutePath.Replace( "\\", "/" );
+            if (alteredPath.StartsWith(Application.dataPath)) {
+                return "Assets" + absolutePath.Substring(Application.dataPath.Length);
+            }
+            else {
+                throw new System.ArgumentException("Full path does not contain the current project's Assets folder", "absolutePath");
+            }
+        }
+
+        public static string RemoveSuffixFromString( string stringToClean, string separator = "_" )
+        {
+            var splitString = stringToClean.Split( separator );
+            var pureString = String.Join( "_", splitString.Take( splitString.Length - 1 ).ToArray() );
+
+            return pureString;
         }
 
         private static Dictionary<Index, string> stringTable = new Dictionary<Index, string>( new IndexComparer() );

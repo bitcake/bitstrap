@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2412d8bfa163c7a439eb0074e6e72381, type: 3}
+  m_Name: BitPipeSettings
+  m_EditorClassIdentifier: 
+  createPersistentScene: 1
+  persistentSceneName: P
+  createGameplayScene: 0
+  gameplaySceneName: Gameplay
+  createGeometryScene: 0
+  geometrySceneName: Geometry
+  createLightingScene: 0
+  lightingSceneName: Lighting
+  createAudioScene: 0
+  audioSceneName: Audio

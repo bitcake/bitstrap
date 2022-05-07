@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace BitStrap
 	public static class BitStrapPreferences
 	{
 		private static SortedList<string, System.Action> drawPreferencesCallback = new SortedList<string, System.Action>();
-
 		public static void RegisterPreference( System.Action drawCallback )
 		{
 			if( drawCallback != null && drawCallback.Method != null )
@@ -24,6 +24,7 @@ namespace BitStrap
 		[SettingsProvider()]
 		private static SettingsProvider OnPreferencesGUI()
 		{
+			Vector2 scroll = Vector2.zero;
 			return new SettingsProvider("Settings/BitStrap", SettingsScope.User)
 			{
 				label = "BitStrap",
@@ -32,12 +33,14 @@ namespace BitStrap
 					if (GUILayout.Button("Open Web Documentation"))
 						BitStrapDocs.OpenDocs();
 
+					EditorGUILayout.Separator();
 					foreach (var pair in drawPreferencesCallback)
 					{
 						if (pair.Value != null)
 							pair.Value();
 					}
 
+					EditorGUILayout.Separator();
 					GUILayout.FlexibleSpace();
 				}
 			};
