@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2412d8bfa163c7a439eb0074e6e72381, type: 3}
   m_Name: BitPipeSettings
   m_EditorClassIdentifier: 
-  sceneToAdd: {fileID: 0}
+  createPersistentScene: 1
+  persistentSceneName: P
+  createGameplayScene: 0
+  gameplaySceneName: Gameplay
+  createGeometryScene: 0
+  geometrySceneName: Geometry
+  createLightingScene: 0
+  lightingSceneName: Lighting
+  createAudioScene: 0
+  audioSceneName: Audio

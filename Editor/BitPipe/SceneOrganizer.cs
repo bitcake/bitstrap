@@ -11,6 +11,10 @@ namespace BitStrap
     [InitializeOnLoad]
     class SceneOrganizer
     {
+        private const string BitPipeSettingsPath = "Assets/Editor/BitPipe/BitPipeSettings.asset";
+        private static BitPipeSettings bitPipeSettings;
+
+        
         static SceneOrganizer()
         {
             EditorSceneManager.sceneOpened += CheckForPersistentScene;
@@ -18,6 +22,8 @@ namespace BitStrap
 
         static void CheckForPersistentScene( Scene scene, OpenSceneMode mode )
         {
+            EnsureData();
+            
             if( !File.Exists( BitFolderManager.BitFolderJsonPath ) )
             {
                 Debug.LogWarning( "Please use BitPipe to create your Folder Structure and organize Scene files" );
@@ -32,7 +38,7 @@ namespace BitStrap
             var pureSceneName = StringHelper.RemoveSuffixFromString( scene.name );
 
             var splitScene = scene.name.Split( "_" );
-            if( !String.Equals( splitScene.Last(), BitPipeSettings.persistentSceneName,
+            if( !String.Equals( splitScene.Last(), bitPipeSettings.persistentSceneName,
                 StringComparison.OrdinalIgnoreCase ) )
                 return;
 
@@ -49,8 +55,8 @@ namespace BitStrap
                 scenePathDir = StringHelper.AbsoluteToRelativePath( scenePathDir );
             }
 
-            var sceneTypesList = BitPipeSettings.sceneTypeNames.ToList();
-            foreach( var sceneType in BitPipeSettings.sceneTypeNames )
+            var sceneTypesList = bitPipeSettings.GetSceneTypesToCreate();
+            foreach( var sceneType in bitPipeSettings.GetSceneTypesToCreate() )
             {
                 var matchingAssets = AssetDatabase.FindAssets( $"{pureSceneName}_{sceneType} t:scene" );
                 foreach( var assetGUID in matchingAssets )
@@ -88,6 +94,22 @@ namespace BitStrap
             SceneManager.SetActiveScene( activeScene );
         }
 
+        private static void EnsureData()
+        {
+            if (bitPipeSettings != null) 
+                return;
+			
+            bitPipeSettings = AssetDatabase.LoadAssetAtPath<BitPipeSettings>(BitPipeSettingsPath);
+            if (bitPipeSettings == null)
+            {
+                var debug = ScriptableObject.CreateInstance<BitPipeSettings>(  );
+                AssetDatabase.CreateAsset(debug, BitPipeSettingsPath);
+                AssetDatabase.SaveAssets();
+                bitPipeSettings =
+                    AssetDatabase.LoadAssetAtPath<BitPipeSettings>(BitPipeSettingsPath);
+            }
+        }
+        
         private static bool CheckActiveScene( string filename )
         {
             var numOpenScenes = SceneManager.sceneCount;
