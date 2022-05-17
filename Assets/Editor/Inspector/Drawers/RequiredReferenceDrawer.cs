@@ -4,7 +4,7 @@ using UnityEditor;
 namespace BitStrap
 {
 	[CustomPropertyDrawer( typeof( Object ), true )]
-	public sealed class NonNullableDrawer : PropertyDrawer
+	public sealed class RequiredReferenceDrawer : PropertyDrawer
 	{
 		public static bool IsNull( SerializedProperty property )
 		{
@@ -30,18 +30,18 @@ namespace BitStrap
 		{
 			PropertyDrawerHelper.LoadAttributeTooltip( this, label );
 
-			var nullableAttribute = fieldInfo.GetAttribute<NullableAttribute>( false );
+			var referenceRequired = fieldInfo.GetAttribute<RequiredReferenceAttribute>( false );
 
 			Object target = property.serializedObject.targetObject;
 			bool isFromMonoBehaviour = target != null && target is MonoBehaviour;
 
-			if( !nullableAttribute.IsSome && isFromMonoBehaviour && IsNull( property ) )
+			if( referenceRequired.IsSome && isFromMonoBehaviour && IsNull( property ) )
 			{
-				GUI.color = Color.red;
+				GUI.backgroundColor = Color.red;
 				EditorGUI.PropertyField( position, property, label, true );
-				GUI.color = Color.white;
+				GUI.backgroundColor = Color.white;
 
-				DrawFieldWarning( position );
+				DrawFieldWarning(position);
 			}
 			else
 			{
