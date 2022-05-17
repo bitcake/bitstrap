@@ -23,6 +23,9 @@ Use Unity's Package Manager and add from a git url:
 ```
 https://github.com/bitcake/bitstrap.git#upm
 ```
+Currently BitStrap has been tested on Unity:
+* 2020.3 LTS
+* 2021.3 LTS
 
 ## Documentation
 
@@ -36,22 +39,11 @@ of it as a "table of contents".
 
 ## I need ~healing~ help
 
-* Jefferson Bandeira
-    * Twitter : [@thevallcrist](https://twitter.com/thevallcrist)
-    * Email   : jefferson@bitcakestudio.com
-* Matheus Lessa Rodrigues
-    * Twitter : [@matheuslrod](https://twitter.com/matheuslrod)
-    * Email   : matheus@bitcakestudio.com
-* Vinicius Pacha
-    * Twitter : [@vini_pacha](https://twitter.com/vini_pacha)
-    * Email   : vini@bitcakestudio.com
-* Anyone from BitCake team
-    * Twitter : [@bitcakestudio](https://twitter.com/bitcakestudio)
-    * Email   : company@bitcakestudio.com
+If you have any issues using the tool, feel free to contact us through the [Issues](https://github.com/bitcake/bitstrap/issues) page here on github and we'll try to help!
 
 ## Awesome contributors
 
-* Timothy McGill ([DragonSmack.com](http://dragonsmack.com) | dragonsmackgames@gmail.com)
+* Timothy McGill ([DragonSmack.com](http://dragonsmack.com))
 * Maso Inar ([bitbucket.org/masoinar](https://bitbucket.org/masoinar/))
 * Johannes Deml ([johannesdeml.com](http://johannesdeml.com) | [@DemlJohannes](https://twitter.com/DemlJohannes))
 * Luiz Wendt ([https://lawendt.github.io/](https://lawendt.github.io/))

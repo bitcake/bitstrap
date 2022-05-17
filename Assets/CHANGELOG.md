@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.23
+- fixed: serialization issue when having an AnimationParameter inside a struct that was automatically initialized by Unity.
+- fixed: support for Unity 2020 LTS and C# versions < 9.0
+- removed: NestedPrefab script
+- removed: NullableAttribute and NonNullableDrawer
+- added: RequiredReferenceAttribute and RequiredReferenceDrawer. Allows you to specify an Object field as required, will show a red warning if the field is not properly setup in the inspector
+
 ### 1.22
 - added: ColliderImporter: Follows Unreal Engine's Collision Meshes setup rules to automagically add Colliders to models. (https://docs.unrealengine.com/4.27/en-US/WorkingWithContent/Importing/FBX/StaticMeshes/)
 

@@ -3,7 +3,7 @@ using BitStrap;
 using UnityEditor;
 using UnityEngine;
 
-public class CustomAssetModificationProcessor : AssetModificationProcessor
+public class CustomAssetModificationProcessor : UnityEditor.AssetModificationProcessor
 {
     private const string errorMessage =
         "You cannot Rename or Delete a BitPipe folder normally! Please use the BitPipe Tool Menu for that!";
