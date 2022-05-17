@@ -32,10 +32,10 @@ namespace BitStrap.Examples
 		[ExponentInfo]
 		public long largeNumber = 1000000000L;
 
-		public GameObject nullGameObjectReference;
+		[RequiredReference]
+		public GameObject requiredButNullGameObjectReference;
 
-		[Nullable]
-		public GameObject nullableGameObjectReference;
+		public GameObject gameObjectReference;
 
 		public DummyScriptableObjectExample scriptableObject;
 
