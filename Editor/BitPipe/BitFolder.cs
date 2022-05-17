@@ -13,7 +13,7 @@ namespace BitStrap
         [NonSerialized] public bool isExpanded = true;
         [NonSerialized] public bool locked = true;
         [NonSerialized] public bool markedForDeletion;
-        public List<BitFolder> childFolders = new();
+        public List<BitFolder> childFolders = new List<BitFolder>();
         public BitFolder parentFolder;
 
         public BitFolder GetChildBitFolderOfName( string childFolderName )
@@ -61,7 +61,7 @@ namespace BitStrap
         public static bool GetBitPipeFolderPath( BitFolder bitFolder, string folderToGetPath,
             out string folderPath, string initialRelativePath = "Assets/" )
         {
-            folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
+	        folderPath = Path.Combine(initialRelativePath, bitFolder.folderName);
             if( bitFolder.folderName == folderToGetPath )
                 return true;
 
@@ -94,7 +94,7 @@ namespace BitStrap
         public static bool CheckFolderPathExists( BitFolder bitFolder, string pathToCheck,
             string initialRelativePath = "Assets/" )
         {
-            var folderPath = Path.Join( initialRelativePath, bitFolder.folderName );
+	        var folderPath = Path.Combine(initialRelativePath, bitFolder.folderName);
             folderPath = folderPath.Replace( "\\", "/" );
             if( pathToCheck == folderPath )
                 return true;

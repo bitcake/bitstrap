@@ -5,101 +5,100 @@ using UnityEngine;
 
 namespace BitStrap
 {
-    /// <summary>
-    /// Bunch of helper methods to work with the string class.
-    /// </summary>
-    public static class StringHelper
-    {
-        private class IndexComparer : IEqualityComparer<Index>
-        {
-            public bool Equals( Index x, Index y )
-            {
-                return x.Equals( y );
-            }
+	/// <summary>
+	///     Bunch of helper methods to work with the string class.
+	/// </summary>
+	public static class StringHelper
+	{
+		private static readonly Dictionary<Index, string> stringTable =
+			new Dictionary<Index, string>(new IndexComparer());
 
-            public int GetHashCode( Index x )
-            {
-                return x.GetHashCode();
-            }
-        }
+		public static string AbsoluteToRelativePath(string absolutePath)
+		{
+			var alteredPath = absolutePath.Replace("\\", "/");
+			if (alteredPath.StartsWith(Application.dataPath))
+				return "Assets" + absolutePath.Substring(Application.dataPath.Length);
+			throw new ArgumentException("Full path does not contain the current project's Assets folder",
+				"absolutePath");
+		}
 
-        private struct Index
-        {
-            public readonly int number;
-            public readonly string format;
-            private readonly int hashCode;
+		public static string RemoveSuffixFromString(string stringToClean, char separator = '_')
+		{
+			var splitString = stringToClean.Split(separator);
+			var pureString = string.Join("_", splitString.Take(splitString.Length - 1).ToArray());
 
-            public Index( string format, int number )
-            {
-                this.number = number;
-                this.format = format;
-                this.hashCode = number * format.GetHashCode();
-            }
+			return pureString;
+		}
 
-            public bool Equals( Index other )
-            {
-                return number == other.number && format == other.format;
-            }
+		/// <summary>
+		///     Given a string format and a number, returns its string representation.
+		///     It's better to use this method than just number.ToString() since,
+		///     in the long term, it does not generate string garbage.
+		/// </summary>
+		/// <param name="format"></param>
+		/// <param name="number"></param>
+		/// <returns></returns>
+		public static string Format(string format, int number)
+		{
+			var ui = new Index(format, number);
 
-            public override int GetHashCode()
-            {
-                return hashCode;
-            }
+			if (!stringTable.ContainsKey(ui))
+				stringTable[ui] = ui.GetString();
 
-            public string GetString()
-            {
-                return string.Format( format, number );
-            }
-        }
-        
-        public static string AbsoluteToRelativePath (string absolutePath)
-        {
-            var alteredPath = absolutePath.Replace( "\\", "/" );
-            if (alteredPath.StartsWith(Application.dataPath)) {
-                return "Assets" + absolutePath.Substring(Application.dataPath.Length);
-            }
-            else {
-                throw new System.ArgumentException("Full path does not contain the current project's Assets folder", "absolutePath");
-            }
-        }
+			return stringTable[ui];
+		}
 
-        public static string RemoveSuffixFromString( string stringToClean, string separator = "_" )
-        {
-            var splitString = stringToClean.Split( separator );
-            var pureString = String.Join( "_", splitString.Take( splitString.Length - 1 ).ToArray() );
+		/// <summary>
+		///     The same as StringHelper.Format() but as an int extension method.
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="format"></param>
+		/// <returns></returns>
+		public static string ToStringSmart(this int n, string format = "{0}")
+		{
+			return Format(format, n);
+		}
 
-            return pureString;
-        }
+		private class IndexComparer : IEqualityComparer<Index>
+		{
+			public bool Equals(Index x, Index y)
+			{
+				return x.Equals(y);
+			}
 
-        private static Dictionary<Index, string> stringTable = new Dictionary<Index, string>( new IndexComparer() );
+			public int GetHashCode(Index x)
+			{
+				return x.GetHashCode();
+			}
+		}
 
-        /// <summary>
-        /// Given a string format and a number, returns its string representation.
-        /// It's better to use this method than just number.ToString() since,
-        /// in the long term, it does not generate string garbage.
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public static string Format( string format, int number )
-        {
-            Index ui = new Index( format, number );
+		private struct Index
+		{
+			public readonly int number;
+			public readonly string format;
+			private readonly int hashCode;
 
-            if( !stringTable.ContainsKey( ui ) )
-                stringTable[ui] = ui.GetString();
+			public Index(string format, int number)
+			{
+				this.number = number;
+				this.format = format;
+				hashCode = number * format.GetHashCode();
+			}
 
-            return stringTable[ui];
-        }
+			public bool Equals(Index other)
+			{
+				return number == other.number && format == other.format;
+			}
 
-        /// <summary>
-        /// The same as StringHelper.Format() but as an int extension method.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        public static string ToStringSmart( this int n, string format = "{0}" )
-        {
-            return Format( format, n );
-        }
-    }
+			public override int GetHashCode()
+			{
+				return hashCode;
+			}
+
+			public string GetString()
+			{
+				return string.Format(format, number);
+			}
+		}
+	}
 }
