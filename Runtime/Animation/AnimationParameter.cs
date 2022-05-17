@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BitStrap
 {
@@ -11,15 +12,21 @@ namespace BitStrap
 	{
 		public string name;
 
-		[SerializeField]
-		private int index = -1;
-
+		[NonSerialized]
+		private bool cached = false;
+		[NonSerialized]
+		private int index;
+		
 		public int Index
 		{
 			get
 			{
-				if( index == -1 )
-					index = Animator.StringToHash( name );
+				if (!cached)
+				{
+					index = Animator.StringToHash(name);
+					cached = true;
+				}
+				
 				return index;
 			}
 		}
