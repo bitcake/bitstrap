@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.23
+- fixed: serialization issue when having an AnimationParameter inside a struct that was automatically initialized by Unity.
+- fixed: support for Unity 2020 LTS and C# versions < 9.0
+
 ### 1.22
 - added: ColliderImporter: Follows Unreal Engine's Collision Meshes setup rules to automagically add Colliders to models. (https://docs.unrealengine.com/4.27/en-US/WorkingWithContent/Importing/FBX/StaticMeshes/)
 
