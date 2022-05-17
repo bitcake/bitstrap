@@ -46,9 +46,9 @@ namespace BitStrap
                     var activeScenePath = Path.GetDirectoryName(activeScene.path);
 
                     var resourcesFolder = BitPipeHelper.CreateResourcesFolder( activeScenePath );
-                        
-                    var terrainNewPath = Path.Join( resourcesFolder, terrainTargetName );
-                    terrainNewPath = AssetDatabase.GenerateUniqueAssetPath( terrainNewPath );
+
+                    var terrainNewPath = Path.Combine(resourcesFolder, terrainTargetName);
+                    terrainNewPath = AssetDatabase.GenerateUniqueAssetPath(terrainNewPath);
                     
                     AssetDatabase.MoveAsset( terrainOriginalPath, terrainNewPath );
                     AssetDatabase.SaveAssets();

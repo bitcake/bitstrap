@@ -26,7 +26,7 @@ namespace BitStrap
         private static string CreateFolder( string dirPath )
         {
             var dirName = dirPath.Split( Path.DirectorySeparatorChar ).Last() + "_Resources";
-            var resourcesFolder = Path.Join( dirPath, dirName );
+            var resourcesFolder = Path.Combine( dirPath, dirName );
             
             if(!Directory.Exists( resourcesFolder ))
                 AssetDatabase.CreateFolder( dirPath, dirName );

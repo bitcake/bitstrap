@@ -37,7 +37,7 @@ namespace BitStrap
 
             var pureSceneName = StringHelper.RemoveSuffixFromString( scene.name );
 
-            var splitScene = scene.name.Split( "_" );
+            var splitScene = scene.name.Split('_');
             if( !String.Equals( splitScene.Last(), bitPipeSettings.persistentSceneName,
                 StringComparison.OrdinalIgnoreCase ) )
                 return;
@@ -47,10 +47,10 @@ namespace BitStrap
                 var bitFolder = BitFolderManager.LoadBitFolderFromJson();
                 BitFolderManager.GetBitPipeFolderPath( bitFolder, "Scenes", out var outFolderPath );
 
-                if( !AssetDatabase.IsValidFolder( Path.Join( outFolderPath, pureSceneName ) ) )
+                if( !AssetDatabase.IsValidFolder( Path.Combine( outFolderPath, pureSceneName ) ) )
                     AssetDatabase.CreateFolder( outFolderPath, pureSceneName );
 
-                AssetDatabase.MoveAsset( scene.path, Path.Join( outFolderPath, pureSceneName, scene.name + ".unity" ) );
+                AssetDatabase.MoveAsset( scene.path, Path.Combine( outFolderPath, pureSceneName, scene.name + ".unity" ) );
                 scenePathDir = Directory.GetParent( scene.path )?.FullName;
                 scenePathDir = StringHelper.AbsoluteToRelativePath( scenePathDir );
             }
