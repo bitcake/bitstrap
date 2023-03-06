@@ -28,6 +28,11 @@ namespace BitStrap
         private void DrawBitFolder( BitFolder bitFolderToDraw, string path )
         {
             var originalBitFolderName = bitFolderToDraw.folderName;
+            if( originalBitFolderName is null )
+            {
+                originalBitFolderName = "";
+                bitFolderToDraw.locked = false;
+            }
             var constructedPath = Path.Combine( path, originalBitFolderName );
 
             using( Horizontal.Do() )
