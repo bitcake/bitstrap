@@ -157,12 +157,12 @@ namespace BitStrap
                 UpdateJson();
             }
 
-            // if( !BitFolderManager.CheckFolderNameExists( bitFolder, "Scenes" ) )
-            // {
-            //     GUILayout.Space( 20 );
-            //     EditorGUILayout.HelpBox( "You need a Folder with the name \'Scenes\' for BitPipe to work correctly!",
-            //         MessageType.Warning, true );
-            // }
+            if( !BitFolderManager.CheckFolderNameExists( bitFolder, "Scenes" ) )
+            {
+                GUILayout.Space( 20 );
+                EditorGUILayout.HelpBox( "You need a Folder with the name \'Scenes\' for BitPipe to work correctly!",
+                    MessageType.Warning, true );
+            }
 
             GUILayout.Space( 20 );
             if( GUILayout.Button( "Generate Folders", GUILayout.Height( 35 ) ) )

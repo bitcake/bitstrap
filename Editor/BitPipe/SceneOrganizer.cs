@@ -45,8 +45,14 @@ namespace BitStrap
             if( pureSceneName != parentDirName )
             {
                 var bitFolder = BitFolderManager.LoadBitFolderFromJson();
-                BitFolderManager.GetBitPipeFolderPath( bitFolder, "Scenes", out var outFolderPath );
+                var folderExists = BitFolderManager.GetBitPipeFolderPath( bitFolder, "Scenes", out var outFolderPath );
 
+                if( !folderExists )
+                {
+                    Debug.LogError( $"Cannot automatically organize the Scene: {activeScene.name}! <Scenes> folder not found, please create one using BitPipe" );
+                    return;
+                }
+                
                 if( !AssetDatabase.IsValidFolder( Path.Combine( outFolderPath, pureSceneName ) ) )
                     AssetDatabase.CreateFolder( outFolderPath, pureSceneName );
 
