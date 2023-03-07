@@ -17,11 +17,11 @@ public class CustomAssetModificationProcessor : UnityEditor.AssetModificationPro
         if( !File.Exists( BitFolderManager.BitFolderJsonPath ) )
             return AssetMoveResult.DidNotMove;
 
-        var dirName = Path.GetFileName( sourcePath );
+        sourcePath = sourcePath.Replace( "\\", "/" );
         var bitFolder = BitFolderManager.LoadBitFolderFromJson();
-        var folderNameExists = BitFolderManager.CheckFolderNameExists( bitFolder, dirName );
+        var folderExists = BitFolderManager.CheckFolderPathExists( bitFolder, sourcePath );
 
-        if( folderNameExists )
+        if( folderExists )
         {
             Debug.LogError( errorMessage );
             return AssetMoveResult.FailedMove;
@@ -39,11 +39,13 @@ public class CustomAssetModificationProcessor : UnityEditor.AssetModificationPro
         if( !File.Exists( BitFolderManager.BitFolderJsonPath ) )
             return AssetDeleteResult.DidNotDelete;
 
-        var dirName = Path.GetFileName( assetPath );
+        assetPath = assetPath.Replace( "\\", "/" );
         var bitFolder = BitFolderManager.LoadBitFolderFromJson();
-        var folderNameExists = BitFolderManager.CheckFolderNameExists( bitFolder, dirName );
+        var folderExists = BitFolderManager.CheckFolderPathExists( bitFolder, assetPath );
+        
+        Debug.Log( folderExists );
 
-        if( folderNameExists )
+        if( folderExists )
         {
             Debug.LogError( errorMessage );
             return AssetDeleteResult.FailedDelete;

@@ -39,7 +39,7 @@ namespace BitStrap
             var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             if( jsonAsset == null )
             {
-                File.WriteAllText( Path.Combine( Application.dataPath, jsonFileName ), "{}" );
+                File.WriteAllText( Path.Combine( Application.dataPath, jsonFileName ), "{\n    \"folderName\": \"_Internal\",\n    \"childFolders\": []\n}" );
                 AssetDatabase.ImportAsset( BitFolderJsonPath );
                 jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>( BitFolderJsonPath );
             }
