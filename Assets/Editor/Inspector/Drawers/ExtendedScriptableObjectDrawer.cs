@@ -17,7 +17,6 @@ namespace BitStrap
 	[CustomPropertyDrawer(typeof(ScriptableObject), true)]
 	public class ScriptableObjectDrawer : PropertyDrawer
 	{
-
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
@@ -27,7 +26,7 @@ namespace BitStrap
 				{
 					EditorGUI.LabelField(new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), property.displayName);
 
-					EditorGUI.PropertyField(new Rect(EditorGUIUtility.labelWidth + 14, position.y, position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), 
+					EditorGUI.PropertyField(new Rect(EditorGUIUtility.labelWidth + position.x, position.y, position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), 
 						property, GUIContent.none, true);
 
 					if (GUI.changed)
@@ -42,7 +41,7 @@ namespace BitStrap
 				}
 				else
 				{
-					EditorGUI.PropertyField(new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), property, GUIContent.none, true);
+					EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), property, GUIContent.none, true);
 					if (GUI.changed)
 					{
 						property.serializedObject.ApplyModifiedProperties();
